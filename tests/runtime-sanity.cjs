@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-4\.4\.5-quality/);
+assert.match(sw,/aegis-4\.4\.6-ai-health/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -20,3 +20,7 @@ assert.match(bridge,/recovered existing cached model without downloading/);
 assert.match(html,/MODEL FLAG — NOT CONFIRMED/);
 assert.doesNotMatch(html,/CHECK NOW:.*the language model thinks someone may be in immediate danger/);
 assert.ok(fs.existsSync('QUALITY_GATES.md'));
+
+assert.match(bridge,/inference_verified:smokeTestPassed/);
+assert.match(bridge,/model loaded but failed the inference smoke test/);
+assert.match(bridge,/stage\('SMOKE_TEST'/);
