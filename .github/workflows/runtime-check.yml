@@ -1,0 +1,20 @@
+name: AEGIS runtime sanity checks
+on:
+  push:
+    branches: [main, fix/blackout-v441-runtime]
+  pull_request:
+    branches: [main]
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse runtime modules
+        run: |
+          node --check llm/webllm_bridge.js
+          node --check sw.js
+      - name: Verify referenced offline assets and iOS settings
+        run: node tests/runtime-sanity.cjs
