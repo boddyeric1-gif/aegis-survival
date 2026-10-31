@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-4\.4\.2-recovery/);
+assert.match(sw,/aegis-4\.4\.5-quality/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -16,3 +16,7 @@ console.log('PASS: syntax checked separately; offline assets, runtime config, mo
 assert.match(bridge,/recovering cached shard/);
 assert.match(bridge,/digest===shard.sha256/);
 assert.match(bridge,/recovered existing cached model without downloading/);
+
+assert.match(html,/MODEL FLAG — NOT CONFIRMED/);
+assert.doesNotMatch(html,/CHECK NOW:.*the language model thinks someone may be in immediate danger/);
+assert.ok(fs.existsSync('QUALITY_GATES.md'));
