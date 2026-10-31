@@ -19,11 +19,27 @@ const shardUrl=s=>new URL(CFG.base+s.file,location.href).href;
 let gbnfText=null;
 async function gbnf(){if(gbnfText===null)gbnfText=await (await fetch(new URL(CFG.gbnf,location.href).href)).text();return gbnfText}
 
-async function cachedBlobs(){            // returns Blob[] if every shard is present with the right size and was verified, else null
-  if(!('caches' in self))return null;const c=await caches.open(STORE);const out=[];
-  const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');
-  for(const s of CFG.shards){const r=await c.match(shardUrl(s));if(!r)return null;const b=await r.blob();if(b.size!==s.bytes||ver[s.file]!==s.sha256)return null;out.push(b)}
-  return [new Blob(out)];}   // chunks are concatenated in manifest order into ONE blob (the engine loads a single GGUF)
+async function cachedBlobs(){
+  if(!('caches' in self))return null;
+  const c=await caches.open(STORE),out=[];
+  let ver={};try{ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}')}catch(e){}
+  let changed=false;
+  for(const shard of CFG.shards){
+    const response=await c.match(shardUrl(shard));
+    if(!response)return null;
+    const blob=await response.blob();
+    if(blob.size!==shard.bytes)return null;
+    if(ver[shard.file]!==shard.sha256){
+      stage('VERIFYING','recovering cached shard '+shard.file);
+      const digest=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));
+      if(digest!==shard.sha256){stage('CORRUPT','cached shard hash mismatch '+shard.file);return null}
+      ver[shard.file]=shard.sha256;changed=true;
+    }
+    out.push(blob);
+  }
+  if(changed){localStorage.setItem(LS('verified'),JSON.stringify(ver));stage('VERIFIED','recovered existing cached model without downloading')}
+  return [new Blob(out)];
+}
 
 async function init(){                   // called on app start: never downloads; loads only if already installed and verified
   try{
@@ -61,7 +77,7 @@ async function install(onProgress){
     const c=await caches.open(STORE);const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');let done=0;
     for(const s of CFG.shards){
       const url=shardUrl(s);const hit=await c.match(url);
-      if(hit&&ver[s.file]===s.sha256){const b=await hit.blob();if(b.size===s.bytes){done+=s.bytes;progress=Math.floor(done*100/total);continue}}
+      if(hit){const b=await hit.blob();if(b.size===s.bytes){if(ver[s.file]!==s.sha256){const digest=hex(await crypto.subtle.digest('SHA-256',await b.arrayBuffer()));if(digest===s.sha256){ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver))}}if(ver[s.file]===s.sha256){done+=s.bytes;progress=Math.floor(done*100/total);continue}}}
       await c.delete(url);delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));
       reason='downloading offline language model: '+progress+'%';
       const resp=await fetch(url,{cache:'no-store'});if(!resp.ok)throw new Error('download failed ('+resp.status+') for '+s.file);
