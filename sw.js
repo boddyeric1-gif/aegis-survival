@@ -1,5 +1,5 @@
 /* AEGIS service worker: cache-first, whole app precached at install. Cache id is a content hash (see build.js). */
-const CACHE='aegis-4.4.1-runtime-bb942da74';
+const CACHE='aegis-4.4.2-recovery-6b6cba3';
 const ASSETS=["./","./index.html","./manifest.webmanifest","./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png","./icons/apple-touch-icon.png","./llm/webllm_bridge.js","./llm/wllama.js","./llm/wllama.wasm","./llm/compat/wllama.wasm","./llm/compat/wllama.js","./llm/interpret.gbnf","./llm/licenses.html"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(a=>new Request(new URL(a,self.location).href,{cache:'reload'})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('aegis-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
