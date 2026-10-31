@@ -1,0 +1,8 @@
+boolean ::= ("true" | "false") space
+hazards ::= "[" space (hazards-item ("," space hazards-item ("," space hazards-item ("," space hazards-item ("," space hazards-item ("," space hazards-item)?)?)?)?)?)? "]" space
+hazards-item ::= "\"blackout\"" | "\"chemical\"" | "\"water\"" | "\"weather\"" | "\"medical\"" | "\"conflict\""
+hazards-kv ::= "\"hazards\"" space ":" space hazards
+immediate-danger-kv ::= "\"immediate_danger\"" space ":" space boolean
+root ::= "{" space hazards-kv "," space immediate-danger-kv "," space uncertain-kv "}" space
+space ::= " "?
+uncertain-kv ::= "\"uncertain\"" space ":" space boolean
