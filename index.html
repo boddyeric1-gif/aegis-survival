@@ -916,7 +916,7 @@ async function initModel(prefs){const el=$('modelstatus');const set=(t,c)=>{el.t
   catch(e){set('Language model unavailable: '+e.message+' (rules-only mode)','warn')}}
 window.addEventListener('aegis-llm-state',()=>{A.ui&&A.ui.reinitModel&&A.ui.reinitModel()});
 function renderHybridExtras(m,out){const top=[];
-  if(m.modelImm&&!(m.plan&&m.plan.w.imm))top.push(h('div',{class:'card danger',role:'alert'},h('b',{text:'CHECK NOW: '}),'the language model thinks someone may be in immediate danger (it over-warns sometimes). If anyone is not breathing, unresponsive, bleeding heavily, choking, or there is fire, a gas smell or an armed threat, contact emergency services now.'));
+  if(m.modelImm&&!(m.plan&&m.plan.w.imm))top.push(h('div',{class:'card warn',role:'status'},h('b',{text:'MODEL FLAG — NOT CONFIRMED: '}),'The experimental language model flagged possible danger, but the reviewed rule engine did not confirm an immediate threat. Describe specific symptoms or hazards. If someone is actually in immediate danger, contact emergency services.'));
   if(m.unmatched&&m.unmatched.length)top.push(h('div',{class:'card warn'},h('b',{text:'Model-suggested, not matched to a reviewed protocol: '}),m.unmatched.join(', ')+'. Describe what happened and who is affected.'));
   if(m.explanation)top.push(h('div',{class:'card'},h('b',{text:'Plain-language summary (language model; each sentence checked against the library; experimental): '}),m.explanation));
   top.reverse().forEach(n=>out.prepend(n));}
