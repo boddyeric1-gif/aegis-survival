@@ -1,5 +1,5 @@
 /* AEGIS service worker: cache-first, whole app precached at install. Cache id is manually versioned; update when app shell assets change. */
-const CACHE='aegis-10.4-emb-gold-e456139';
+const CACHE='aegis-10.5-obsidian-62a62e2';
 const ASSETS=["./","./index.html","./wildlands-knowledge.js","./wildlands-fieldcraft.js","./wildlands-manual.js","./manual-projects.js","./manual-library-v7.js","./deep-shelter-earthworks.js","./manual-offline-check.js","./ux-v9.js","./quick-start.js","./manifest.webmanifest","./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png","./icons/apple-touch-icon.png","./llm/webllm_bridge.js","./llm/wllama.js","./llm/wllama.wasm","./llm/compat/wllama.wasm","./llm/compat/wllama.js","./llm/interpret.gbnf","./llm/licenses.html"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(a=>new Request(new URL(a,self.location).href,{cache:'reload'})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('aegis-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
