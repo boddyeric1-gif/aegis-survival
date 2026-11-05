@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-8\.0-manuals/);
+assert.match(sw,/aegis-9\.0-ux/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -87,3 +87,14 @@ assert.match(sw,/caches\.open\(CACHE\)\.then\(c=>c\.match/);
 assert.match(deep,/Trench planning and excavation safety/);
 assert.match(deep,/Indoor warm-room conversion/);
 assert.match(offlineCheck,/airplane mode/);
+
+const ux=read('ux-v9.js');
+assert.match(html,/id="v9-search"/);
+assert.match(html,/id="radiohub"/);
+assert.match(html,/data-tab="radiohub"/);
+assert.match(html,/data-v9-jump="emergency"/);
+assert.match(html,/src="ux-v9.js"/);
+assert.match(sw,/ux-v9\.js/);
+assert.match(ux,/NOAA Weather Radio frequencies/);
+assert.match(ux,/Search all field manuals|manual-chapters/);
+assert.match(read('manual-offline-check.js'),/ux-v9\.js/);
