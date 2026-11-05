@@ -10,7 +10,7 @@
 
 | Area | Description |
 | --- | --- |
-| Home | Emergency-first shortcuts, manual search, quick navigation, and collapsible advanced tools. |
+| Home | Emergency-first shortcuts, manual search, quick navigation, a 60-second Quick Start, and collapsible advanced tools. |
 | Library / Field Guide | Searchable reference cards and practice fieldcraft guides. |
 | Field Manual | Nine chapter-based sections, practical build projects, additional procedures, and shelter/earthworks guidance. |
 | Emergency | Short rule-based emergency references; **not** a substitute for professional training or emergency services. |
@@ -20,6 +20,10 @@
 | Optional local AI | Experimental on-device model support; not required for reading bundled manuals and may not work on every device. |
 
 The field guides include materials, numbered procedures, checks, troubleshooting, and limitations. They are **not independently field-tested**. Excavation, below-grade shelters, and human-entry trenches require qualified professionals; the app does not provide a safe DIY substitute for engineered protection.
+
+## Quick Start & Field Key
+
+Tap **? Quick Start & Key** in the app header, or **New here? Open the 60-second AEGIS guide** on Home. The guide explains every main tab, gives a four-step getting-started workflow, and lets you jump to a section directly. It is bundled offline with the app shell; it does not require AI.
 
 ## Install and use offline
 
@@ -52,6 +56,7 @@ Licenses and model attributions: [`llm/licenses.html`](llm/licenses.html). The r
 - `wildlands-knowledge.js` and `wildlands-fieldcraft.js` — searchable reference and practice guides.
 - `manual-projects.js`, `manual-library-v7.js`, `deep-shelter-earthworks.js` — additional procedures.
 - `ux-v9.js` — emergency-first search, navigation helpers, and radio reference.
+- `quick-start.js` — offline help dialog and section navigation key.
 - `manual-offline-check.js` — checks selected files in the current app cache.
 - `sw.js` — versioned offline app cache and service worker.
 - `manifest.webmanifest` and `icons/` — install metadata and icons.
