@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-9\.0-ux/);
+assert.match(sw,/aegis-10\.0-glass/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -98,3 +98,9 @@ assert.match(sw,/ux-v9\.js/);
 assert.match(ux,/NOAA Weather Radio frequencies/);
 assert.match(ux,/Search all field manuals|manual-chapters/);
 assert.match(read('manual-offline-check.js'),/ux-v9\.js/);
+
+assert.match(html,/AEGIS v10/);
+assert.match(html,/backdrop-filter:blur/);
+assert.match(html,/prefers-reduced-motion/);
+assert.match(html,/data-v9-jump="emergency"/);
+assert.match(html,/id="manualhub"/);
