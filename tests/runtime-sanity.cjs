@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-7\.0-library/);
+assert.match(sw,/aegis-8\.0-manuals/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -75,3 +75,15 @@ assert.match(html,/src="manual-library-v7.js"/);
 assert.match(sw,/manual-library-v7\.js/);
 assert.match(libv7,/Non-operational deadfall model/);
 assert.match(libv7,/Wooden scraper and spatula/);
+
+const deep=read('deep-shelter-earthworks.js'),offlineCheck=read('manual-offline-check.js');
+assert.match(html,/id="deep-manuals"/);
+assert.match(html,/id="manual-verify-offline"/);
+assert.match(html,/src="deep-shelter-earthworks.js"/);
+assert.match(html,/src="manual-offline-check.js"/);
+assert.match(sw,/deep-shelter-earthworks\.js/);
+assert.match(sw,/manual-offline-check\.js/);
+assert.match(sw,/caches\.open\(CACHE\)\.then\(c=>c\.match/);
+assert.match(deep,/Trench planning and excavation safety/);
+assert.match(deep,/Indoor warm-room conversion/);
+assert.match(offlineCheck,/airplane mode/);
