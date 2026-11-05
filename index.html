@@ -1213,7 +1213,7 @@ function create(opts){
     out.evidence=evidenceFor(pl,text);
     const raw=await llm.explain(S,text,out.evidence);
     if(raw!=null){const v=validate(raw,{evidence:out.evidence,situation:situationText(S)});if(v.ok){out.explanation=v.kept.join(' ');out.droppedSentences=v.dropped;}else out.explanationRejected={reasons:v.reasons,raw:raw.slice(0,300)};}
-    const head=(out.modelImm&&!pl.w.imm?'CHECK NOW: the language model thinks someone may be in immediate danger (it over-warns sometimes). If anyone is not breathing, unresponsive, bleeding heavily, choking, or there is fire, a gas smell, or an armed threat, contact emergency services now. If not, you can continue.\n\n':'');
+    const head=(out.modelImm&&!pl.w.imm?'MODEL FLAG — NOT CONFIRMED: the experimental language model identified a possible concern, but the rule engine has not confirmed it. Check the actual situation. If anyone is in immediate danger, get to safety and contact emergency services.\n\n':'');
     out.unmatched=out.modelAdded.filter(h=>S.hazards[h]&&!S.hazards[h].fine.length);
     let note='';
     if(out.unmatched.length||(!pl.actions.length&&(interp&&(interp.hazards.length||interp.immediate)))){
