@@ -1,6 +1,6 @@
 # EMB AEGIS Wildlands — Glass Edition (v10.0)
 
-**AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature obsidian-black and champagne-gold glassmorphic theme, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
+**AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
