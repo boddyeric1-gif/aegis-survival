@@ -1,16 +1,31 @@
 {
-  "name": "ESI AEGIS - Offline Survival Decision Support",
+  "name": "EMB AEGIS Wildlands — Glass Edition",
   "short_name": "AEGIS",
-  "description": "Offline rule-based emergency decision support. Experimental, not expert reviewed.",
+  "description": "Offline-first survival field manual and emergency preparedness reference. Experimental and not professionally validated.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#080b0e",
-  "theme_color": "#10151a",
+  "background_color": "#08141b",
+  "theme_color": "#08141b",
   "icons": [
-    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }
