@@ -14,7 +14,7 @@ assert.ok(cfg.shards.length>0);
 console.log('PASS: syntax checked separately; offline assets, runtime config, model manifest and iOS conservative settings verified');
 
 assert.match(bridge,/recovering cached shard/);
-assert.match(bridge,/digest===shard.sha256/);
+assert.match(bridge,/digest!==shard.sha256/);
 assert.match(bridge,/recovered existing cached model without downloading/);
 
 assert.match(html,/MODEL FLAG — NOT CONFIRMED/);
