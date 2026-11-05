@@ -182,45 +182,63 @@ input:focus,textarea:focus,select:focus{outline:2px solid rgba(134,226,255,.8);o
 .aegis-help-note{margin-top:20px;color:#e6cf9e;font-size:13px}
 @media(max-width:600px){.aegis-help-sections{grid-template-columns:1fr}.aegis-help-head{flex-wrap:wrap}.aegis-help-dialog{max-height:94vh}.aegis-help-open{margin-bottom:8px}}
 
-/* EMB Signature Edition: obsidian + champagne gold. Preserve red emergency semantics. */
-:root{--glass-border:rgba(219,176,99,.34);--glass-fill:rgba(19,17,15,.86);--glass-highlight:rgba(255,227,165,.075);--cyan:#f4c975;--gold:#e8bd72;--mint:#dfb46a;background:#090908;color:#f7f0e5}
-html{background:#090908}
-body{background:radial-gradient(ellipse 65% 45% at 83% 3%,rgba(137,94,28,.19),transparent 78%),radial-gradient(ellipse 70% 48% at 8% 45%,rgba(100,71,24,.13),transparent 80%),linear-gradient(145deg,#080807 0%,#17130f 52%,#090a09 100%);color:#f6efe2}
-body:before{background:repeating-linear-gradient(115deg,transparent 0 86px,rgba(234,186,101,.018) 87px 88px,transparent 89px 175px),radial-gradient(ellipse 48% 30% at 50% 95%,rgba(124,82,27,.12),transparent)}
-header{background:linear-gradient(110deg,rgba(11,10,9,.95),rgba(37,27,17,.8));border-bottom-color:rgba(224,178,97,.38)}
-header small,.wild-kicker{color:#e9be73!important}
-header h1{color:#fff4df;text-shadow:0 0 28px rgba(226,171,75,.16)}
-header .edition{color:#e8bd72}
-.tabs{background:rgba(14,13,11,.87);border-color:rgba(224,180,105,.34)}
-.tabs button{color:#eee2ce}
-.tabs button:hover{background:rgba(210,157,69,.14);border-color:rgba(235,190,109,.36)}
-.tabs button.active,.tabs button[aria-selected=true]{background:linear-gradient(140deg,#eac47e,#ba8d45);border-color:#f7d99c;box-shadow:inset 0 1px rgba(255,255,255,.4),0 0 20px rgba(214,160,65,.2);color:#1b1309}
-.panel,.card,.wild-hero,.v9-command>div,.manual-reader,.wild-guide,.wild-actions>button,.v9-result{background:linear-gradient(140deg,rgba(48,38,25,.72),rgba(13,13,12,.92))!important;border-color:rgba(223,182,111,.3)!important;box-shadow:inset 0 1px 0 rgba(255,223,159,.075),0 16px 38px rgba(0,0,0,.28)!important}
-.wild-hero{background:radial-gradient(ellipse at 93% 7%,rgba(209,156,67,.18),transparent 52%),linear-gradient(125deg,rgba(48,34,18,.92),rgba(13,12,11,.9))!important}
-.wild-hero:after{border-color:rgba(228,182,102,.18);box-shadow:0 0 0 52px rgba(228,182,102,.035),0 0 0 105px rgba(228,182,102,.02)}
-.wild-hero h2,h2,h3,h4{color:#fff3dd}
-a{color:#efc47b}a:hover{color:#ffe5af}
-button,.btn{background:linear-gradient(145deg,rgba(73,54,31,.92),rgba(29,26,22,.96));border-color:rgba(224,179,99,.48);color:#f8eeda}
-button:hover,.btn:hover{background:linear-gradient(145deg,rgba(104,73,35,.94),rgba(51,39,26,.98));border-color:#f4cb80;box-shadow:0 0 20px rgba(228,172,72,.15)}
-input,textarea,select{background:rgba(12,12,11,.85);border-color:rgba(216,175,106,.45);color:#fff4e5}
-input:focus,textarea:focus,select:focus{outline-color:#e9be73}
-.v9-find{background:radial-gradient(ellipse at 95% 0%,rgba(205,147,57,.17),transparent 55%),linear-gradient(140deg,rgba(42,32,20,.94),rgba(13,13,12,.95))!important;border-color:rgba(226,177,91,.48)!important}
-.v9-find h3{color:#fff0d3}
-.v9-searchrow input{border-color:rgba(234,187,106,.7);box-shadow:0 0 0 3px rgba(207,151,54,.08),inset 0 0 20px rgba(0,0,0,.55)}
-.v9-shortcuts button{background:rgba(81,59,30,.6)}
-.manual-chapter{background:rgba(38,31,22,.94)!important;border-color:rgba(224,183,108,.35)!important;color:#fff0d6!important}
-.manual-active{background:linear-gradient(110deg,rgba(179,123,41,.8),rgba(93,62,25,.9))!important;border-color:#f2c979!important;color:#fff7e6!important;box-shadow:0 0 17px rgba(217,160,70,.2)}
-.aegis-help-open,.aegis-help-start{border-color:rgba(237,192,110,.72);background:linear-gradient(125deg,#7b5729,#35291b);color:#fff2d7}
-.aegis-help-backdrop{background:rgba(5,4,3,.9)}
-.aegis-help-dialog{background:#211b14;color:#fff0db;border-color:rgba(237,190,104,.75)}
-.aegis-help-section strong{color:#ffe0a5}.aegis-help-section span{color:#e1cdb1}
-.aegis-help-priority{background:#4c2930;border-color:#ff9d91;color:#fff4ef}
-.aegis-help-note{color:#e7c184}
-.v9-urgent{background:radial-gradient(ellipse at 95% 5%,rgba(240,97,86,.24),transparent 55%),linear-gradient(135deg,rgba(72,28,35,.88),rgba(25,20,21,.9))!important;border-color:rgba(255,158,147,.48)!important}
-.v9-command .v9-primary{background:linear-gradient(110deg,#e25c59,#b82d3d)!important;border-color:#ffb3aa!important;color:#fff!important}
-.v9-emergency-grid button{background:rgba(87,39,45,.7);border-color:rgba(255,168,160,.42);color:#fff1ee}
-.wild-emergency{border-color:rgba(255,149,139,.55)!important;background:linear-gradient(130deg,rgba(111,35,44,.85),rgba(44,24,37,.92))!important}
-@supports not (backdrop-filter:blur(1px)){.panel,.card,.wild-hero,.v9-command>div,.tabs,.manual-reader{background:#241d15!important}}
+/* EMB Signature Edition v2 — true obsidian, controlled gold, restrained luxury. */
+:root{color-scheme:dark;--glass-border:rgba(196,156,91,.2);--glass-fill:#111214;--glass-highlight:rgba(255,255,255,.035);--cyan:#e4bd7b;--gold:#e5bd79;--mint:#dfc08e;background:#08090b;color:#f2f1ee}
+html{background:#08090b}
+body{background:radial-gradient(ellipse 52% 40% at 82% -12%,rgba(186,139,66,.055),transparent 78%),linear-gradient(180deg,#090a0c 0%,#0d0e10 48%,#08090b 100%);color:#ecebe8}
+body:before{background:none;opacity:0}
+header{background:#0b0c0e;border-bottom:1px solid rgba(212,169,101,.24);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;padding:18px clamp(18px,3vw,44px)}
+header small{color:#cfa866!important;letter-spacing:.19em}
+header h1{color:#faf8f3;text-shadow:none;letter-spacing:.08em}
+header .edition{color:#e6bc77;border-color:rgba(225,181,110,.52)}
+header .muted{color:#a9a8a5}
+.shell{max-width:1480px}
+.tabs{background:#111214;border:1px solid #35302a;border-radius:14px;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;gap:5px;padding:7px}
+.tabs button{color:#d5d4d1;background:transparent;border:1px solid transparent;border-radius:9px;box-shadow:none}
+.tabs button:hover{background:#24211c;border-color:#50412d}
+.tabs button.active,.tabs button[aria-selected=true]{background:#dcb777;color:#17130d;border-color:#f1d39d;box-shadow:none;font-weight:800}
+.panel,.card,.wild-hero,.v9-command>div,.manual-reader,.wild-guide,.wild-actions>button,.v9-result{background:#131416!important;border:1px solid #32302d!important;box-shadow:none!important;backdrop-filter:none;-webkit-backdrop-filter:none}
+.panel,.card,.wild-hero,.v9-command>div,.manual-reader{border-radius:15px!important}
+.wild-hero{background:linear-gradient(110deg,#151617,#111214)!important;border:1px solid #3a332a!important;padding:clamp(23px,3.3vw,42px)!important}
+.wild-hero:after{border-color:rgba(220,175,104,.16);box-shadow:0 0 0 48px rgba(222,179,109,.012),0 0 0 98px rgba(222,179,109,.008)}
+.wild-hero h2{color:#f8f6f0;text-shadow:none}
+.wild-kicker{color:#d8ad69!important}
+h2,h3,h4{color:#f1efeb}
+a{color:#e5bd7c}a:hover{color:#ffe0a6}
+button,.btn{background:#202124;border:1px solid #49423a;color:#f1eee9;box-shadow:none;border-radius:10px}
+button:hover,.btn:hover{background:#2b2926;border-color:#c6a06b;box-shadow:none}
+input,textarea,select{background:#0b0c0e;border:1px solid #585045;color:#f7f5f0;box-shadow:none}
+input:focus,textarea:focus,select:focus{outline:2px solid #e2ba77;outline-offset:2px}
+.v9-command{gap:18px}
+.v9-command>div{padding:clamp(19px,2.3vw,30px)!important;border-radius:16px!important}
+.v9-urgent{background:#171416!important;border-color:#664046!important}
+.v9-urgent>strong{color:#fff1ef}
+.v9-command .v9-primary{background:#c83e4b!important;border:1px solid #e9858c!important;color:#fff!important;box-shadow:none!important}
+.v9-emergency-grid button{background:#302125;border:1px solid #66434a;color:#f9e8e6}
+.v9-find{background:#141517!important;border-color:#3c3832!important}
+.v9-find h3{color:#f6f3ed}
+.v9-searchrow input{background:#0b0c0e;border-color:#776043;box-shadow:none;min-height:54px}
+.v9-result{background:#1b1c1e!important}
+.v9-shortcuts button{background:#202022;border:1px solid #4b4235}
+.v9-shortcuts button:hover{background:#2c2821}
+#v9-more.v9-more{display:block;width:100%;background:#171819!important;border:1px solid #464039!important;color:#e6c28b!important;box-shadow:none!important;min-height:55px;font-weight:750}
+#v9-more.v9-more:hover{background:#22201c!important;border-color:#cba66b!important}
+.manual-chapter{background:#1c1d1e!important;border-color:#494036!important;color:#e9e7e2!important}
+.manual-active{background:#3d3121!important;border-color:#dcb777!important;color:#ffeed0!important;box-shadow:none!important}
+.wild-emergency{background:#2c1a1f!important;border-color:#9a4951!important}
+.aegis-help-open,.aegis-help-start{background:#22201c!important;border:1px solid #b58b4f!important;color:#f1d5a7!important;box-shadow:none!important}
+.aegis-help-backdrop{background:rgba(0,0,0,.88)}
+.aegis-help-dialog{background:#151617;color:#f4f1ea;border-color:#8b6b42;box-shadow:0 24px 90px rgba(0,0,0,.8)}
+.aegis-help-section strong{color:#f3d4a1}.aegis-help-section span{color:#c5c1ba}
+.aegis-help-priority{background:#382127;border-color:#c66d74;color:#fff0ed}
+.aegis-help-note{color:#ddba84}
+#offline,#offlineready,#modelstatus{background:#15191a;color:#c7d8d4;border:1px solid #3a4b47}
+#selftestout{color:#cbd0cd}
+header [role="group"][aria-label="Display options"]{margin-top:9px;color:#bcbab5;font-size:13px}
+header [role="group"][aria-label="Display options"] label{margin-right:10px}
+@media(max-width:640px){header{padding:15px 16px}.tabs{gap:3px}.tabs button{padding:9px 10px}.v9-command>div{padding:17px!important}}
+@media(prefers-reduced-motion:reduce){button:hover{transform:none}}
+
 </style><script>window.AEGIS_WEBLLM={"name":"Qwen2.5-0.5B-Instruct Q4_K_M (Apache-2.0)","license":"Apache-2.0","nctx":2048,"addHazards":false,"base":"llm/model/","wasm":"llm/wllama.wasm","compat_wasm":"llm/compat/wllama.wasm","compat_worker":"llm/compat/wllama.js","gbnf":"llm/interpret.gbnf","shards":[{"file":"qwen2.5-0.5b-instruct-q4_k_m.part001","bytes":24117248,"sha256":"9611ab08f2513766afb1761cf9928cf49a3b51e8412ee727fde3d3bfbc1720fc"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part002","bytes":24117248,"sha256":"e44193a76f9c7534849150440a1f1feedd496f3f09147971a37b25cb59239212"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part003","bytes":24117248,"sha256":"f8934dc998f5f58d1905949d64a4f0bf1adc02d04e7eb43209c8b900babcc1c1"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part004","bytes":24117248,"sha256":"cebd6b29a606859abc78b7e98fb28669ddff423b6d720836b827a129a5316d39"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part005","bytes":24117248,"sha256":"b75c3545c2104a8bfb0075352bb91aa2c9de571b0116c519cce9ea5ce1be73fa"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part006","bytes":24117248,"sha256":"edf6748c42470ef016d4ec791d7eb5c8f1b09dff492c47d029dc8e2dc1dceb20"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part007","bytes":24117248,"sha256":"d5fee0ae08d6337222e435e71be691b3b3a0183cefc2b9b5ea8b59a95c5f7c65"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part008","bytes":24117248,"sha256":"f5f119d5b2c1ad36232af0bcdc3359f444c08339d5a01b1575913497bd39fbcd"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part009","bytes":24117248,"sha256":"b23c0965f092c2cfd39ce68d021b1dd08f2959d764e4ff522298218f0aa18513"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part010","bytes":24117248,"sha256":"2083db317c2058dcb2e0dcf4cc6a343e1d6a475f3253925ac2406f6e827ba6bf"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part011","bytes":24117248,"sha256":"5e6db915e8666e27d5f95593899c204230b6c15d19fee422ab4c374499064bf2"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part012","bytes":24117248,"sha256":"27fd012f07b7ac1ed2bb8a2c30a9385d7124fea58fc45ec5a4c4c6568d8068ab"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part013","bytes":24117248,"sha256":"2abe6a74c9ed6c5205210e8c6ec99dc084dc30a004d7ef3da0fc954bfb4b62d1"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part014","bytes":24117248,"sha256":"7aaa0eb967b85db781d557cec2bd9e7275d16fe66cd37ad3e8a07b6769bc1cb6"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part015","bytes":24117248,"sha256":"ca12e6a1bc6450ae54e3aa8d533c1c902301dcb59c133c620a24bfeeb56e4f88"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part016","bytes":24117248,"sha256":"3fbec6c3abbd0fc1e6e51212fff4482d93d7a8e81d2149804f671d04aa44bb5f"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part017","bytes":24117248,"sha256":"781b4cd707dbecea14ae3fe8f8c7ece6731db9b69188dfaa7cd736263a63d7ed"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part018","bytes":24117248,"sha256":"a11bc393d30a20b48739c1dc8f2d1a122d0452494590f66e9cbb0ba03e1c67d9"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part019","bytes":24117248,"sha256":"9639f20ad70dcffefca93701721d96e805526b414d6d6935b94c2e641ae39296"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part020","bytes":24117248,"sha256":"06f38bb8d21e04f53a05bd20fee359b04c808019f012abceba8831d7394adc7b"},{"file":"qwen2.5-0.5b-instruct-q4_k_m.part021","bytes":9055072,"sha256":"705b4f4d31957d7f0523d7d6e8fb8334b15aa8273a8cb47fb391ccfcc204af58"}]};</script></head><body>
 <a class="skip" href="#main">Skip to main content</a>
 <header><small>EMB STUDIOS · FIELD COMMAND</small><h1>AEGIS <span class="edition">WILDLANDS</span></h1><div class="muted">Adaptive Emergency Guidance &amp; Intelligence System · Experimental offline-first field command</div><button id="aegis-help-open" class="aegis-help-open" type="button" aria-haspopup="dialog" aria-controls="aegis-help">? Quick Start &amp; Key</button> <button id="sos" class="sos" data-tab="emergency">EMERGENCY REFERENCE</button> <div id="offline" class="pill" role="status">checking...</div> <div id="offlineready" class="pill" role="status">offline cache: checking...</div> <div id="modelstatus" class="pill" role="status">language model: checking...</div> <div id="selftestout" class="step" role="status"></div>
