@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-10\.3-help/);
+assert.match(sw,/aegis-10\.4-emb-gold/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -122,3 +122,8 @@ assert.match(html,/src="quick-start.js"/);
 assert.match(sw,/quick-start\.js/);
 assert.match(read('quick-start.js'),/Escape/);
 assert.match(read('manual-offline-check.js'),/quick-start\.js/);
+
+assert.match(html,/EMB Signature Edition: obsidian \+ champagne gold/);
+assert.match(html,/#090908/);
+assert.match(html,/\.v9-command \.v9-primary\{background:linear-gradient\(110deg,#e25c59,#b82d3d\)/);
+assert.match(read('manifest.webmanifest'),/#090908/);
