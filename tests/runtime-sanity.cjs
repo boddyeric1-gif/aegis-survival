@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-5\.2-fieldcraft/);
+assert.match(sw,/aegis-6\.0-chapters/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -49,3 +49,13 @@ assert.match(html,/src="wildlands-fieldcraft.js"/);
 assert.match(sw,/wildlands-fieldcraft\.js/);
 assert.match(fieldcraft,/Reverse-wrap two-ply cord/);
 assert.match(fieldcraft,/Portable handwashing station/);
+
+const manual=read('wildlands-manual.js');
+assert.match(html,/id="wild-manual"/);
+assert.match(html,/id="manual-chapters"/);
+assert.match(html,/src="wildlands-manual.js"/);
+assert.match(sw,/wildlands-manual\.js/);
+assert.match(manual,/Primitive Tools & Materials/);
+assert.match(manual,/Emergency Response & Long-Term Planning/);
+assert.match(sw,/startsWith\('aegis-'\)/);
+assert.doesNotMatch(sw,/caches\.delete\('model-store-v1'\)/);
