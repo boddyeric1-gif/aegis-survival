@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-10\.0-glass/);
+assert.match(sw,/aegis-10\.1-glass-footer/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -104,3 +104,6 @@ assert.match(html,/backdrop-filter:blur/);
 assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
+
+assert.match(html,/EMB AEGIS Wildlands v10\.0 · Glass Edition/);
+assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
