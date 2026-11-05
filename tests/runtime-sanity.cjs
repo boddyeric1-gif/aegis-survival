@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-4\.4\.6-ai-health/);
+assert.match(sw,/aegis-5\.0-wildlands/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -24,3 +24,14 @@ assert.ok(fs.existsSync('QUALITY_GATES.md'));
 assert.match(bridge,/inference_verified:smokeTestPassed/);
 assert.match(bridge,/model loaded but failed the inference smoke test/);
 assert.match(bridge,/stage\('SMOKE_TEST'/);
+
+assert.match(html,/class="wild-actions"/);
+assert.match(html,/I NEED HELP NOW/);
+assert.match(html,/class="wild-quick"/);
+assert.match(html,/WILDLANDS/);
+assert.match(html,/data-tab="fieldmanual"/);
+assert.match(html,/data-tab="emergency"/);
+assert.match(html,/id="msg"/);
+assert.match(html,/id="answer"/);
+assert.match(html,/id="modelstatus"/);
+assert.match(sw,/model-store-v1|aegis-/);
