@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-10\.2-audit/);
+assert.match(sw,/aegis-10\.3-help/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -114,3 +114,11 @@ assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
 assert.match(read('manual-offline-check.js'),/aegis-10\.2-audit-/);
 assert.match(read('README.md'),/Glass Edition \(v10\.0\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
+
+assert.match(html,/id="aegis-help"/);
+assert.match(html,/id="aegis-help-open"/);
+assert.match(html,/id="aegis-help-start"/);
+assert.match(html,/src="quick-start.js"/);
+assert.match(sw,/quick-start\.js/);
+assert.match(read('quick-start.js'),/Escape/);
+assert.match(read('manual-offline-check.js'),/quick-start\.js/);
