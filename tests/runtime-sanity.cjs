@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-6\.0-chapters/);
+assert.match(sw,/aegis-6\.1-workshop/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -59,3 +59,12 @@ assert.match(manual,/Primitive Tools & Materials/);
 assert.match(manual,/Emergency Response & Long-Term Planning/);
 assert.match(sw,/startsWith\('aegis-'\)/);
 assert.doesNotMatch(sw,/caches\.delete\('model-store-v1'\)/);
+
+const projects=read('manual-projects.js');
+assert.match(html,/id="manualhub"/);
+assert.match(html,/data-tab="manualhub"/);
+assert.match(html,/id="manual-projects"/);
+assert.match(html,/src="manual-projects.js"/);
+assert.match(sw,/manual-projects\.js/);
+assert.match(projects,/Wooden digging stick/);
+assert.match(projects,/Boiler outage checklist/);
