@@ -11,28 +11,20 @@ function validUpdates(feed){return feed&&Array.isArray(feed.releases)&&feed.rele
 function text(tag,value,cls){const el=document.createElement(tag);el.textContent=String(value||'');if(cls)el.className=cls;return el}
 let alerts=read(key,fallback),releases=read(updatesKey,releaseFallback),lastCheck=null;
 function render(){
- const list=$('aegis-alert-list'),history=$('aegis-update-list'),badge=$('aegis-alert-badge'),status=$('aegis-alert-status');if(!list||!history)return;
- const seen=read(seenKey,[]),unread=alerts.announcements.filter(a=>!seen.includes(a.id)).length;
- badge.textContent=unread?' ('+unread+' new)':'';status.textContent=lastCheck?'Last online check: '+lastCheck:'Showing saved announcements; open while online to check for new ones.';
- list.replaceChildren();
- for(const a of alerts.announcements){const article=document.createElement('article');article.className='panel';article.append(text('h3',a.title),text('p',a.body),text('p',(a.severity||'info').toUpperCase()+' · '+(a.published||'date unavailable'),'muted'));list.append(article)}
- if(!alerts.announcements.length)list.append(text('p','No announcements have been saved on this device.','muted'));
+ const history=$('aegis-update-list');if(!history)return;
  history.replaceChildren();
  for(const r of releases.releases){const d=document.createElement('details');const summary=text('summary',(r.version||'Release')+' · '+(r.title||'Update')+' · '+(r.date||''));d.append(summary);const ul=document.createElement('ul');for(const change of (Array.isArray(r.changes)?r.changes:[]).slice(0,30)){ul.append(text('li',change))}d.append(ul);history.append(d)}
 }
 async function refresh(){
  if(!navigator.onLine){render();return}
  try{
-  const [a,u]=await Promise.all([fetch('announcements.json?check='+Date.now(),{cache:'no-store'}),fetch('updates.json?check='+Date.now(),{cache:'no-store'})]);
-  if(a.ok){const feed=await a.json();if(valid(feed)){alerts=feed;store(key,feed)}}
+  const u=await fetch('updates.json?check='+Date.now(),{cache:'no-store'});
   if(u.ok){const feed=await u.json();if(validUpdates(feed)){releases=feed;store(updatesKey,feed)}}
   lastCheck=new Date().toLocaleString();
  }catch{}render();
 }
 function init(){
- if(!$('aegis-alert-list'))return;
- $('aegis-alert-refresh').addEventListener('click',refresh);
- $('aegis-alert-mark-read').addEventListener('click',()=>{store(seenKey,alerts.announcements.map(a=>a.id));render()});
+ if(!$('aegis-update-list'))return;
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh()});
  window.addEventListener('online',refresh);
  render();refresh();setInterval(()=>{if(!document.hidden)refresh()},15*60*1000);
