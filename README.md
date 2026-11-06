@@ -86,3 +86,7 @@ When changing an offline asset, update the `sw.js` precache list and cache revis
 
 ---
 **EMB Creations · Signature black-and-gold theme · Experimental, not professionally validated.**
+
+### Field Guide intent fix
+
+The local deterministic assistant now routes shelter, water, and lost-person requests to goal-first guidance before it searches inventory-based craft recipes. In particular, 'I have a tarp, knife, rope, blankets, and a sleeping bag. I need to make shelter' no longer produces a horseshoe pack or stone-knife project. The v11 footer label now identifies the release. This is a targeted regression fix, not a claim that every natural-language request is understood.
