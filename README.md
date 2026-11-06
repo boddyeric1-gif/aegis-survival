@@ -10,6 +10,10 @@
 
 Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Eight additional practical food-acquisition and fieldcraft references are also included, covering hunting observation, bank fishing, archery safety and equipment, humane trap selection, edible plant and mushroom identification, food safety, and lost-person signaling. These are **not yet comprehensive standalone training guides**; existing manual sections remain below unchanged.
 
+## Expanded v11 manual audit
+
+All 48 procedures in the v7 practical library now include a materials/preparation section, completion checks, troubleshooting guidance, and a transparent reference-status label. Nine previously superficial entries were rewritten with more explicit procedural sequencing, including water boiling, wood mallet, ground insulation, signaling, wildlife observation, fishing, practice snare/deadfall models and food ration planning. The mobile guide typography and navigation have been tightened. **This does not mean all 48 procedures are independently validated or equally detailed**, and other manual collections still require the same editorial treatment. The bow and trapping sections do not provide fully validated functional weapon/trap construction plans. Real-world skill practice and qualified safety review remain essential.
+
 ## What is included
 
 | Area | Description |
