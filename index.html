@@ -909,13 +909,11 @@ function findGoals(text){
 }
 function survivalIntent(t){
   const raw=String(t||'').toLowerCase();
-  // Phase 3: distinguish requested outcomes from inventory, hypotheticals and negation.
-  // Explicit 'need shelter' outranks a knife mentioned only as a possession.
-  const goal=/(?:\\b(?:need|want|looking for|trying to|help me|how (?:do|can) i|how to|show me how to|build|make|find|purify|treat)\\b)[^.!?;]{0,140}/g;
+  // Explicit requested outcomes outrank incidental inventory mentions.
+  const goal=/\b(?:need|want|looking for|trying to|help me|how (?:do|can) i|how to|show me how to|build|make|find|purify|treat)\b[^.!?;]{0,140}/g;
   const matches=[...raw.matchAll(goal)].map(m=>m[0]);
   const q=matches.length?matches.join(' '):raw;
-  const negated=(term)=>new RegExp('\\\\b(?:no|not|without|don\\'t need|do not need)\\\\s+(?:(?:any|a|the)\\\\s+)?'+term+'\\\\b').test(q);
-  if(negated('shelter')&&!/\\b(?:need|want|build|make)\\s+(?:a\\s+)?shelter\\b/.test(q))return null;
+  if(/\b(?:no|not|without)\s+(?:any\s+|a\s+)?shelter\b/.test(q)&&!/\b(?:need|want|build|make)\s+(?:a\s+)?shelter\b/.test(q))return null;
   if(/\b(?:shelter|lean[- ]?to|tarp (?:shelter|roof)|sleep(?:ing)? (?:outside|warm)|rain cover|stay dry)\b/.test(q))
     return {kind:'guide',topic:'Shelter',text:'SHELTER FIRST — You asked for shelter, not a pack or knife.\n\n1. Choose high, stable ground away from flood paths, dead limbs and exposed ridges.\n2. Stretch your tarp between two sound supports with rope, keeping the roof sloped so rain drains away from bedding. Use proper anchors; avoid loading weak branches.\n3. Put a waterproof layer under your sleeping bag and insulate from the ground with a dry pad or folded blankets. Keep sleeping gear away from the tarp edges.\n4. Lower the windward edge if needed while retaining ventilation and a clear exit.\n5. Check anchor tension and runoff; move to a solid building if wind, cold or rain overwhelms the setup.\n\nUse your knife only for controlled cutting; keep it sheathed otherwise. Never use a flame, stove or heater inside the tarp. Open Field Manual → Low-profile lean-to rain tarp for the illustrated walkthrough.'};
   if(/\b(?:water|thirst|drink|dehydrat|boil)\b/.test(q)&&/\b(?:need|find|safe|purify|treat|clean|drink|boil)\b/.test(q))
