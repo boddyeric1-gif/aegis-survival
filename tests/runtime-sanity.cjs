@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -105,7 +105,7 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v17 · Broadcast Admin/);
+assert.match(html,/EMB AEGIS Wildlands v19 · Broadcast & Notifications/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
 const uxAudit=read('ux-v9.js');
@@ -149,7 +149,7 @@ assert.match(read('manual-library-v7.js'),/Completion check/);
 
 assert.match(html,/SHELTER FIRST/);
 assert.match(html,/function survivalIntent/);
-assert.match(html,/v17 · Broadcast Admin/);
+assert.match(html,/v19 · Broadcast & Notifications/);
 
 for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-earthworks.js']){
   assert.match(read(name),/Field verification/);
@@ -283,3 +283,8 @@ assert.match(html,/connect-src 'self' https:\/\/zsyfzgefyjydkvdgbyth\.supabase\.
 const adminScript=read('broadcast-live-v16.js');
 assert.doesNotMatch(adminScript,/e\.append\(email\)/,'Removed email input must not be referenced');
 assert.match(adminScript,/form\.append\(u,p,submit,status\)/,'Two-field login should be rendered');
+
+assert.match(html,/id="aegis-urgent-banner"/);
+assert.match(html,/id="aegis-notify-optin"/);
+assert.match(read('broadcast-live-v16.js'),/Notification\.requestPermission/);
+assert.match(read('broadcast-live-v16.js'),/notifyNew\(messages\)/);

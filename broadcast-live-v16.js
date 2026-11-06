@@ -6,7 +6,8 @@ const KEY='sb_publishable_6xebiARfz9Lhx1eoT4bbCQ_7pIvrprQ';
 const headers={'apikey':KEY,'Content-Type':'application/json'};
 const $=id=>document.getElementById(id);
 const saved='aegis-live-broadcast-v16',seen='aegis-alert-seen-v14';
-let messages=[],session=null,checked='';
+let messages=[],session=null,checked='',initialSync=true;
+const notifiedKey='aegis-notified-ids-v19';
 function el(tag,value){const e=document.createElement(tag);if(value!==undefined)e.textContent=String(value);return e}
 function local(key,fallback){try{return JSON.parse(localStorage.getItem(key))||fallback}catch{return fallback}}
 function persist(key,data){try{localStorage.setItem(key,JSON.stringify(data))}catch{}}
@@ -14,7 +15,10 @@ function formatSeverity(s){return ({general:'GENERAL',notice:'NOTICE',warning:'W
 function render(){
  const root=$('aegis-alert-list'),badge=$('aegis-alert-badge'),status=$('aegis-alert-status');if(!root)return;
  const viewed=local(seen,[]);const unseen=messages.filter(m=>!viewed.includes(m.id)).length;
+ const urgent=messages.find(m=>!viewed.includes(m.id)&&(m.severity==='emergency'||m.severity==='warning'));
+ const banner=$('aegis-urgent-banner');if(banner){banner.hidden=!urgent;if(urgent){banner.replaceChildren();const title=el('strong',(urgent.severity==='emergency'?'EMERGENCY':'IMPORTANT')+' · '+urgent.title);const body=el('span',' — '+urgent.body.slice(0,220));const go=el('button','Open Messages');go.type='button';go.addEventListener('click',()=>{document.querySelector('[data-tab="messages"]')?.click()});banner.append(title,body,go)}}
  if(badge)badge.textContent=unseen?' ('+unseen+' new)':'';
+ const label=$('aegis-unread-counter');if(label)label.textContent=unseen?unseen+' unread messages':'All messages read';
  if(status)status.textContent=checked?'Last check: '+checked:'Saved messages · online sync pending';
  root.replaceChildren();
  if(!messages.length)root.append(el('p','No broadcast messages received yet.'));
@@ -22,8 +26,9 @@ function render(){
 }
 async function load(){
  if(!navigator.onLine){render();return}
- try{const res=await fetch(BASE+'/rest/v1/aegis_messages?select=id,title,body,severity,created_at&published=eq.true&order=created_at.desc&limit=100',{headers:{apikey:KEY},cache:'no-store'});if(!res.ok)throw Error('Feed '+res.status);const rows=await res.json();if(!Array.isArray(rows))throw Error('Unexpected feed');messages=rows.filter(m=>m&&typeof m.id==='string'&&typeof m.title==='string'&&typeof m.body==='string');persist(saved,messages);checked=new Date().toLocaleString()}catch(e){const s=$('aegis-alert-status');if(s)s.textContent='Could not check messages: '+e.message}render();
+ try{const res=await fetch(BASE+'/rest/v1/aegis_messages?select=id,title,body,severity,created_at&published=eq.true&order=created_at.desc&limit=100',{headers:{apikey:KEY},cache:'no-store'});if(!res.ok)throw Error('Feed '+res.status);const rows=await res.json();if(!Array.isArray(rows))throw Error('Unexpected feed');messages=rows.filter(m=>m&&typeof m.id==='string'&&typeof m.title==='string'&&typeof m.body==='string');notifyNew(messages);persist(saved,messages);checked=new Date().toLocaleString()}catch(e){const s=$('aegis-alert-status');if(s)s.textContent='Could not check messages: '+e.message}render();
 }
+function notifyNew(rows){const previous=local(notifiedKey,[]);if(initialSync){initialSync=false;persist(notifiedKey,rows.map(m=>m.id).slice(0,150));return}const fresh=rows.filter(m=>!previous.includes(m.id));persist(notifiedKey,[...new Set([...rows.map(m=>m.id),...previous])].slice(0,200));if(!fresh.length)return;const urgent=fresh.find(m=>m.severity==='emergency')||fresh.find(m=>m.severity==='warning')||fresh[0];if('Notification' in window&&Notification.permission==='granted'&&document.visibilityState==='visible'){try{new Notification('AEGIS · '+formatSeverity(urgent.severity),{body:urgent.title+' — '+urgent.body.slice(0,120),tag:'aegis-'+urgent.id})}catch{}}}
 async function request(path,body,access){const res=await fetch(BASE+path,{method:'POST',headers:{...headers,...(access?{Authorization:'Bearer '+access}:{})},body:JSON.stringify(body),cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok)throw Error(data.msg||data.error_description||data.message||'Request rejected: '+res.status);return data}
 function admin(){
  const root=$('aegis-admin-root');if(!root)return;
@@ -37,6 +42,6 @@ function admin(){
  window.addEventListener('pagehide',()=>{session=null;composer.hidden=true;form.hidden=false});
 }
 function parseJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch{return {}}}
-function init(){messages=local(saved,[]);render();admin();$('aegis-alert-refresh')?.addEventListener('click',load);$('aegis-alert-mark-read')?.addEventListener('click',()=>{persist(seen,messages.map(m=>m.id));render()});window.addEventListener('online',load);document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();setInterval(()=>{if(!document.hidden)load()},15*60*1000)}
+function init(){messages=local(saved,[]);render();admin();$('aegis-notify-optin')?.addEventListener('click',async()=>{const status=$('aegis-notify-status');if(!('Notification' in window)){if(status)status.textContent='This browser does not support browser notifications.';return}try{const permission=await Notification.requestPermission();if(status)status.textContent=permission==='granted'?'Enabled while AEGIS is open and online. Background push is not yet available.':'Permission: '+permission}catch(e){if(status)status.textContent='Permission request failed: '+e.message}});$('aegis-alert-refresh')?.addEventListener('click',load);$('aegis-alert-mark-read')?.addEventListener('click',()=>{persist(seen,messages.map(m=>m.id));render()});window.addEventListener('online',load);document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();setInterval(()=>{if(!document.hidden)load()},15*60*1000)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
