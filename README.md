@@ -140,3 +140,9 @@ The local deterministic assistant now routes shelter, water, and lost-person req
 
 ## v17: Admin login correction
 The admin interface now shows only username and password. `ADMIN-EMB` maps to the existing EMB business Supabase Auth account internally; publishing still requires a valid Supabase password and a matching allowlisted admin user. The password shared in chat is not provisioned. Network failures show connectivity diagnostics rather than being treated as incorrect credentials. Footer now displays v17.
+
+## v19: In-app alert visibility and opt-in foreground notifications
+
+Messages has an unread count and explicit opt-in for browser notifications while the application is running online. Newly received broadcasts trigger a browser notification where permission and platform support allow. Important and Emergency unread messages also display an urgent in-app banner linking to the inbox. Notification deduplication and unread state are stored locally. This is **not** OS-level background push and is not a substitute for official emergency alert systems.
+
+**Admin authentication limitation:** The public app still uses the existing authorized Supabase Auth account. A separately requested chat-shared password has not been provisioned; never place it in frontend JavaScript. Use the existing account password or arrange a private reset/credential provisioning flow.
