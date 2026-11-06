@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -235,3 +235,11 @@ assert.match(router.match('How do I make that again?').text,/Skillet bannock/);
 assert.match(router.match('How do I make bannock?').text,/Reported missing: water/);
 assert.match(router.match('clear field guide memory').text,/cleared/);
 assert.equal(router.recall().inventory.length,0);
+
+assert.match(sw,/req\.mode==='navigate'\)return fetch\(req\)/);
+assert.match(sw,/\.catch\(\(\)=>hit\|\|c\.match/);
+assert.match(html,/updateViaCache:'none'/);
+assert.match(html,/registration\.update\(\)/);
+assert.match(html,/visibilitychange/);
+assert.match(html,/controllerchange/);
+assert.match(html,/location\.reload\(\)/);
