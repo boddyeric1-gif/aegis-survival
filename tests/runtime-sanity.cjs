@@ -144,3 +144,7 @@ assert.match(reader,/aria-live/);
 assert.match(html,/src="practical-skills-v11\.js"/);
 assert.match(sw,/practical-skills-v11\.js/);
 assert.match(read('practical-skills-v11.js'),/Simple fishing: bank line and baited hook/);
+
+assert.match(html,/field-manual-v11\.css/);
+assert.match(sw,/field-manual-v11\.css/);
+assert.match(read('manual-library-v7.js'),/Completion check/);
