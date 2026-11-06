@@ -7,7 +7,35 @@ const entries=[];
 function register(kind,items){for(const x of items||[]){const title=x.title||x.name;if(!title)continue;entries.push({kind,title,group:x.group||x.category||'',materials:x.ingredients||x.gear||x.materials||'',steps:x.steps||x.method||'',caution:x.caution||x.hazard||x.warning||x.limits||'',context:x.context||x.site||x.preflight||''});}}
 function isQuestion(s){return /\b(?:how|recipe|instructions|guide|steps|teach|show|make|build|prepare|cook|bake|fix|repair|learn|what is|what are|find)\b/i.test(s)||/\?/.test(s)}
 function score(query,entry){const q=new Set(tokenize(query)),title=tokenize(entry.title),group=tokenize(entry.group);let value=0;for(const t of title)if(q.has(t))value+=3;for(const t of group)if(q.has(t))value+=.5;for(const [key,words] of Object.entries(ALIASES)){const all=[key,...words];if(all.some(w=>query.includes(w))&&all.some(w=>entry.title.toLowerCase().includes(w)))value+=5;}return value;}
-function format(x,query){let lines=['OFFLINE FIELD PROCEDURE: '+x.title,'Collection: '+x.group,'Materials: '+x.materials];if(Array.isArray(x.steps)){lines.push('Procedure:');for(let i=0;i<x.steps.length;i++){const st=x.steps[i];lines.push((i+1)+'. '+(Array.isArray(st)?st[0]+': '+st[1]:String(st)));}}else lines.push('Method: '+x.steps);lines.push('Safety and limitations: '+x.caution);if(/\b(?:i have|i've got|we have|we've got|only have|without|no )\b/i.test(query)){lines.push('Supply check: Compare the materials above against your actual inventory. AEGIS has not verified quantities, substitutions or feasibility from this message. Do not assume missing equipment can be improvised safely.');}if(x.context)lines.push('Context: '+x.context);lines.push('Source status: Original offline reference; not independently field-validated.');return lines.join('\n\n');}
+function inventoryCheck(query,materials){
+ // Extract only explicit possession or absence statements. Never infer stock from a question.
+ const clauses=String(query).split(/[.;!?]/).filter(c=>/\b(?:i have|i've got|we have|we've got|only have|i got|we got|don't have|do not have|without|no)\b/i.test(c));
+ if(!clauses.length)return '';
+ const required=String(materials).split(/[,;]|\bor\b/i).map(s=>s.trim()).filter(Boolean);
+ const known=[],absent=[],unknown=[];
+ for(const material of required){
+   const words=tokenize(material).filter(w=>!/^\d+$/.test(w)&&!['cups','cup','tsp','tbsp','ft','feet','optional','available','clean','dry','sound','small','large'].includes(w));
+   if(!words.length){unknown.push(material);continue;}
+   const evidence=clauses.find(c=>words.some(w=>new RegExp('\\b'+w+'\\b','i').test(c)));
+   if(!evidence){unknown.push(material);continue;}
+   const denied=new RegExp("(?:without|no|don't have|do not have)\\s+(?:any\\s+|a\\s+|an\\s+)?[^,;.!?]{0,25}\\b(?:"+words.join('|')+")\\b",'i').test(evidence);
+   (denied?absent:known).push(material);
+ }
+ const parts=['SUPPLY CHECK — reported items only; not independently verified.'];
+ if(known.length)parts.push('Mentioned as available: '+known.join('; '));
+ if(absent.length)parts.push('Reported missing: '+absent.join('; '));
+ if(unknown.length)parts.push('Not confirmed: '+unknown.join('; '));
+ parts.push('Amounts, condition and safe substitutions are NOT verified. Do not begin if essential materials or safety equipment are missing.');
+ return parts.join('\n');
+}
+function format(x,query){let lines=['OFFLINE FIELD PROCEDURE: '+x.title,'Collection: '+x.group,'Materials: '+x.materials];
+ const inventory=inventoryCheck(query,x.materials);if(inventory)lines.push(inventory);
+ if(Array.isArray(x.steps)){lines.push('Procedure:');for(let i=0;i<x.steps.length;i++){const st=x.steps[i];lines.push((i+1)+'. '+(Array.isArray(st)?st[0]+': '+st[1]:String(st)));}}else lines.push('Method: '+x.steps);
+ lines.push('Safety and limitations: '+x.caution);
+ if(x.context)lines.push('Context: '+x.context);
+ lines.push('Source status: Original offline reference; not independently field-validated.');
+ return lines.join('\n\n');
+}
 function match(raw){const query=String(raw||'').toLowerCase().trim();if(!isQuestion(query)||query.length<5)return null;
  // Do not override immediate hazard triage or ongoing emergency dialogue.
  if(/\b(?:not breathing|unresponsive|blue lips|chest pain|severe bleeding|fire in|smell gas|carbon monoxide poisoning|coughing blood|difficulty breathing|trouble breathing|stroke symptoms|poisoning|overdose|suicidal|seizure)\b/.test(query))return null;
