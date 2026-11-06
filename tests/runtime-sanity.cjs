@@ -215,7 +215,12 @@ assert.equal(router.match('My child has blue lips and is not breathing'),null);
 assert.equal(router.stats().procedures,2);
 
 assert.equal(router.match('How do I treat someone coughing blood?'),null);
-assert.match(router.match('How do I make bannock? I only have flour').text,/Supply check/);
+assert.match(router.match('How do I make bannock? I only have flour').text,/SUPPLY CHECK/);
 assert.match(read('wildlands-fieldcraft.js'),/AEGIS_PHASE3\.register/);
 assert.match(read('manual-projects.js'),/AEGIS_PHASE3\.register/);
 assert.match(read('deep-shelter-earthworks.js'),/AEGIS_PHASE3\.register/);
+
+const supply=router.match('How do I make bannock? I have flour but no water').text;
+assert.match(supply,/Mentioned as available: Flour/);
+assert.match(supply,/Reported missing: water/);
+assert.match(supply,/Amounts, condition and safe substitutions are NOT verified/);
