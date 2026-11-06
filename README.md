@@ -1,10 +1,18 @@
-# EMB AEGIS Wildlands — Glass Edition (v10.0)
+# EMB AEGIS Wildlands — Field Reader Pilot (v11)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## New: Illustrated field reader pilot
+
+Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Eight additional practical food-acquisition and fieldcraft references are also included, covering hunting observation, bank fishing, archery safety and equipment, humane trap selection, edible plant and mushroom identification, food safety, and lost-person signaling. These are **not yet comprehensive standalone training guides**; existing manual sections remain below unchanged.
+
+## Expanded v11 manual audit
+
+All 48 procedures in the v7 practical library now include a materials/preparation section, completion checks, troubleshooting guidance, and a transparent reference-status label. Nine previously superficial entries were rewritten with more explicit procedural sequencing, including water boiling, wood mallet, ground insulation, signaling, wildlife observation, fishing, practice snare/deadfall models and food ration planning. The existing user-selectable high-contrast and large-text accessibility modes are preserved. **This does not mean all 48 procedures are independently validated or equally detailed**, and other manual collections still require the same editorial treatment. The bow and trapping sections do not provide fully validated functional weapon/trap construction plans. Real-world skill practice and qualified safety review remain essential.
 
 ## What is included
 
@@ -78,3 +86,7 @@ When changing an offline asset, update the `sw.js` precache list and cache revis
 
 ---
 **EMB Creations · Signature black-and-gold theme · Experimental, not professionally validated.**
+
+### Field Guide intent fix
+
+The local deterministic assistant now routes shelter, water, and lost-person requests to goal-first guidance before it searches inventory-based craft recipes. In particular, 'I have a tarp, knife, rope, blankets, and a sleeping bag. I need to make shelter' no longer produces a horseshoe pack or stone-knife project. The v11 footer label now identifies the release. This is a targeted regression fix, not a claim that every natural-language request is understood.
