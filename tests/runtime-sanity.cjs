@@ -213,3 +213,9 @@ assert.match(router.match('Show me a cough comfort recipe').text,/No honey for i
 assert.equal(router.match('hello'),null);
 assert.equal(router.match('My child has blue lips and is not breathing'),null);
 assert.equal(router.stats().procedures,2);
+
+assert.equal(router.match('How do I treat someone coughing blood?'),null);
+assert.match(router.match('How do I make bannock? I only have flour').text,/Supply check/);
+assert.match(read('wildlands-fieldcraft.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('manual-projects.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('deep-shelter-earthworks.js'),/AEGIS_PHASE3\.register/);
