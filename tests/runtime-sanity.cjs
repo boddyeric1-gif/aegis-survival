@@ -166,3 +166,6 @@ for(const guide of v7entries){
  assert.ok(guide.steps.length>=8,'Short manual: '+guide.title);
  assert.ok(guide.steps.every(step=>step.length>=35),'Vague step in '+guide.title);
 }
+
+const practical=read('practical-skills-v11.js');
+for(const title of ['Make two-ply reverse-wrap cordage','Assemble and fish a simple handline from shore','Track small game and plan a lawful food harvest','Forage safely without guessing edible species','Make and test a low-load wooden mallet'])assert.match(practical,new RegExp(title));
