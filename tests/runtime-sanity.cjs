@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence|22-offline-ai-chat)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -105,7 +105,7 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v21 · Field Intelligence/);
+assert.match(html,/EMB AEGIS Wildlands v22 · Offline AI Chat/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
 const uxAudit=read('ux-v9.js');
@@ -149,7 +149,7 @@ assert.match(read('manual-library-v7.js'),/Completion check/);
 
 assert.match(html,/SHELTER FIRST/);
 assert.match(html,/function survivalIntent/);
-assert.match(html,/v21 · Field Intelligence/);
+assert.match(html,/v22 · Offline AI Chat/);
 
 for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-earthworks.js']){
   assert.match(read(name),/Field verification/);
@@ -315,3 +315,19 @@ assert.ok(facts.hazards.includes('Cold or exposure'));
 assert.match(fakeWindow.AEGIS_PHASE4.planSituation('We have a tarp and sleeping bag'),/Tarp:/);
 assert.match(fakeWindow.AEGIS_PHASE4.inventoryReport(),/Water:/);
 assert.ok(fakeWindow.AEGIS_PHASE4.matchGuide('shelter').length>0);
+
+assert.match(html,/data-tab="aichat"/);
+assert.match(html,/id="aegis-chat-thread"/);
+assert.match(html,/id="aegis-chat-input"/);
+assert.match(sw,/offline-ai-chat-v22\.js/);
+const chatSource=read('offline-ai-chat-v22.js');
+assert.match(chatSource,/model\.complete\(promptFor\(history\)\)/);
+assert.match(chatSource,/window\.AEGIS_PHASE3\?\.catalog/);
+assert.match(chatSource,/localStorage\.setItem\(KEY/);
+assert.doesNotMatch(chatSource,/fetch\s*\(/,'Chat must not fetch remote content');
+const chatVM=require('node:vm'),chatStore=new Map();
+const chatWindow={AEGIS_PHASE3:{catalog:()=>[{title:'Tarp shelter',tags:['shelter'],steps:['Stay dry']}]}};
+const chatSandbox={window:chatWindow,document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
+chatVM.runInNewContext(chatSource,chatSandbox,{timeout:1500});
+assert.match(chatWindow.AEGIS_CHAT.references('tarp shelter'),/Tarp shelter/);
+assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/User: How do I build/);
