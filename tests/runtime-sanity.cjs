@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-11-reader/);
+assert.match(sw,/aegis-(?:11-reader|12-intent)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -191,3 +191,47 @@ assert.match(pioneer,/Honey-lemon warm drink/);
 assert.match(pioneer,/Basic oral rehydration solution/);
 assert.match(pioneer,/Wagon-era medical myths/);
 assert.match(pioneer,/Never give honey to children under 12 months/);
+
+const phase3=read('phase3-procedure-router.js');
+assert.match(html,/src="phase3-procedure-router.js"/);
+assert.match(sw,/phase3-procedure-router\.js/);
+assert.match(phase3,/AEGIS_PHASE3/);
+assert.match(phase3,/OFFLINE FIELD PROCEDURE/);
+assert.match(read('practical-skills-v11.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('pioneer-handbook-v11.js'),/AEGIS_PHASE3\.register/);
+assert.match(html,/AEGIS_PHASE3&&window\.AEGIS_PHASE3\.match/);
+
+const vm=require('node:vm');
+const sandbox={window:{}};vm.runInNewContext(phase3,sandbox,{timeout:1000});
+const router=sandbox.window.AEGIS_PHASE3;
+router.register('pioneer',[
+ {title:'Skillet bannock',group:'Trail kitchen',ingredients:'Flour; water',method:'Mix and cook in a skillet.',caution:'Cook through.'},
+ {title:'Honey-lemon warm drink for cough comfort',group:'Comfort remedies',ingredients:'Honey, lemon, water',method:'Mix in warm water.',caution:'No honey for infants.'}
+]);
+assert.match(router.match('How do I make bannock with flour?').text,/Mix and cook in a skillet/);
+assert.match(router.match('Show me a cough comfort recipe').text,/No honey for infants/);
+assert.equal(router.match('hello'),null);
+assert.equal(router.match('My child has blue lips and is not breathing'),null);
+assert.equal(router.stats().procedures,2);
+
+assert.equal(router.match('How do I treat someone coughing blood?'),null);
+assert.match(router.match('How do I make bannock? I only have flour').text,/SUPPLY CHECK/);
+assert.match(read('wildlands-fieldcraft.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('manual-projects.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('deep-shelter-earthworks.js'),/AEGIS_PHASE3\.register/);
+
+const supply=router.match('How do I make bannock? I have flour but no water').text;
+assert.match(supply,/Mentioned as available: Flour/);
+assert.match(supply,/Reported missing: water/);
+assert.match(supply,/Amounts, condition and safe substitutions are NOT verified/);
+
+router.clearContext();
+router.match('I have flour and water');
+assert.equal(router.recall().inventory.some(x=>x.item==='flour'&&x.status==='reported'),true);
+router.match("Actually I don't have water");
+assert.equal(router.recall().inventory.find(x=>x.item==='water').status,'missing');
+router.match('How do I make bannock?');
+assert.match(router.match('How do I make that again?').text,/Skillet bannock/);
+assert.match(router.match('How do I make bannock?').text,/Reported missing: water/);
+assert.match(router.match('clear field guide memory').text,/cleared/);
+assert.equal(router.recall().inventory.length,0);
