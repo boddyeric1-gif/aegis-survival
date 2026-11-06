@@ -146,3 +146,7 @@ assert.match(sw,/practical-skills-v11\.js/);
 assert.match(read('practical-skills-v11.js'),/Simple fishing: bank line and baited hook/);
 
 assert.match(read('manual-library-v7.js'),/Completion check/);
+
+assert.match(html,/SHELTER FIRST/);
+assert.match(html,/function survivalIntent/);
+assert.match(html,/v11 · Field Manual Expansion/);
