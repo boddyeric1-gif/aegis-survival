@@ -151,3 +151,8 @@ Messages has an unread count and explicit opt-in for browser notifications while
 ## v21 · Phase 4 Field Intelligence
 
 A new offline **Field Intelligence** tab provides: (1) deterministic multi-supply and hazard extraction with transparent priorities and uncertainties; (2) editable household inventory and rough water/food duration calculations (3 L water and 2,000 kcal per person/day, explicitly not inclusive of all needs); (3) four mission templates with checklists, hazards and check-in times; (4) cross-search of the registered Phase 3 offline procedures; and (5) JSON backup import/export and local reset. No online AI dependency. Data stays in browser localStorage unless explicitly exported. This is a **new integrated planning workspace**, not a full rewrite of every legacy advisor or field guide article. It cannot guarantee safety or replace professional emergency guidance.
+
+
+## v22 · Offline AI Chat
+
+Open the **Offline AI Chat** tab after installing and verifying the local Qwen model. Send free-form questions and receive responses from the actual on-device wllama runtime (AEGISNative.complete), without an online service. Chat has a bounded local conversation history, optional Field Guide procedure snippets, model readiness indicators, short/normal/long response settings, and local JSON export/clear controls. The browser must have already cached the app and model; test airplane mode after installation. A 0.5B model can be slow, inaccurate and limited in long conversations; it does not provide verified medical or emergency authority.
