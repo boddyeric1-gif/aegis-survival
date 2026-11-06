@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -291,3 +291,27 @@ assert.match(read('broadcast-live-v16.js'),/notifyNew\(messages\)/);
 
 assert.match(read('broadcast-live-v16.js'),/username\.value=''/);
 assert.match(read('broadcast-live-v16.js'),/password\.value=''/);
+
+assert.match(html,/data-tab="phase4"/);
+assert.match(html,/id="p4-analysis"/);
+assert.match(html,/id="p4-inventory"/);
+assert.match(html,/id="p4-missions"/);
+assert.match(sw,/phase4-field-intelligence\.js/);
+const p4=read('phase4-field-intelligence.js');
+assert.match(p4,/window\.AEGIS_PHASE4=/);
+assert.match(p4,/inventoryReport/);
+assert.match(p4,/exportData/);
+assert.match(p4,/importData/);
+assert.match(p4,/matchGuide/);
+assert.match(p4,/planSituation/);
+const vm=require('node:vm');
+const fakeStorage=new Map();
+const fakeWindow={localStorage:{getItem:k=>fakeStorage.get(k)||null,setItem:(k,v)=>fakeStorage.set(k,v)},AEGIS_PHASE3:{catalog:()=>[{title:'Tarp shelter',tags:['shelter']},{title:'Water treatment',tags:['water']}]}};
+const sandbox={window:fakeWindow,localStorage:fakeWindow.localStorage,document:{readyState:'loading',addEventListener:()=>{}},structuredClone,console};
+vm.runInNewContext(p4,sandbox,{timeout:1500});
+const facts=fakeWindow.AEGIS_PHASE4.analyze('We have a tarp, knife, blanket and sleeping bag in freezing weather');
+for(const item of ['tarp','knife','blanket','sleeping_bag'])assert.equal(facts.equipment[item],true,'multi-item parsing: '+item);
+assert.ok(facts.hazards.includes('Cold or exposure'));
+assert.match(fakeWindow.AEGIS_PHASE4.planSituation('We have a tarp and sleeping bag'),/Tarp:/);
+assert.match(fakeWindow.AEGIS_PHASE4.inventoryReport(),/Water:/);
+assert.ok(fakeWindow.AEGIS_PHASE4.matchGuide('shelter').length>0);
