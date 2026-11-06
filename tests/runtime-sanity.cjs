@@ -191,3 +191,12 @@ assert.match(pioneer,/Honey-lemon warm drink/);
 assert.match(pioneer,/Basic oral rehydration solution/);
 assert.match(pioneer,/Wagon-era medical myths/);
 assert.match(pioneer,/Never give honey to children under 12 months/);
+
+const phase3=read('phase3-procedure-router.js');
+assert.match(html,/src="phase3-procedure-router.js"/);
+assert.match(sw,/phase3-procedure-router\.js/);
+assert.match(phase3,/AEGIS_PHASE3/);
+assert.match(phase3,/OFFLINE FIELD PROCEDURE/);
+assert.match(read('practical-skills-v11.js'),/AEGIS_PHASE3\.register/);
+assert.match(read('pioneer-handbook-v11.js'),/AEGIS_PHASE3\.register/);
+assert.match(html,/AEGIS_PHASE3&&window\.AEGIS_PHASE3\.match/);
