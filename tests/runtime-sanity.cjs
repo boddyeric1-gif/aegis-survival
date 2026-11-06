@@ -140,3 +140,7 @@ assert.match(reader,/Boiling water for microbial safety/);
 assert.match(reader,/Low-profile lean-to rain tarp/);
 assert.match(reader,/72-hour no-cook food kit/);
 assert.match(reader,/aria-live/);
+
+assert.match(html,/src="practical-skills-v11\.js"/);
+assert.match(sw,/practical-skills-v11\.js/);
+assert.match(read('practical-skills-v11.js'),/Simple fishing: bank line and baited hook/);
