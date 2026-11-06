@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -112,7 +112,7 @@ const uxAudit=read('ux-v9.js');
 assert.match(uxAudit,/\['fc-list','fieldmanual','Fieldcraft'\]/);
 assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
 assert.match(read('manual-offline-check.js'),/aegis-11-reader-/);
-assert.match(read('README.md'),/Offline Field Guide, Unified Manual & Community Updates \(v14\)/);
+assert.match(read('README.md'),/Offline Field Guide & Broadcast Admin Scaffold \(v15\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
 
 assert.match(html,/id="aegis-help"/);
@@ -263,3 +263,12 @@ assert.match(read('community-updates-v14.js'),/aegis-alert-seen-v14/);
 assert.match(read('field-guide-expansion-v13.js'),/Bank fishing/);
 assert.ok(JSON.parse(read('updates.json')).releases.length>=3);
 assert.ok(JSON.parse(read('announcements.json')).announcements.length>=1);
+
+assert.match(html,/data-tab="admin"/);
+assert.match(html,/data-tab="messages"/);
+assert.match(html,/id="aegis-admin-root"/);
+assert.match(html,/sleeping_bag/);
+assert.match(html,/tarp/);
+assert.match(sw,/broadcast-admin-v15\.js/);
+assert.match(read('broadcast-admin-v15.js'),/Publishing backend not configured/);
+assert.doesNotMatch(read('broadcast-admin-v15.js'),/EMB2701/);
