@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-11-reader/);
+assert.match(sw,/aegis-(?:11-reader|12-intent)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -191,3 +191,22 @@ assert.match(pioneer,/Honey-lemon warm drink/);
 assert.match(pioneer,/Basic oral rehydration solution/);
 assert.match(pioneer,/Wagon-era medical myths/);
 assert.match(pioneer,/Never give honey to children under 12 months/);
+
+const vm=require('node:vm');
+const intentSource=html.slice(html.indexOf('function survivalIntent(t){'),html.indexOf('function assist(text){'));
+const intent=vm.runInNewContext(intentSource+';survivalIntent');
+const checks=[
+ ['I have a tarp, knife, rope, blankets, and a sleeping bag. I need to make shelter.','Shelter'],
+ ['I have a tarp for shelter but I need to make a fishing hook.','Fishing'],
+ ['I have a water bottle and need to build a shelter.','Shelter'],
+ ['How can I purify water with a pot?','Water'],
+ ['I have a tarp and a fishing line.','none'],
+ ['I want to gather edible plants.','Foraging'],
+ ['I need a recipe for bannock.','Food'],
+ ['I am lost outdoors.','Navigation']
+];
+for(const [query,expected] of checks){
+ const actual=intent(query)?.topic||'none';
+ assert.strictEqual(actual,expected,'Intent mismatch: '+query);
+}
+console.log('PASS: eight live objective-versus-inventory intent tests');
