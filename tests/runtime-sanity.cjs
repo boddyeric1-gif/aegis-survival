@@ -200,3 +200,16 @@ assert.match(phase3,/OFFLINE FIELD PROCEDURE/);
 assert.match(read('practical-skills-v11.js'),/AEGIS_PHASE3\.register/);
 assert.match(read('pioneer-handbook-v11.js'),/AEGIS_PHASE3\.register/);
 assert.match(html,/AEGIS_PHASE3&&window\.AEGIS_PHASE3\.match/);
+
+const vm=require('node:vm');
+const sandbox={window:{}};vm.runInNewContext(phase3,sandbox,{timeout:1000});
+const router=sandbox.window.AEGIS_PHASE3;
+router.register('pioneer',[
+ {title:'Skillet bannock',group:'Trail kitchen',ingredients:'Flour and water',method:'Mix and cook in a skillet.',caution:'Cook through.'},
+ {title:'Honey-lemon warm drink for cough comfort',group:'Comfort remedies',ingredients:'Honey, lemon, water',method:'Mix in warm water.',caution:'No honey for infants.'}
+]);
+assert.match(router.match('How do I make bannock with flour?').text,/Mix and cook in a skillet/);
+assert.match(router.match('Show me a cough comfort recipe').text,/No honey for infants/);
+assert.equal(router.match('hello'),null);
+assert.equal(router.match('My child has blue lips and is not breathing'),null);
+assert.equal(router.stats().procedures,2);
