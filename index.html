@@ -909,13 +909,42 @@ function findGoals(text){
 }
 function survivalIntent(t){
   const q=String(t||'').toLowerCase();
-  if(/\b(?:shelter|lean[- ]?to|tarp (?:shelter|roof)|sleep(?:ing)? (?:outside|warm)|rain cover|stay dry)\b/.test(q))
-    return {kind:'guide',topic:'Shelter',text:'SHELTER FIRST — You asked for shelter, not a pack or knife.\n\n1. Choose high, stable ground away from flood paths, dead limbs and exposed ridges.\n2. Stretch your tarp between two sound supports with rope, keeping the roof sloped so rain drains away from bedding. Use proper anchors; avoid loading weak branches.\n3. Put a waterproof layer under your sleeping bag and insulate from the ground with a dry pad or folded blankets. Keep sleeping gear away from the tarp edges.\n4. Lower the windward edge if needed while retaining ventilation and a clear exit.\n5. Check anchor tension and runoff; move to a solid building if wind, cold or rain overwhelms the setup.\n\nUse your knife only for controlled cutting; keep it sheathed otherwise. Never use a flame, stove or heater inside the tarp. Open Field Manual → Low-profile lean-to rain tarp for the illustrated walkthrough.'};
-  if(/\b(?:water|thirst|drink|dehydrat|boil)\b/.test(q)&&/\b(?:need|find|safe|purify|treat|clean|drink|boil)\b/.test(q))
-    return {kind:'guide',topic:'Water',text:'WATER FIRST — Prioritize a known safe supply. For potentially microbially contaminated water, settle and filter cloudy water first, then boil at a rolling boil for 1 minute (3 minutes above 6,500 feet). Cool in a clean covered vessel. Boiling does NOT remove chemicals, fuel or heavy metals. Open Field Manual → Boiling water for microbial safety.'};
-  if(/\b(?:lost|can't find (?:my|the) way|stranded|navigation)\b/.test(q))
-    return {kind:'guide',topic:'Navigation',text:'LOST OUTDOORS — Stop, check immediate hazards, conserve warmth and water, mark your last known location, and signal with whistle, light or bright fabric. Avoid aimless travel. If possible, contact emergency services. Open Field Manual → Lost outdoors: stop, orient and signal.'};
-  return null;
+  // Separate stated objectives from inventory: a tarp in the kit is not a shelter request.
+  const clauses=q.split(/[.!?;\n]+/).map(x=>x.trim()).filter(Boolean);
+  const objectives=[];
+  for(const clause of clauses){
+    const markers=[/\b(?:i|we)\s+(?:really\s+)?(?:need|want|must|have to|am trying to|are trying to)\s+(?:to\s+)?/g,/\b(?:how (?:do|can|should) (?:i|we)|help (?:me|us) (?:to )?|show (?:me|us) how to|teach (?:me|us) to|plan to|trying to)\s*/g];
+    for(const marker of markers){let match;while((match=marker.exec(clause))!==null){
+      const part=clause.slice(match.index+match[0].length).replace(/\b(?:with|using|given|i have|we have)\b.*$/,'').trim();
+      if(part)objectives.push(part);
+    }}
+    if(/^(?:build|make|find|treat|purify|boil|catch|fish|navigate|construct|create|repair|prepare|cook|gather|forage|set up|how to)\b/.test(clause))objectives.push(clause);
+    if(/\b(?:i am|i'm|we are|we're)\s+(?:lost|stranded)\b/.test(clause))objectives.push('lost outdoors');
+  }
+  if(!objectives.length)return null;
+  const scored=[];
+  const topics=[
+    ['Shelter',/\b(?:shelter|lean[- ]?to|tarp roof|rain cover|stay dry|sleep outside|sleep warm)\b/],
+    ['Water',/\b(?:water|thirst|drink|dehydrat\w*|boil)\b/],
+    ['Navigation',/\b(?:lost|stranded|navigate|find (?:my|our) way|orientation)\b/],
+    ['Fishing',/\b(?:fish|fishing|hook|handline|bait)\b/],
+    ['Foraging',/\b(?:forag\w*|gather\w*|wild edible|mushroom|plant identification)\b/],
+    ['Food',/\b(?:cook|recipe|meal|food|bannock|hardtack)\b/]
+  ];
+  for(let n=0;n<objectives.length;n++)for(const [topic,re] of topics)if(re.test(objectives[n]))scored.push({topic,order:n});
+  if(!scored.length)return null;
+  const first=scored[0].topic;
+  if(scored.some(x=>x.topic!==first)&&objectives.length===1)
+    return {kind:'guide',topic:'Clarification',text:'I found multiple possible objectives. What do you need first: '+[...new Set(scored.map(x=>x.topic))].join(', ')+'? List supplies separately and I will use them as materials, not as the goal.'};
+  const responses={
+    Shelter:"SHELTER FIRST — Select higher stable ground away from flood paths and dead branches. Use the tarp and rope for a sloped roof with sound anchors, preserve ventilation, and place dry insulation under the sleeping bag. Test runoff and keep flames outside. Field Manual → Low-profile lean-to rain tarp.",
+    Water:"WATER FIRST — Seek a verified safe source. For possible microbial contamination, settle and prefilter cloudy water, then boil at a rolling boil for 1 minute (3 minutes above 6,500 feet). Boiling does not remove fuel, heavy metals or chemical pollutants. Field Manual → Boiling water for microbes.",
+    Navigation:"LOST OUTDOORS — Stop in a safe place, check hazards, compare visible landmarks with a map, conserve warmth and water, and signal with a whistle or light. Call emergency services when possible. Field Manual → Lost outdoors: stop, orient and signal.",
+    Fishing:"FISHING — Check local access, species and regulations. Use a legal hook and line, a secure tested knot and lawful bait. Keep the line off your fingers, use stable shore access, and chill retained fish promptly. Practical Survival Skills → Assemble and fish a simple handline from shore.",
+    Foraging:"FORAGING — Do not eat an unidentified plant or mushroom. Check the complete specimen, region, season, toxic look-alikes and preparation with authoritative local references; avoid contaminated sites. Practical Survival Skills → Forage safely without guessing edible species.",
+    Food:"FOOD — Start with shelf-stable ingredients and safe water. Choose a recipe that matches available fuel and equipment; keep perishable cooked food out of unsafe temperatures. Pioneer Handbook → Trail Recipes & Home Comfort."
+  };
+  return {kind:'guide',topic:first,text:responses[first]};
 }
 function assist(text){
   if(!_items)init();
