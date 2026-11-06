@@ -146,3 +146,8 @@ The admin interface now shows only username and password. `ADMIN-EMB` maps to th
 Messages has an unread count and explicit opt-in for browser notifications while the application is running online. Newly received broadcasts trigger a browser notification where permission and platform support allow. Important and Emergency unread messages also display an urgent in-app banner linking to the inbox. Notification deduplication and unread state are stored locally. This is **not** OS-level background push and is not a substitute for official emergency alert systems.
 
 **Admin authentication limitation:** The public app still uses the existing authorized Supabase Auth account. A separately requested chat-shared password has not been provisioned; never place it in frontend JavaScript. Use the existing account password or arrange a private reset/credential provisioning flow.
+
+
+## v21 · Phase 4 Field Intelligence
+
+A new offline **Field Intelligence** tab provides: (1) deterministic multi-supply and hazard extraction with transparent priorities and uncertainties; (2) editable household inventory and rough water/food duration calculations (3 L water and 2,000 kcal per person/day, explicitly not inclusive of all needs); (3) four mission templates with checklists, hazards and check-in times; (4) cross-search of the registered Phase 3 offline procedures; and (5) JSON backup import/export and local reset. No online AI dependency. Data stays in browser localStorage unless explicitly exported. This is a **new integrated planning workspace**, not a full rewrite of every legacy advisor or field guide article. It cannot guarantee safety or replace professional emergency guidance.
