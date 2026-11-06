@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v14",
+  "version": "v16",
   "updated": "2026-11-06",
   "releases": [
+    {
+      "version": "v16",
+      "date": "2026-11-06",
+      "title": "Live Broadcast messaging",
+      "changes": [
+        "Connected Messages inbox to Supabase with offline cache",
+        "Admin uses existing EMB Supabase account and protected database insert permissions",
+        "Added severity-based broadcast composition; replies and native push deferred"
+      ]
+    },
     {
       "version": "v14",
       "date": "2026-11-06",
