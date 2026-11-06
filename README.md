@@ -8,7 +8,7 @@
 
 ## New: Illustrated field reader pilot
 
-Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Existing manual sections remain below unchanged.
+Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Eight additional practical food-acquisition and fieldcraft references are also included, covering hunting observation, bank fishing, archery safety and equipment, humane trap selection, edible plant and mushroom identification, food safety, and lost-person signaling. These are **not yet comprehensive standalone training guides**; existing manual sections remain below unchanged.
 
 ## What is included
 
