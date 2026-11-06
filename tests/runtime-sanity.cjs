@@ -149,7 +149,7 @@ assert.match(read('manual-library-v7.js'),/Completion check/);
 
 assert.match(html,/SHELTER FIRST/);
 assert.match(html,/function survivalIntent/);
-assert.match(html,/v11 · Field Manual Expansion/);
+assert.match(html,/v17 · Broadcast Admin/);
 
 for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-earthworks.js']){
   assert.match(read(name),/Field verification/);
