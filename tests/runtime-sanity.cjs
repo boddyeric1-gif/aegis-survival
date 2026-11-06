@@ -156,3 +156,13 @@ for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-
   assert.match(read(name),/Stop conditions/);
   assert.match(read(name),/no independent field validation claimed/);
 }
+
+const v7source=read('manual-library-v7.js');
+const v7start=v7source.indexOf('const data=')+11;
+const v7end=v7source.indexOf(';const root=',v7start);
+const v7entries=JSON.parse(v7source.slice(v7start,v7end));
+assert.strictEqual(v7entries.length,48);
+for(const guide of v7entries){
+ assert.ok(guide.steps.length>=8,'Short manual: '+guide.title);
+ assert.ok(guide.steps.every(step=>step.length>=35),'Vague step in '+guide.title);
+}
