@@ -67,5 +67,5 @@ function match(raw){const query=String(raw||'').toLowerCase().trim();if(/^(?:cle
  if(second&&second.s>=best.s&&best.e.title!==second.e.title&&tokenize(query).length<=2)return {kind:'clarify',text:'Several offline procedures match. Please name the skill or recipe more specifically: '+ranked.slice(0,3).map(r=>r.e.title).join('; ')};
  context.lastTopic=best.e.title;return {kind:'offline_procedure',topic:best.e.title,score:best.s,text:format(best.e,query+'; '+rememberedInventory())};
 }
-window.AEGIS_PHASE3={register,match,recall,clearContext,stats:()=>({procedures:entries.length})};
+window.AEGIS_PHASE3={register,match,recall,clearContext,catalog:()=>entries.map((e,i)=>({...e,id:i})),stats:()=>({procedures:entries.length})};
 })();
