@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -248,3 +248,8 @@ assert.match(html,/src="field-manual-unified.js"/);
 assert.match(sw,/field-manual-unified\.js/);
 assert.match(read('field-manual-unified.js'),/field-original-sources/);
 assert.match(read('phase3-procedure-router.js'),/catalog:\(\)=>entries\.map/);
+
+assert.match(html,/src="field-guide-expansion-v13.js"/);
+assert.match(sw,/field-guide-expansion-v13\.js/);
+assert.match(read('field-guide-expansion-v13.js'),/Field Guide · Live Capture, Hunting & Gathering/);
+assert.match(read('field-guide-expansion-v13.js'),/AEGIS_PHASE3\.register/);
