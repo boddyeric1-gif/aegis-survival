@@ -105,7 +105,7 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v11 · Field Manual Expansion/);
+assert.match(html,/EMB AEGIS Wildlands v17 · Broadcast Admin/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
 const uxAudit=read('ux-v9.js');
@@ -277,3 +277,5 @@ assert.match(html,/src="broadcast-live-v16.js"/);
 assert.match(sw,/broadcast-live-v16\.js/);
 assert.match(read('broadcast-live-v16.js'),/aegis_messages/);
 assert.match(read('broadcast-live-v16.js'),/auth\/v1\/token/);
+
+assert.match(html,/connect-src 'self' https:\/\/zsyfzgefyjydkvdgbyth\.supabase\.co/);
