@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -279,3 +279,7 @@ assert.match(read('broadcast-live-v16.js'),/aegis_messages/);
 assert.match(read('broadcast-live-v16.js'),/auth\/v1\/token/);
 
 assert.match(html,/connect-src 'self' https:\/\/zsyfzgefyjydkvdgbyth\.supabase\.co/);
+
+const adminScript=read('broadcast-live-v16.js');
+assert.doesNotMatch(adminScript,/e\.append\(email\)/,'Removed email input must not be referenced');
+assert.match(adminScript,/form\.append\(u,p,submit,status\)/,'Two-field login should be rendered');
