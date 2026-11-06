@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Field Reader Pilot (v11)
+# EMB AEGIS Wildlands — Offline Field Guide & Unified Manual (v13)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -6,7 +6,23 @@
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
 
-## New: Illustrated field reader pilot
+## New in v13: Field Guide expansion and unified manual
+
+The **Field Guide** and **Field Manual** are deliberately separate workspaces. Field Guide now includes a dedicated **Live Capture, Hunting & Gathering** reference with six new structured guides: a ventilated box-trap mechanical prototype, a collapsible funnel-enclosure prototype, humane capture planning, wildlife sign observation, field harvest identification, and game-meat safety. The trap projects are educational, nonlethal mechanism prototypes—not verified species-specific live-trap designs. Real capture requires lawful permissions, frequent checks, animal welfare safeguards and species-specific expertise.
+
+The **Field Manual** now has one searchable, purpose-filtered procedure catalog that groups overlapping titles and moves the legacy stacked collections into an Advanced section. This is a navigation consolidation, not a claim that all underlying content is unique or professionally validated.
+
+The offline assistant includes deterministic procedure retrieval, explicit reported-supply checks, and session-only topic/inventory recall. The installed PWA checks for service-worker updates on launch, resume and reconnect, while retaining offline fallback. iOS behavior must still be tested on a physical device.
+
+### Current development priorities
+
+1. Field-test and independently review high-risk guidance, particularly wildlife handling, water treatment and medical content.
+2. Replace repetitive draft text with complete, distinct, skill-tested lessons and illustrations.
+3. Improve Field Guide/Field Manual cross-navigation and unified search relevance.
+4. Validate the iPhone PWA update cycle and real airplane-mode behavior after deployment.
+5. Expand lawful nonlethal wildlife observation and capture planning only with species-specific welfare and regulatory references.
+
+## Earlier: Illustrated field reader pilot
 
 Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Eight additional practical food-acquisition and fieldcraft references are also included, covering hunting observation, bank fishing, archery safety and equipment, humane trap selection, edible plant and mushroom identification, food safety, and lost-person signaling. These are **not yet comprehensive standalone training guides**; existing manual sections remain below unchanged.
 
