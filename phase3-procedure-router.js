@@ -36,14 +36,36 @@ function format(x,query){let lines=['OFFLINE FIELD PROCEDURE: '+x.title,'Collect
  lines.push('Source status: Original offline reference; not independently field-validated.');
  return lines.join('\n\n');
 }
-function match(raw){const query=String(raw||'').toLowerCase().trim();if(!isQuestion(query)||query.length<5)return null;
+// Session-only conversation context: no network, no hidden persistent storage.
+const context={lastTopic:null,inventory:[]};
+const inventoryWords=['flour','water','salt','sugar','honey','lemon','rope','cord','tarp','knife','wood','matches','lighter','pot','pan','blanket','needle','thread','rice','beans','oats','soap','bleach','batteries'];
+function updateContext(message){
+ const text=String(message||'').toLowerCase();
+ // Only explicit possession/correction phrases update the local inventory.
+ const mentions=/\b(?:i have|i've got|we have|we've got|i got|we got|actually|correction|now have|don't have|do not have|ran out of|without|no more)\b/.test(text);
+ if(!mentions)return;
+ for(const item of inventoryWords){
+   const re=new RegExp('\\b'+item+'\\b');
+   if(!re.test(text))continue;
+   const absent=new RegExp("(?:don't have|do not have|ran out of|without|no more|no)\\s+(?:any\\s+|a\\s+)?(?:\\w+\\s+){0,3}"+item+'\\b').test(text);
+   const prior=context.inventory.findIndex(x=>x.item===item);
+   if(prior>=0)context.inventory.splice(prior,1);
+   context.inventory.push({item,status:absent?'missing':'reported'});
+ }
+ context.inventory=context.inventory.slice(-40);
+}
+function recall(){return {lastTopic:context.lastTopic,inventory:context.inventory.map(x=>({...x}))};}
+function clearContext(){context.lastTopic=null;context.inventory.length=0;}
+function rememberedInventory(){if(!context.inventory.length)return '';return context.inventory.map(x=>x.status==='missing'?'I do not have '+x.item:'I have '+x.item).join('. ');}
+function match(raw){const query=String(raw||'').toLowerCase().trim();if(/^(?:clear|reset|forget) (?:field guide |supply |conversation )?(?:memory|context|supplies)$/.test(query)){clearContext();return {kind:'context',text:'Field Guide session context cleared.'};}updateContext(query);if(!isQuestion(query)||query.length<5)return null;
  // Do not override immediate hazard triage or ongoing emergency dialogue.
  if(/\b(?:not breathing|unresponsive|blue lips|chest pain|severe bleeding|fire in|smell gas|carbon monoxide poisoning|coughing blood|difficulty breathing|trouble breathing|stroke symptoms|poisoning|overdose|suicidal|seizure)\b/.test(query))return null;
- const ranked=entries.map(e=>({e,s:score(query,e)})).sort((a,b)=>b.s-a.s);
+ const followUp=/\b(?:that|it|those|same|again|instead|what if|what about)\b/.test(query);const target=followUp&&context.lastTopic?query+' '+context.lastTopic:query;
+ const ranked=entries.map(e=>({e,s:score(target,e)})).sort((a,b)=>b.s-a.s);
  const best=ranked[0],second=ranked[1];if(!best||best.s<5)return null;
  // Ambiguous short queries should ask for specificity rather than invent a recipe.
  if(second&&second.s>=best.s&&best.e.title!==second.e.title&&tokenize(query).length<=2)return {kind:'clarify',text:'Several offline procedures match. Please name the skill or recipe more specifically: '+ranked.slice(0,3).map(r=>r.e.title).join('; ')};
- return {kind:'offline_procedure',topic:best.e.title,score:best.s,text:format(best.e,query)};
+ context.lastTopic=best.e.title;return {kind:'offline_procedure',topic:best.e.title,score:best.s,text:format(best.e,query+'; '+rememberedInventory())};
 }
-window.AEGIS_PHASE3={register,match,stats:()=>({procedures:entries.length})};
+window.AEGIS_PHASE3={register,match,recall,clearContext,stats:()=>({procedures:entries.length})};
 })();
