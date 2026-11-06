@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-10\.5-obsidian/);
+assert.match(sw,/aegis-11-reader/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -111,8 +111,8 @@ assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 const uxAudit=read('ux-v9.js');
 assert.match(uxAudit,/\['fc-list','fieldmanual','Fieldcraft'\]/);
 assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
-assert.match(read('manual-offline-check.js'),/aegis-10\.2-audit-/);
-assert.match(read('README.md'),/Glass Edition \(v10\.0\)/);
+assert.match(read('manual-offline-check.js'),/aegis-11-reader-/);
+assert.match(read('README.md'),/Field Reader Pilot \(v11\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
 
 assert.match(html,/id="aegis-help"/);
@@ -131,3 +131,12 @@ assert.match(read('manifest.webmanifest'),/#08090b/);
 assert.match(html,/#v9-more\.v9-more\{display:block;width:100%;background:#171819/);
 assert.match(html,/\.v9-urgent\{background:#171416/);
 assert.match(html,/\.v9-find\{background:#141517/);
+
+// Reader pilot must be precached and available without network.
+assert.match(html,/src="field-reader-v11\.js"/);
+assert.match(sw,/field-reader-v11\.js/);
+const reader=read('field-reader-v11.js');
+assert.match(reader,/Boiling water for microbial safety/);
+assert.match(reader,/Low-profile lean-to rain tarp/);
+assert.match(reader,/72-hour no-cook food kit/);
+assert.match(reader,/aria-live/);
