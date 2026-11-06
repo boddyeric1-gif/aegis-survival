@@ -1263,7 +1263,23 @@ async function offlineReady(){const el=$('offlineready');const bi=A.buildInfo;co
    set(missing.length?'Offline cache incomplete ('+missing.length+' files missing)':'OFFLINE READY: all '+bi.assets.length+' files cached ('+bi.cache+')',missing.length?'warn':'ok');}catch(e){set('Offline cache check failed','warn')}}
 async function registerSW(){if(window.AEGIS_PLATFORM==='android'){const el=$('offlineready');if(el){el.textContent='OFFLINE: app files are bundled inside the installed app (no cache needed)';el.className='pill ok'}return}
   if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol)){offlineReady();return}
-  try{await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;}catch(e){status('Offline install failed: '+e.message,true)}
+  try{
+    const registration=await navigator.serviceWorker.register('sw.js',{updateViaCache:'none'});
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(refreshing)return;
+      refreshing=true;
+      // A newly activated worker now controls the app: load its updated shell.
+      location.reload();
+    });
+    const check=()=>{if(navigator.onLine)registration.update().catch(()=>{});};
+    check();
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)check();});
+    window.addEventListener('online',check);
+    // Check while the PWA remains open, not just after it is reinstalled.
+    setInterval(check,30*60*1000);
+    await navigator.serviceWorker.ready;
+  }catch(e){status('Offline install failed: '+e.message,true)}
   offlineReady();setTimeout(offlineReady,3000);}
 // ---------- diagnostics (live, executable in the browser) ----------
 async function renderDiag(run){const o=$('diagout');if(!run){if(!o.firstChild)o.textContent='Press "Run diagnostics" to execute checks in this browser.';return}
