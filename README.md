@@ -1,10 +1,14 @@
-# EMB AEGIS Wildlands — Glass Edition (v10.0)
+# EMB AEGIS Wildlands — Field Reader Pilot (v11)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## New: Illustrated field reader pilot
+
+Field Manual now begins with three curated, mobile-friendly walkthroughs: boiling water for microbes, a mild-weather lean-to rain tarp, and a 72-hour no-cook food kit. Each includes a labeled schematic, sequential steps, a materials list, checkable inspections, mistakes to avoid, safety boundaries, and source notes. This is a **pilot**, not a complete replacement for the existing library, and the new content is not independently expert-reviewed or field-tested. Existing manual sections remain below unchanged.
 
 ## What is included
 
