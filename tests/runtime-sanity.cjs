@@ -169,3 +169,16 @@ for(const guide of v7entries){
 
 const practical=read('practical-skills-v11.js');
 for(const title of ['Make two-ply reverse-wrap cordage','Assemble and fish a simple handline from shore','Track small game and plan a lawful food harvest','Forage safely without guessing edible species','Make and test a low-load wooden mallet'])assert.match(practical,new RegExp(title));
+
+assert.match(read('practical-skills-v11.js'),/Traditional self-bow: material selection, tillering and safe first testing/);
+assert.match(read('practical-skills-v11.js'),/Small-game capture: legal trap selection, placement and humane monitoring/);
+assert.match(read('wildlands-manual.js'),/Action checklist/);
+assert.match(read('wildlands-knowledge.js'),/Field checklist/);
+const chsrc=read('wildlands-manual.js'), chstart=chsrc.indexOf('const chapters=')+15, chend=chsrc.indexOf(';const root=',chstart);
+const chapters=JSON.parse(chsrc.slice(chstart,chend));
+assert.strictEqual(chapters.reduce((n,c)=>n+c.sections.length,0),27);
+assert.ok(chapters.every(c=>c.sections.every(s=>s.actions.length===4)));
+const ksrc=read('wildlands-knowledge.js'), kstart=ksrc.indexOf('const entries=')+14,kend=ksrc.indexOf('];',kstart)+1;
+const knowledge=JSON.parse(ksrc.slice(kstart,kend));
+assert.strictEqual(knowledge.length,28);
+assert.ok(knowledge.every(x=>x.actions.length===2));
