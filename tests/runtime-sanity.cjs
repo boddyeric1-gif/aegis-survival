@@ -205,7 +205,7 @@ const vm=require('node:vm');
 const sandbox={window:{}};vm.runInNewContext(phase3,sandbox,{timeout:1000});
 const router=sandbox.window.AEGIS_PHASE3;
 router.register('pioneer',[
- {title:'Skillet bannock',group:'Trail kitchen',ingredients:'Flour and water',method:'Mix and cook in a skillet.',caution:'Cook through.'},
+ {title:'Skillet bannock',group:'Trail kitchen',ingredients:'Flour; water',method:'Mix and cook in a skillet.',caution:'Cook through.'},
  {title:'Honey-lemon warm drink for cough comfort',group:'Comfort remedies',ingredients:'Honey, lemon, water',method:'Mix in warm water.',caution:'No honey for infants.'}
 ]);
 assert.match(router.match('How do I make bannock with flour?').text,/Mix and cook in a skillet/);
