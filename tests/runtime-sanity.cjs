@@ -112,7 +112,7 @@ const uxAudit=read('ux-v9.js');
 assert.match(uxAudit,/\['fc-list','fieldmanual','Fieldcraft'\]/);
 assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
 assert.match(read('manual-offline-check.js'),/aegis-11-reader-/);
-assert.match(read('README.md'),/Offline Field Guide & Broadcast Admin Scaffold \(v15\)/);
+assert.match(read('README.md'),/Offline Field Guide & Live Broadcast \(v16\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
 
 assert.match(html,/id="aegis-help"/);
