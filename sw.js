@@ -7,6 +7,7 @@ self.addEventListener('fetch',e=>{
   const req=e.request;if(req.method!=='GET')return;
   const url=new URL(req.url);if(url.origin!==self.location.origin)return;
   e.respondWith(caches.open(CACHE).then(c=>c.match(req,{ignoreSearch:true}).then(hit=>{
+    if(/\/(?:announcements|updates)\.json$/.test(url.pathname))return fetch(req).then(fresh=>{if(fresh.ok)c.put(new URL(url.pathname,self.location.origin).href,fresh.clone());return fresh}).catch(()=>hit||new Response('{"announcements":[],"releases":[]}',{headers:{'Content-Type':'application/json'}}));
     if(req.mode==='navigate')return fetch(req).then(fresh=>{if(fresh.ok)c.put(new URL('./index.html',self.location).href,fresh.clone());return fresh}).catch(()=>hit||c.match(new URL('./index.html',self.location).href));
     if(hit)return hit;
     return fetch(req);})));});
