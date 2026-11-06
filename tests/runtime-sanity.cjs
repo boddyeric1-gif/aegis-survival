@@ -235,3 +235,11 @@ assert.match(router.match('How do I make that again?').text,/Skillet bannock/);
 assert.match(router.match('How do I make bannock?').text,/Reported missing: water/);
 assert.match(router.match('clear field guide memory').text,/cleared/);
 assert.equal(router.recall().inventory.length,0);
+
+assert.match(sw,/req\.mode==='navigate'\)return fetch\(req\)/);
+assert.match(sw,/\.catch\(\(\)=>hit\|\|c\.match/);
+assert.match(html,/updateViaCache:'none'/);
+assert.match(html,/registration\.update\(\)/);
+assert.match(html,/visibilitychange/);
+assert.match(html,/controllerchange/);
+assert.match(html,/location\.reload\(\)/);
