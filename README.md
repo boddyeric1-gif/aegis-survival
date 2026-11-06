@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide, Unified Manual & Community Updates (v14)
+# EMB AEGIS Wildlands — Offline Field Guide & Broadcast Admin Scaffold (v15)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -6,7 +6,17 @@
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
 
-## New in v14: Updates tab and community announcements
+## v15: Messages inbox and secure-admin integration scaffold
+
+A prominent **Messages** inbox now sits beside Updates and Admin. The existing offline-cached public announcement feed is shown in Messages with unread counts; release notes remain in Updates. The Admin tab contains a severity selector (General, Community, Important, Emergency), subject, message composer, confirmation and lock controls.
+
+**Security gate:** The admin composer is intentionally locked until a separate authenticated publishing API is configured as `window.AEGIS_BROADCAST_API` **before** `broadcast-admin-v15.js` loads. The API must implement `POST /login` (server-verified username/password returning a short-lived session token) and `POST /publish` (verify token and admin role; validate and publish to the actual message feed). This release **does not claim to provide a live authenticated broadcast service**. The supplied credential is not embedded in any public source or build. Rotate any credential shared in chat before production setup. Do not configure a public password or hash in frontend code.
+
+For a real secure deployment, provision a dedicated AEGIS backend with server-side salted password hashing or managed Auth, role authorization, audit logs, rate limits, and a message store with public read / admin-only write. GitHub Pages alone cannot verify passwords or securely publish authenticated messages. Push notifications to closed iOS PWAs require opt-in, a service-worker push handler and server-side Web Push delivery.
+
+**Situation Advisor:** Distinguishes tarp, knife, sleeping bag and blanket as separate reported equipment types, addressing the missing-item issue visible in the November 6 iPhone recording. More device regression testing is still required.
+
+## Earlier v14: Updates tab and community announcements
 
 The **Updates** tab sits beside Diagnostics and contains an offline-cached release changelog plus a community announcement inbox. The inbox checks `announcements.json` while the app is open and online (on launch, on resume, after reconnection, manually, and at intervals). Users see an unread count and can mark messages as read. The last successfully retrieved feed is stored locally for offline reading.
 
