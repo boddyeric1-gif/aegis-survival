@@ -224,3 +224,14 @@ const supply=router.match('How do I make bannock? I have flour but no water').te
 assert.match(supply,/Mentioned as available: Flour/);
 assert.match(supply,/Reported missing: water/);
 assert.match(supply,/Amounts, condition and safe substitutions are NOT verified/);
+
+router.clearContext();
+router.match('I have flour and water');
+assert.equal(router.recall().inventory.some(x=>x.item==='flour'&&x.status==='reported'),true);
+router.match("Actually I don't have water");
+assert.equal(router.recall().inventory.find(x=>x.item==='water').status,'missing');
+router.match('How do I make bannock?');
+assert.match(router.match('How do I make that again?').text,/Skillet bannock/);
+assert.match(router.match('How do I make bannock?').text,/Reported missing: water/);
+assert.match(router.match('clear field guide memory').text,/cleared/);
+assert.equal(router.recall().inventory.length,0);
