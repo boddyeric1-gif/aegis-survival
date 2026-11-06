@@ -327,7 +327,7 @@ assert.match(chatSource,/localStorage\.setItem\(KEY/);
 assert.doesNotMatch(chatSource,/fetch\s*\(/,'Chat must not fetch remote content');
 const chatVM=require('node:vm'),chatStore=new Map();
 const chatWindow={AEGIS_PHASE3:{catalog:()=>[{title:'Tarp shelter',tags:['shelter'],steps:['Stay dry']}]}};
-const chatSandbox={window:chatWindow,document:{readyState:'loading',addEventListener:()=>{}},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
+const chatSandbox={window:chatWindow,document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
 chatVM.runInNewContext(chatSource,chatSandbox,{timeout:1500});
 assert.match(chatWindow.AEGIS_CHAT.references('tarp shelter'),/Tarp shelter/);
 assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/User: How do I build/);
