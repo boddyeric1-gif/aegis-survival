@@ -105,7 +105,7 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v10\.0 · Glass Edition/);
+assert.match(html,/EMB AEGIS Wildlands v11 · Field Manual Expansion/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
 const uxAudit=read('ux-v9.js');
