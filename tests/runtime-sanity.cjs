@@ -182,3 +182,12 @@ const ksrc=read('wildlands-knowledge.js'), kstart=ksrc.indexOf('const entries=')
 const knowledge=JSON.parse(ksrc.slice(kstart,kend));
 assert.strictEqual(knowledge.length,28);
 assert.ok(knowledge.every(x=>x.actions.length===2));
+
+assert.match(html,/pioneer-handbook-v11\.js/);
+assert.match(read('sw.js'),/pioneer-handbook-v11\.js/);
+const pioneer=read('pioneer-handbook-v11.js');
+assert.match(pioneer,/Pioneer Handbook/);
+assert.match(pioneer,/Honey-lemon warm drink/);
+assert.match(pioneer,/Basic oral rehydration solution/);
+assert.match(pioneer,/Wagon-era medical myths/);
+assert.match(pioneer,/Never give honey to children under 12 months/);
