@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "updated": "2026-11-06T15:00:00Z",
+  "announcements": [
+    {
+      "id": "welcome-v14",
+      "published": "2026-11-06T15:00:00Z",
+      "severity": "info",
+      "title": "AEGIS Community Alerts",
+      "body": "This feed is for app releases, preparedness notices and verified service announcements. It is not a real-time emergency warning service. Open AEGIS while online to check for new messages."
+    }
+  ]
+}

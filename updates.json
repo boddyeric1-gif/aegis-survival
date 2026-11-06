@@ -1,0 +1,36 @@
+{
+  "schema": 1,
+  "version": "v14",
+  "updated": "2026-11-06",
+  "releases": [
+    {
+      "version": "v14",
+      "date": "2026-11-06",
+      "title": "Field Guide depth, Updates and Community Alerts",
+      "changes": [
+        "New Updates tab beside Diagnostics with release history",
+        "Online community announcements with offline last-seen copy and unread badge",
+        "Field Guide practical lesson expansion and safety-first planning"
+      ]
+    },
+    {
+      "version": "v13",
+      "date": "2026-11-06",
+      "title": "Unified Field Manual and expanded Field Guide",
+      "changes": [
+        "Consolidated overlapping manual collections into a single catalog",
+        "Added live-capture prototypes, wildlife observation and gathering lessons",
+        "Improved offline procedure routing and supply-aware conversation context"
+      ]
+    },
+    {
+      "version": "v12",
+      "date": "2026-11-06",
+      "title": "Installed PWA update handling",
+      "changes": [
+        "Check for new service workers on launch, reconnect and resume",
+        "Network-first navigation with offline fallback"
+      ]
+    }
+  ]
+}

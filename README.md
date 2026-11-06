@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Unified Manual (v13)
+# EMB AEGIS Wildlands — Offline Field Guide, Unified Manual & Community Updates (v14)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -6,7 +6,17 @@
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
 
-## New in v13: Field Guide expansion and unified manual
+## New in v14: Updates tab and community announcements
+
+The **Updates** tab sits beside Diagnostics and contains an offline-cached release changelog plus a community announcement inbox. The inbox checks `announcements.json` while the app is open and online (on launch, on resume, after reconnection, manually, and at intervals). Users see an unread count and can mark messages as read. The last successfully retrieved feed is stored locally for offline reading.
+
+**Maintainer publishing workflow:** Edit `announcements.json` in the repository's `main` branch, append an announcement with a **unique** `id`, `published` ISO timestamp, `severity` (`info`, `warning`, or `critical`), `title`, and `body`; commit and wait for GitHub Pages to deploy. Do not put secrets or personal data in public messages. All users who open the app online after deployment can retrieve it. You can also ask the connected assistant to publish a specific announcement to GitHub. Update `updates.json` with each release and bump the service-worker cache when bundled files change.
+
+**Important limitations:** This is a *polling inbox*, **not native push**. It cannot reach an iPhone PWA that is closed, offline, or suspended, and cannot guarantee immediate delivery. A true push system requires a secure authenticated publisher, subscriber storage, a push service and an HTTPS backend (e.g. VAPID/Web Push), plus iOS permission and installation requirements. Never embed an admin token in the public PWA.
+
+The Field Guide also adds practical bank fishing, tarp sleeping-system, three-strand cordage and lost-person signaling lessons, each with material lists, sequential steps and safety limits.
+
+## Earlier v13: Field Guide expansion and unified manual
 
 The **Field Guide** and **Field Manual** are deliberately separate workspaces. Field Guide now includes a dedicated **Live Capture, Hunting & Gathering** reference with six new structured guides: a ventilated box-trap mechanical prototype, a collapsible funnel-enclosure prototype, humane capture planning, wildlife sign observation, field harvest identification, and game-meat safety. The trap projects are educational, nonlethal mechanism prototypes—not verified species-specific live-trap designs. Real capture requires lawful permissions, frequent checks, animal welfare safeguards and species-specific expertise.
 

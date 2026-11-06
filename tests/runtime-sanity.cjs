@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -112,7 +112,7 @@ const uxAudit=read('ux-v9.js');
 assert.match(uxAudit,/\['fc-list','fieldmanual','Fieldcraft'\]/);
 assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
 assert.match(read('manual-offline-check.js'),/aegis-11-reader-/);
-assert.match(read('README.md'),/Offline Field Guide & Unified Manual \(v13\)/);
+assert.match(read('README.md'),/Offline Field Guide, Unified Manual & Community Updates \(v14\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
 
 assert.match(html,/id="aegis-help"/);
@@ -253,3 +253,13 @@ assert.match(html,/src="field-guide-expansion-v13.js"/);
 assert.match(sw,/field-guide-expansion-v13\.js/);
 assert.match(read('field-guide-expansion-v13.js'),/Field Guide · Live Capture, Hunting & Gathering/);
 assert.match(read('field-guide-expansion-v13.js'),/AEGIS_PHASE3\.register/);
+
+assert.match(html,/data-tab="updates"/);
+assert.match(html,/id="aegis-alert-list"/);
+assert.match(html,/src="community-updates-v14.js"/);
+assert.match(sw,/announcements\.json/);
+assert.match(sw,/updates\.json/);
+assert.match(read('community-updates-v14.js'),/aegis-alert-seen-v14/);
+assert.match(read('field-guide-expansion-v13.js'),/Bank fishing/);
+assert.ok(JSON.parse(read('updates.json')).releases.length>=3);
+assert.ok(JSON.parse(read('announcements.json')).announcements.length>=1);
