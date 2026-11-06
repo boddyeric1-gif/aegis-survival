@@ -10,9 +10,9 @@
 
 AEGIS now reads published announcements from the isolated `public.aegis_messages` table in the existing EMB OS Supabase project, with local offline caching and unread markers. The public publishable key is safe to include in the browser; secret/service keys are never included. Messages refresh on open, reconnect, resume, manual check and every 15 minutes while visible.
 
-The Admin tab uses the fixed display username `ADMIN-EMB` plus **the existing EMB Supabase account email and password**, verified by Supabase Auth over HTTPS. The authorized admin is the existing EMB business account, allowlisted in the private `aegis_admins` table. Supabase row-level security independently enforces admin-only INSERT; public clients have SELECT only on published messages and no access to the admin allowlist. The password previously provided in chat was **not** installed or embedded in the site.
+The Admin tab uses the fixed display username `ADMIN-EMB` plus **the existing EMB Supabase account password**; the corresponding account email is mapped internally, verified by Supabase Auth over HTTPS. The authorized admin is the existing EMB business account, allowlisted in the private `aegis_admins` table. Supabase row-level security independently enforces admin-only INSERT; public clients have SELECT only on published messages and no access to the admin allowlist. The password previously provided in chat was **not** installed or embedded in the site.
 
-**To publish:** Admin → username ADMIN-EMB → email for the existing EMB OS Supabase Auth account → that account's password → select severity, compose, confirm. If that account's password is unknown, reset it via Supabase Auth. Do not reuse the exposed chat password. The session is memory-only and clears when the page unloads.
+**To publish:** Admin → username ADMIN-EMB → the existing EMB OS Supabase Auth account password → select severity, compose, confirm. If that account's password is unknown, reset it via Supabase Auth. Do not reuse the exposed chat password. The session is memory-only and clears when the page unloads.
 
 **Limitations:** This is an in-app polling inbox, not OS push. Offline clients receive new messages only after reconnecting; a closed iOS PWA does not receive alerts. There is no reply feature. Supabase project resources and Auth are shared with EMB OS; AEGIS's tables and permissions are isolated.
 
@@ -136,3 +136,7 @@ When changing an offline asset, update the `sw.js` precache list and cache revis
 ### Field Guide intent fix
 
 The local deterministic assistant now routes shelter, water, and lost-person requests to goal-first guidance before it searches inventory-based craft recipes. In particular, 'I have a tarp, knife, rope, blankets, and a sleeping bag. I need to make shelter' no longer produces a horseshoe pack or stone-knife project. The v11 footer label now identifies the release. This is a targeted regression fix, not a claim that every natural-language request is understood.
+
+
+## v17: Admin login correction
+The admin interface now shows only username and password. `ADMIN-EMB` maps to the existing EMB business Supabase Auth account internally; publishing still requires a valid Supabase password and a matching allowlisted admin user. The password shared in chat is not provisioned. Network failures show connectivity diagnostics rather than being treated as incorrect credentials. Footer now displays v17.
