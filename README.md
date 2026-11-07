@@ -1,10 +1,14 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v23)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v24)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## v24: Visitor Analytics
+
+The **Updates** tab displays approximate daily AEGIS visitor counts (14-day window), including Reddit-attributed visits when a `?utm_source=reddit` link or Reddit referrer is present. Each browser gets a locally stored random ID; the backend records one visit per UTC day and does not store chat contents, inventory, IP addresses or user-agent strings. Clearing browser storage or switching browsers can change counts. Public numbers are not authenticated or bot-proof, and are **not downloads or unique people**. Analytics requests fail silently offline and never block AEGIS. The backend is a Supabase Edge Function `aegis-visitors` with an RLS-protected table; no service-role key is in the frontend.
 
 ## v23: Surface Performance Lab
 
