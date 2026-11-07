@@ -190,3 +190,7 @@ Every one of the 26 Bushcraft lessons now has a Wikimedia Commons photo search p
 ## v29 — Offline reference image preparation
 
 The Bushcraft media panel can now search all 26 lesson topics and cache up to three Commons search-result images per lesson in a single user-initiated operation (maximum 78, subject to availability, licensing metadata, browser quota and network). It reports progress and failures. This is **not** a curated, expert-verified, step-specific image library. Users should verify attribution and relevance on each Commons file page. Test the completed cache in airplane mode; browser storage can be evicted. A prior bug preventing sourced shelter photographs from rendering was also fixed.
+
+## v32 Bushcraft step-photo engine
+
+The new `bushcraft-photo-steps-v32.js` module replaces the former lesson-only Commons gallery. It searches for a reference photograph for each written step and can cache matched photographs for offline use via **Prepare all step photos offline**. Each result includes Commons source and licensing metadata. Images are automatically selected search matches, **not** verified step-by-step instructional photographs. Search and downloading require internet access, sufficient browser storage, and a compatible Commons response. The app retains the offline conceptual illustrations as fallback. Verify results and test airplane mode before relying on downloaded photographs.
