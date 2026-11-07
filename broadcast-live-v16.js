@@ -9,7 +9,7 @@ const saved='aegis-live-broadcast-v16',seen='aegis-alert-seen-v14';
 let messages=[],session=null,checked='',initialSync=true;
 const notifiedKey='aegis-notified-ids-v19';
 const PUSH_API=BASE+'/functions/v1/aegis-push';
-const PUSH_KEY='BN_zl6dLiSIDtCgcCw-r5fOGOIxuTlAIGQmqA2Rak4G7VtuJDAqiSCuGxM9jhQs4lX7kfaIfKlXFgIM-jCdMq3Y';
+const PUSH_KEY='BCFT54MO8240pW9JIXg3bG257Hur0St23vzsL4cb2eqICD2dWGKGSyd9FWZcTLNhboWtFwFAGW4X7dtV3q55YKs';
 function pushBytes(s){const p=s.replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(p+'='.repeat((4-p.length%4)%4)),ch=>ch.charCodeAt(0))}
 async function enablePush(){
  if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window))throw Error('Background push is not supported here. On iPhone, open AEGIS from its Home Screen icon (iOS 16.4+).');
@@ -18,7 +18,7 @@ async function enablePush(){
  let subscription=await registration.pushManager.getSubscription();
  if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushBytes(PUSH_KEY)});
  const response=await fetch(PUSH_API+'/subscribe',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({subscription:subscription.toJSON()}),cache:'no-store'});
- if(!response.ok)throw Error('Push registration failed ('+response.status+'). Please try again.');
+ if(!response.ok){const detail=await response.text().catch(()=>'');throw Error('Push registration failed ('+response.status+'). '+detail.slice(0,180))}
  return true;
 }
 
