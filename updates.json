@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v28",
+  "version": "v29",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v29",
+      "date": "2026-11-07",
+      "title": "Bushcraft Offline Photo Preparation",
+      "changes": [
+        "Added one-click download and caching for up to three Wikimedia Commons reference images per each of the 26 Bushcraft lessons",
+        "Shows per-lesson progress and failed image counts during preparation",
+        "Fixed rendering of previously sourced shelter photos",
+        "Image matches remain unreviewed and not guaranteed to illustrate exact procedural steps; requires online preparation and device storage"
+      ]
+    },
     {
       "version": "v28",
       "date": "2026-11-07",
