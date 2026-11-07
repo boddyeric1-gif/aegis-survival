@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v25",
+  "version": "v26",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v26",
+      "title": "Bushcraft Visual Overhaul",
+      "date": "2026-11-07",
+      "changes": [
+        "Replaced repeated generic icons with distinct offline SVG field scenes for shelter, knots, fire, water, navigation, tools and other categories",
+        "Introduced stage-specific schematic variations and improved Bushcraft academy header and cards",
+        "Illustrations remain conceptual and must not be treated as validated step-accurate diagrams; full photographic lesson library remains pending"
+      ]
+    },
     {
       "version": "v25",
       "title": "Bushcraft Illustrated Skills",
