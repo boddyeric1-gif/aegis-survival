@@ -4,6 +4,17 @@
   "updated": "2026-11-07",
   "releases": [
     {
+      "version": "v25",
+      "title": "Bushcraft Illustrated Skills",
+      "date": "2026-11-07",
+      "changes": [
+        "Added dedicated Bushcraft navigation tab and 26 searchable skills across 10 categories",
+        "Added offline schematic artwork, step text, materials, safety notes, favorites and export/print",
+        "Bundled Bushcraft library into versioned service worker cache",
+        "Illustrations are schematic category artwork; detailed verified step photography remains future work"
+      ]
+    },
+    {
       "version": "v24",
       "date": "2026-11-07",
       "title": "Privacy-conscious Visitor Analytics",
