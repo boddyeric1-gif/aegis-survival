@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v26",
+  "version": "v27",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v27",
+      "date": "2026-11-07",
+      "title": "Sourced Bushcraft Photography — First Batch",
+      "changes": [
+        "Added three attributed Creative Commons Wikimedia Commons photos to shelter-related Bushcraft lessons",
+        "Linked image sources and licensing metadata in lesson panels",
+        "Photos require internet; existing locally generated schematic graphics remain the offline fallback",
+        "Additional verified images and full offline photo bundling remain incomplete"
+      ]
+    },
     {
       "version": "v26",
       "title": "Bushcraft Visual Overhaul",
