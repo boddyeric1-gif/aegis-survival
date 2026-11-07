@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence|22-offline-ai-chat)/);
+assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence|22-offline-ai-chat|23-surface-benchmark)/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -105,7 +105,7 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v22 · Offline AI Chat/);
+assert.match(html,/EMB AEGIS Wildlands v23 · Surface Performance Lab/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
 const uxAudit=read('ux-v9.js');
@@ -149,7 +149,7 @@ assert.match(read('manual-library-v7.js'),/Completion check/);
 
 assert.match(html,/SHELTER FIRST/);
 assert.match(html,/function survivalIntent/);
-assert.match(html,/v22 · Offline AI Chat/);
+assert.match(html,/v23 · Surface Performance Lab/);
 
 for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-earthworks.js']){
   assert.match(read(name),/Field verification/);
@@ -331,3 +331,16 @@ const chatSandbox={window:chatWindow,document:{readyState:'loading',addEventList
 chatVM.runInNewContext(chatSource,chatSandbox,{timeout:1500});
 assert.match(chatWindow.AEGIS_CHAT.references('tarp shelter'),/Tarp shelter/);
 assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/User: How do I build/);
+
+assert.match(html,/surface-benchmark-v23\.js/);
+assert.match(sw,/surface-benchmark-v23\.js/);
+assert.match(bridge,/n_threads:THREADS/);
+const perfSource=read('surface-benchmark-v23.js');
+assert.match(perfSource,/targetSeconds:TARGET/);
+assert.match(perfSource,/engine\.complete/);
+assert.doesNotMatch(perfSource,/fetch\s*\(/);
+const perfVm=require('node:vm'),perfWindow={},perfStore=new Map();
+perfVm.runInNewContext(perfSource,{window:perfWindow,document:{readyState:'loading',addEventListener:()=>{}},localStorage:{getItem:k=>perfStore.get(k)||null,setItem:(k,v)=>perfStore.set(k,v)},console},{timeout:1500});
+assert.equal(perfWindow.AEGIS_BENCHMARK.TARGET,10);
+assert.equal(perfWindow.AEGIS_BENCHMARK.evaluate([{ok:true,seconds:4},{ok:true,seconds:8},{ok:true,seconds:12}]).pass,true);
+assert.equal(perfWindow.AEGIS_BENCHMARK.evaluate([{ok:true,seconds:11},{ok:true,seconds:12},{ok:true,seconds:13}]).pass,false);
