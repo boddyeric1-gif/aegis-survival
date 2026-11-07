@@ -186,3 +186,7 @@ Three Wikimedia Commons photographs with attribution and source links are integr
 ## v28 — Bushcraft image library discovery
 
 Every one of the 26 Bushcraft lessons now has a Wikimedia Commons photo search panel. Search results are labeled as **unreviewed visual references** and include creator, license, and a link to the original file page. Users may cache individual image files for offline viewing, and saved photo caches are preserved when the PWA updates. Searches require a network connection and Commons API availability; results are not a pre-curated, independently verified collection of step-accurate instructions. No bulk offline image pack is shipped yet. Code: `bushcraft-media-v28.js`.
+
+## v29 — Offline reference image preparation
+
+The Bushcraft media panel can now search all 26 lesson topics and cache up to three Commons search-result images per lesson in a single user-initiated operation (maximum 78, subject to availability, licensing metadata, browser quota and network). It reports progress and failures. This is **not** a curated, expert-verified, step-specific image library. Users should verify attribution and relevance on each Commons file page. Test the completed cache in airplane mode; browser storage can be evicted. A prior bug preventing sourced shelter photographs from rendering was also fixed.
