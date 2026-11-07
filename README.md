@@ -182,3 +182,7 @@ Updated the locally bundled `bushcraft-v25.js` renderer with category-specific s
 ## v27 — Real image sourcing (initial batch)
 
 Three Wikimedia Commons photographs with attribution and source links are integrated into the shelter-related Bushcraft lesson views. These are **online-only** images: the current service worker does not bundle them for offline use, and conceptual diagrams remain available offline. The photos are illustrative context, not verified step-by-step procedural photos. Sources: [Jomegat pole tarp shelter](https://commons.wikimedia.org/wiki/File:Pole_tarp_and_rope_shelter_4855.JPG), [Virginia State Parks lean-to](https://commons.wikimedia.org/wiki/File:Lean_to_Shelter_(17035853790).jpg), [Virginia State Parks shelter construction](https://commons.wikimedia.org/wiki/File:Building_a_lean_to_shelter_(17197376576).jpg). Licensing is documented on each source page.
+
+## v28 — Bushcraft image library discovery
+
+Every one of the 26 Bushcraft lessons now has a Wikimedia Commons photo search panel. Search results are labeled as **unreviewed visual references** and include creator, license, and a link to the original file page. Users may cache individual image files for offline viewing, and saved photo caches are preserved when the PWA updates. Searches require a network connection and Commons API availability; results are not a pre-curated, independently verified collection of step-accurate instructions. No bulk offline image pack is shipped yet. Code: `bushcraft-media-v28.js`.
