@@ -1,5 +1,5 @@
 /* AEGIS service worker: cache-first, whole app precached at install. Cache id is manually versioned; update when app shell assets change. */
-const CACHE='aegis-34-independent-admin-1';
+const CACHE='aegis-35-push-prep-1';
 const ASSETS=["./","./index.html","./wildlands-knowledge.js","./wildlands-fieldcraft.js","./wildlands-manual.js","./manual-projects.js","./manual-library-v7.js","./field-reader-v11.js","./practical-skills-v11.js","./pioneer-handbook-v11.js","./phase3-procedure-router.js","./phase4-field-intelligence.js","./offline-ai-chat-v22.js","./surface-benchmark-v23.js","./visitor-analytics-v24.js","./bushcraft-v25.js","./bushcraft-photo-steps-v32.js","./field-manual-unified.js","./field-guide-expansion-v13.js","./community-updates-v14.js","./broadcast-admin-v15.js","./broadcast-live-v16.js","./updates.json","./announcements.json","./deep-shelter-earthworks.js","./manual-offline-check.js","./ux-v9.js","./quick-start.js","./manifest.webmanifest","./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png","./icons/apple-touch-icon.png","./llm/webllm_bridge.js","./llm/wllama.js","./llm/wllama.wasm","./llm/compat/wllama.wasm","./llm/compat/wllama.js","./llm/interpret.gbnf","./llm/licenses.html"];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(a=>new Request(new URL(a,self.location).href,{cache:'reload'})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith('aegis-')&&!k.startsWith('aegis-commons-')&&!k.startsWith('aegis-photo-binary-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
@@ -12,3 +12,19 @@ self.addEventListener('fetch',e=>{
     if(hit)return hit;
     return fetch(req);})));});
 self.addEventListener('message',e=>{if(e.data==='version'&&e.source)e.source.postMessage({cache:CACHE});});
+
+self.addEventListener('push',event=>{
+ let data={};try{data=event.data?.json()||{}}catch{data={body:event.data?.text()||''}}
+ const title=String(data.title||'AEGIS Wildlands alert');
+ const options={body:String(data.body||'New AEGIS message received'),icon:'./icons/icon-192.png',badge:'./icons/icon-192.png',tag:String(data.tag||'aegis-broadcast'),data:{url:String(data.url||'./')},renotify:true};
+ event.waitUntil(self.registration.showNotification(title,options));
+});
+self.addEventListener('notificationclick',event=>{
+ event.notification.close();
+ const url=new URL(event.notification.data?.url||'./',self.location.href);
+ if(url.origin!==self.location.origin)return;
+ event.waitUntil(self.clients.matchAll({type:'window',includeUncontrolled:true}).then(async clients=>{
+  for(const client of clients){if(new URL(client.url).origin===url.origin){await client.focus();client.postMessage({type:'aegis-open-messages'});return}}
+  await self.clients.openWindow(url.href);
+ }));
+});
