@@ -23,20 +23,38 @@ let current='',epoch=0;
 function loadStored(n){try{return JSON.parse(localStorage.getItem(cachePrefix+n)||'null')}catch{return null}}
 function store(n,v){try{localStorage.setItem(cachePrefix+n,JSON.stringify(v))}catch{}}
 function normalize(p){const i=p.imageinfo?.[0]||{},m=i.extmetadata||{},url=i.thumburl||i.url||'';if(!allowed(url))return null;const lic=plain(m.LicenseShortName?.value||m.License?.value||'License not supplied');return {title:p.title,thumb:url,original:i.descriptionurl||'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title.replaceAll(' ','_')),artist:plain(m.Artist?.value||'Creator not supplied').slice(0,220),license:lic,credit:plain(m.Credit?.value||'').slice(0,180),description:plain(m.ImageDescription?.value||'').slice(0,200)}}
-async function find(n){const params=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:'filetype:bitmap '+searches[n],gsrnamespace:'6',gsrlimit:'24',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'600'});const res=await fetch(api+'?'+params,{mode:'cors',cache:'no-store'});if(!res.ok)throw Error('Wikimedia search unavailable');const data=await res.json();const entries=Object.values(data.query?.pages||{}).map(normalize).filter(Boolean).filter(x=>/CC|public domain|PD|GNU|GFDL/i.test(x.license));const result={items:entries.slice(0,18),checked:Date.now()};store(n,result);return result}
+async function find(n){
+ const terms=[searches[n],n,searches[n].split(' ').slice(0,2).join(' ')].filter(Boolean);
+ let entries=[],errors=[];
+ for(const term of [...new Set(terms)]){
+  try{
+   const params=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:term,gsrnamespace:'6',gsrlimit:'40',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'600'});
+   const res=await fetch(api+'?'+params,{mode:'cors',cache:'no-store'});
+   if(!res.ok)throw Error('Commons HTTP '+res.status);
+   const data=await res.json();
+   if(data.error)throw Error(data.error.info||data.error.code);
+   const found=Object.values(data.query?.pages||{}).map(normalize).filter(Boolean).filter(x=>/CC|public domain|PD|GNU|GFDL/i.test(x.license));
+   for(const item of found){if(!entries.some(x=>x.title===item.title))entries.push(item)}
+   if(entries.length>=6)break;
+  }catch(e){errors.push(e.message)}
+ }
+ if(!entries.length&&errors.length)throw Error(errors.join('; '));
+ const result={items:entries.slice(0,18),checked:Date.now(),terms};
+ store(n,result);return result
+}
 function status(t){const e=document.querySelector('#bc-photo-status');if(e)e.textContent=t}
 async function saveImage(item,btn){if(!('caches'in window)){status('Image caching unavailable in this browser.');return}try{btn.disabled=true;btn.textContent='Saving…';const cache=await caches.open(imagesPrefix);const req=new Request(item.thumb,{mode:'cors'});const response=await fetch(req);if(!response.ok)throw Error('Image download failed');await cache.put(req,response);btn.textContent='✓ Cached on device';status('Image cached in this browser. Offline availability depends on retained browser storage.')}catch(e){btn.textContent='Save image offline';status('Could not cache image: '+e.message)}finally{btn.disabled=false}}
 async function saveLesson(n,btn){const data=loadStored(n);if(!data?.items?.length){status('Search for photos first.');return}const original=btn.textContent;btn.disabled=true;let ok=0;try{if(!('caches'in window))throw Error('Cache storage unavailable');const cache=await caches.open(imagesPrefix);for(const item of data.items){try{const req=new Request(item.thumb,{mode:'cors'});const res=await fetch(req);if(res.ok){await cache.put(req,res);ok++}}catch{}btn.textContent='Saving '+ok+' / '+data.items.length}status('Saved '+ok+' of '+data.items.length+' images for '+n+'. Offline images remain dependent on browser storage.')}catch(e){status(e.message)}finally{btn.textContent=original;btn.disabled=false}}
 async function saveEntireLibrary(btn){
  if(!navigator.onLine){status('Connect to the internet to prepare the photo library.');return}
  if(!('caches'in window)){status('Offline photo storage unavailable.');return}
- btn.disabled=true;const label=btn.textContent;let lessonsDone=0,saved=0,failed=0;
+ btn.disabled=true;const label=btn.textContent;let lessonsDone=0,saved=0,failed=0,empty=0;
  try{
   const cache=await caches.open(imagesPrefix);
   for(const n of Object.keys(searches)){
    btn.textContent='Preparing '+(++lessonsDone)+' / '+Object.keys(searches).length;
    let data=loadStored(n);
-   if(!data?.items?.length){try{data=await find(n)}catch{failed++;continue}}
+   if(!data?.items?.length){try{data=await find(n)}catch{failed++;continue}}if(!data?.items?.length){empty++;continue}
    for(const item of data.items.slice(0,3)){
     try{
      const req=new Request(item.thumb,{mode:'cors'});
@@ -45,9 +63,9 @@ async function saveEntireLibrary(btn){
      await cache.put(req,res);saved++;
     }catch{failed++}
    }
-   status('Offline library: '+lessonsDone+' / 26 lessons checked; '+saved+' images available; '+failed+' failed. Keep this page open.');
+   status('Offline library: '+lessonsDone+' / 26 lessons checked; '+saved+' images available; '+failed+' failed; '+empty+' lessons had no results. Keep this page open.');
   }
-  status('Finished: '+saved+' images cached across '+lessonsDone+' lessons; '+failed+' failures. This is a reference-image collection, not expert-verified build photography. Verify with airplane mode.');
+  status('Finished: '+saved+' images cached across '+lessonsDone+' lessons; '+failed+' failures; '+empty+' lessons had no image results. This is a reference-image collection, not expert-verified build photography. Verify with airplane mode.');
  }catch(e){status('Library preparation interrupted: '+e.message)}
  finally{btn.disabled=false;btn.textContent=label}
 }
