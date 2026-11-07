@@ -1,8 +1,20 @@
 {
   "schema": 1,
-  "version": "v27",
+  "version": "v28",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v28",
+      "date": "2026-11-07",
+      "title": "Full Bushcraft Commons Image Discovery",
+      "changes": [
+        "Added Wikimedia Commons image search to all 26 Bushcraft lessons across 10 categories",
+        "Each photo result includes creator, license, source link and a per-image offline save control",
+        "Cached gallery metadata is available offline after a successful search",
+        "Saved images are preserved across AEGIS service-worker updates",
+        "Search results are not expert-curated or validated as step-specific instructions; offline image storage requires individually saving images"
+      ]
+    },
     {
       "version": "v27",
       "date": "2026-11-07",
