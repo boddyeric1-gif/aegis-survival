@@ -8,6 +8,20 @@ const $=id=>document.getElementById(id);
 const saved='aegis-live-broadcast-v16',seen='aegis-alert-seen-v14';
 let messages=[],session=null,checked='',initialSync=true;
 const notifiedKey='aegis-notified-ids-v19';
+const PUSH_API=BASE+'/functions/v1/aegis-push';
+const PUSH_KEY='BN_zl6dLiSIDtCgcCw-r5fOGOIxuTlAIGQmqA2Rak4G7VtuJDAqiSCuGxM9jhQs4lX7kfaIfKlXFgIM-jCdMq3Y';
+function pushBytes(s){const p=s.replace(/-/g,'+').replace(/_/g,'/');return Uint8Array.from(atob(p+'='.repeat((4-p.length%4)%4)),ch=>ch.charCodeAt(0))}
+async function enablePush(){
+ if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window))throw Error('Background push is not supported here. On iPhone, open AEGIS from its Home Screen icon (iOS 16.4+).');
+ const permission=await Notification.requestPermission();if(permission!=='granted')throw Error('Notification permission is '+permission+'. Enable it in your device settings.');
+ const registration=await navigator.serviceWorker.ready;
+ let subscription=await registration.pushManager.getSubscription();
+ if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:pushBytes(PUSH_KEY)});
+ const response=await fetch(PUSH_API+'/subscribe',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({subscription:subscription.toJSON()}),cache:'no-store'});
+ if(!response.ok)throw Error('Push registration failed ('+response.status+'). Please try again.');
+ return true;
+}
+
 function el(tag,value){const e=document.createElement(tag);if(value!==undefined)e.textContent=String(value);return e}
 function local(key,fallback){try{return JSON.parse(localStorage.getItem(key))||fallback}catch{return fallback}}
 function persist(key,data){try{localStorage.setItem(key,JSON.stringify(data))}catch{}}
@@ -45,11 +59,17 @@ function admin(){
  async function request(action,data,token){const res=await fetch(api+'/'+action,{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY,...(token?{Authorization:'Bearer '+token}:{})},body:JSON.stringify(data),cache:'no-store'});const json=await res.json().catch(()=>({}));if(!res.ok)throw Error(json.error||'Server rejected request ('+res.status+')');return json}
  let adminToken='';
  form.addEventListener('submit',async ev=>{ev.preventDefault();submit.disabled=true;status.textContent='Authenticating…';try{const result=await request('login',{username:username.value.trim(),password:password.value});if(!result.token)throw Error('No session returned');adminToken=result.token;password.value='';form.hidden=true;composer.hidden=false;status.textContent=''}catch(e){status.textContent=e.message}finally{submit.disabled=false}});
- send.addEventListener('click',async()=>{if(!adminToken)return;if(!subject.value.trim()||!body.value.trim()){alert('Subject and message required');return}if(!confirm('Publish '+level.value+' alert to all AEGIS users?'))return;send.disabled=true;try{await request('publish',{title:subject.value.trim(),body:body.value.trim(),severity:level.value},adminToken);subject.value='';body.value='';alert('Published successfully.');await load()}catch(e){alert('Message not sent: '+e.message)}finally{send.disabled=false}});
+ send.addEventListener('click',async()=>{if(!adminToken)return;if(!subject.value.trim()||!body.value.trim()){alert('Subject and message required');return}if(!confirm('Publish '+level.value+' alert to all AEGIS users?'))return;send.disabled=true;try{await request('publish',{title:subject.value.trim(),body:body.value.trim(),severity:level.value},adminToken);
+ let delivery='';try{
+  const res=await fetch(PUSH_API+'/dispatch',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({token:adminToken,title:'AEGIS · '+formatSeverity(level.value),body:subject.value.trim()+' — '+body.value.trim().slice(0,140),tag:'aegis-'+Date.now()})});
+  const result=await res.json().catch(()=>({}));
+  delivery=res.ok?' Background push sent to '+(result.sent||0)+' subscribed devices.': ' Background push failed ('+res.status+').';
+ }catch(e){delivery=' Background push failed: '+e.message}
+ subject.value='';body.value='';alert('Message published.'+delivery);await load()}catch(e){alert('Message not sent: '+e.message)}finally{send.disabled=false}});
  logout.addEventListener('click',()=>{adminToken='';composer.hidden=true;form.hidden=false;password.value='';status.textContent='Admin panel locked.'});
  window.addEventListener('pagehide',()=>{adminToken='';composer.hidden=true;form.hidden=false});
 }
 function parseJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))}catch{return {}}}
-function init(){messages=local(saved,[]);render();admin();$('aegis-notify-optin')?.addEventListener('click',async()=>{const status=$('aegis-notify-status');if(!('Notification' in window)){if(status)status.textContent='This browser does not support browser notifications.';return}try{const permission=await Notification.requestPermission();if(status)status.textContent=permission==='granted'?'Enabled while AEGIS is open and online. Background push is not yet available.':'Permission: '+permission}catch(e){if(status)status.textContent='Permission request failed: '+e.message}});$('aegis-alert-refresh')?.addEventListener('click',load);$('aegis-alert-mark-read')?.addEventListener('click',()=>{persist(seen,messages.map(m=>m.id));render()});window.addEventListener('online',load);document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();setInterval(()=>{if(!document.hidden)load()},15*60*1000)}
+function init(){messages=local(saved,[]);render();admin();$('aegis-notify-optin')?.addEventListener('click',async()=>{const status=$('aegis-notify-status');if(status)status.textContent='Enabling background push…';try{await enablePush();if(status)status.textContent='Background push enabled! AEGIS can alert you even when closed, while your device is online.'}catch(e){if(status)status.textContent=e.message}});$('aegis-alert-refresh')?.addEventListener('click',load);$('aegis-alert-mark-read')?.addEventListener('click',()=>{persist(seen,messages.map(m=>m.id));render()});navigator.serviceWorker?.addEventListener('message',event=>{if(event.data?.type==='aegis-open-messages'){document.querySelector('[data-tab="messages"]')?.click();load()}});window.addEventListener('online',load);document.addEventListener('visibilitychange',()=>{if(!document.hidden)load()});load();setInterval(()=>{if(!document.hidden)load()},15*60*1000)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
