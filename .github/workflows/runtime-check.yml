@@ -16,5 +16,7 @@ jobs:
         run: |
           node --check llm/webllm_bridge.js
           node --check sw.js
+      - name: Enforce release changelog and README alignment
+        run: node tests/release-metadata.cjs
       - name: Verify referenced offline assets and iOS settings
         run: node tests/runtime-sanity.cjs
