@@ -11,7 +11,7 @@ const escape=s=>String(s||'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>'
 const strip=s=>{let d=document.createElement('div');d.innerHTML=String(s||'');return(d.textContent||'').trim()};
 const sleep=t=>new Promise(r=>setTimeout(r,t));
 const lesson=()=>document.querySelector('#bc-detail h2')?.textContent?.trim()||'';
-const steps=()=>Array.from(document.querySelectorAll('#bc-detail .bc-step p')).map(x=>x.textContent.replace(/^\\s*\\d+\\.\\s*/,'').trim());
+const steps=()=>Array.from(document.querySelectorAll('#bc-detail .bc-step p')).map(x=>x.textContent.replace(/^\s*\d+\.\s*/,'').trim());
 const key=(name,step)=>name+'::'+step;
 const saveIndex=()=>{try{localStorage.setItem(DB,JSON.stringify(state.records))}catch(e){state.errors.push('Metadata storage: '+e.message)}};
 const goodURL=url=>{try{let u=new URL(url);return u.protocol==='https:'&&['upload.wikimedia.org','commons.wikimedia.org'].includes(u.hostname)}catch{return false}};
