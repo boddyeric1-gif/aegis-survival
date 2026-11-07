@@ -34,6 +34,47 @@ function admin(){
  const root=$('aegis-admin-root');if(!root)return;
  const form=el('form'),u=el('label','Administrator username'),username=el('input'),p=el('label','Account password'),password=el('input'),submit=el('button','Sign in securely'),status=el('p');
  username.value='';username.placeholder='Enter admin username';username.autocomplete='username';username.required=true;password.type='password';password.value='';password.placeholder='Enter admin password';password.required=true;password.autocomplete='current-password';submit.type='submit';status.setAttribute('role','status');u.append(username);p.append(password);form.append(u,p,submit,status);
+ const recovery=el('button','Set / reset AEGIS password');recovery.type='button';
+ const recoveryPanel=el('section');recoveryPanel.hidden=true;
+ const newPass=el('input'),confirmPass=el('input'),savePass=el('button','Save new password');
+ newPass.type='password';newPass.placeholder='New password (12+ characters)';newPass.autocomplete='new-password';newPass.minLength=12;
+ confirmPass.type='password';confirmPass.placeholder='Confirm new password';confirmPass.autocomplete='new-password';confirmPass.minLength=12;
+ savePass.type='button';recoveryPanel.append(el('p','Choose a new password for the existing EMB Creations administrator account. This also changes that Supabase account password anywhere else it is used.'),newPass,confirmPass,savePass);
+ form.append(recovery,recoveryPanel);
+ recovery.addEventListener('click',async()=>{
+  recovery.disabled=true;status.textContent='Requesting a secure password-reset email…';
+  try{
+   const redirect=location.origin+location.pathname;
+   const res=await fetch(BASE+'/auth/v1/recover?redirect_to='+encodeURIComponent(redirect),{method:'POST',headers,body:JSON.stringify({email:ADMIN_EMAIL}),cache:'no-store'});
+   const data=await res.json().catch(()=>({}));
+   if(!res.ok)throw Error(data.msg||data.message||data.error_description||'Password recovery request failed ('+res.status+')');
+   status.textContent='If email delivery is configured, a password-reset link has been sent to the administrator email. Open it on this device and return here.';
+  }catch(err){status.textContent='Password recovery unavailable: '+err.message}
+  finally{recovery.disabled=false}
+ });
+ let recoveryToken='';
+ async function consumeRecovery(){
+  const hash=new URLSearchParams(location.hash.replace(/^#/,'')),query=new URLSearchParams(location.search);
+  const token=hash.get('access_token'),type=hash.get('type'),error=hash.get('error_description')||query.get('error_description');
+  if(error){status.textContent='Recovery link error: '+error;return}
+  if(type!=='recovery'||!token)return;
+  recoveryToken=token;recoveryPanel.hidden=false;status.textContent='Recovery link verified by Supabase. Enter your new password below.';
+  history.replaceState(null,'',location.pathname+location.search);
+ }
+ savePass.addEventListener('click',async()=>{
+  if(!recoveryToken){status.textContent='Open the recovery link from your email first.';return}
+  if(newPass.value.length<12||newPass.value!==confirmPass.value){status.textContent='Use a matching password of at least 12 characters.';return}
+  savePass.disabled=true;
+  try{
+   const res=await fetch(BASE+'/auth/v1/user',{method:'PUT',headers:{...headers,Authorization:'Bearer '+recoveryToken},body:JSON.stringify({password:newPass.value}),cache:'no-store'});
+   const data=await res.json().catch(()=>({}));
+   if(!res.ok)throw Error(data.msg||data.message||data.error_description||'Password update failed ('+res.status+')');
+   recoveryToken='';newPass.value='';confirmPass.value='';recoveryPanel.hidden=true;
+   status.textContent='Password updated. Sign in with username ADMIN-EMB and your new password.';
+  }catch(err){status.textContent='Password update failed: '+err.message}
+  finally{savePass.disabled=false}
+ });
+ consumeRecovery();
  const composer=el('section');composer.hidden=true;const title=el('h3','Publish broadcast');const level=el('select');for(const [v,t] of [['general','General alert'],['notice','Community notice'],['warning','Important warning'],['emergency','Emergency alert']]){const option=el('option',t);option.value=v;level.append(option)}
  const subject=el('input');subject.placeholder='Subject';subject.maxLength=180;const body=el('textarea');body.placeholder='Write a broadcast message…';body.maxLength=2500;const send=el('button','Send to all inboxes'),logout=el('button','Lock admin');send.type='button';logout.type='button';composer.append(title,level,subject,body,send,logout);root.replaceChildren(form,composer);
  form.addEventListener('submit',async ev=>{ev.preventDefault();if(username.value.trim()!=='ADMIN-EMB'){status.textContent='Invalid administrator username';return}submit.disabled=true;status.textContent='Verifying account…';try{const login=await request('/auth/v1/token?grant_type=password',{email:ADMIN_EMAIL,password:password.value});password.value='';const token=login.access_token;if(!token)throw Error('No session returned');const check=await fetch(BASE+'/rest/v1/aegis_messages?select=id&limit=0',{headers:{apikey:KEY,Authorization:'Bearer '+token}});if(!check.ok)throw Error('Unable to verify account');session=token;form.hidden=true;composer.hidden=false;status.textContent='';}catch(err){session=null;status.textContent=err instanceof TypeError?'Cannot reach the broadcast server. Check network, DNS, browser extensions, or firewall; then retry.':err.message}finally{submit.disabled=false}});
