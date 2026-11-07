@@ -1,8 +1,72 @@
 {
   "schema": 1,
-  "version": "v16",
-  "updated": "2026-11-06",
+  "version": "v23",
+  "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v23",
+      "date": "2026-11-07",
+      "title": "Surface Performance Lab",
+      "changes": [
+        "Added three-prompt offline inference benchmark with 10-second median target and JSON export",
+        "Desktop CPU thread setting (1 or 2) and conservative 128 batch size",
+        "Existing 0.5B model remains installed; larger model not yet provisioned"
+      ]
+    },
+    {
+      "version": "v22",
+      "date": "2026-11-06",
+      "title": "Offline AI Chat",
+      "changes": [
+        "Added conversational offline AI chat using installed local model",
+        "Added Field Guide snippet retrieval, response length options, and conversation JSON export",
+        "Chat history stored locally; AI remains experimental"
+      ]
+    },
+    {
+      "version": "v21",
+      "date": "2026-11-06",
+      "title": "Phase 4 Field Intelligence",
+      "changes": [
+        "Added supply-aware deterministic situation advisor and editable inventory",
+        "Added water and food estimates, mission checklists and procedure search",
+        "Added local JSON backup and restore"
+      ]
+    },
+    {
+      "version": "v20",
+      "date": "2026-11-06",
+      "title": "Admin login input cleanup",
+      "changes": [
+        "Admin username and password inputs start blank",
+        "No new Supabase admin account or credentials provisioned"
+      ]
+    },
+    {
+      "version": "v19",
+      "date": "2026-11-06",
+      "title": "Alerts and foreground notifications",
+      "changes": [
+        "Added in-app alerts banner and opt-in foreground browser notifications",
+        "Background iOS push notifications not implemented"
+      ]
+    },
+    {
+      "version": "v18",
+      "date": "2026-11-06",
+      "title": "Admin rendering adjustments",
+      "changes": [
+        "Adjusted administrative UI rendering and interaction"
+      ]
+    },
+    {
+      "version": "v17",
+      "date": "2026-11-06",
+      "title": "Admin login adjustments",
+      "changes": [
+        "Adjusted admin login interface; authentication still depends on existing Supabase account"
+      ]
+    },
     {
       "version": "v16",
       "date": "2026-11-06",
