@@ -178,3 +178,7 @@ A new **Bushcraft** tab provides 26 structured lessons across 10 categories, sea
 ## v26 — Bushcraft visual overhaul
 
 Updated the locally bundled `bushcraft-v25.js` renderer with category-specific scene illustrations, stage variations, and a more immersive fieldcraft academy layout. These are **conceptual SVG illustrations**, not verified photographs or precise step-by-step construction diagrams. The 26 existing lessons remain; a full photograph-backed library and expert-reviewed detailed build instructions are still planned. Offline cache bumped to `aegis-26-bushcraft-visual-1`.
+
+## v27 — Real image sourcing (initial batch)
+
+Three Wikimedia Commons photographs with attribution and source links are integrated into the shelter-related Bushcraft lesson views. These are **online-only** images: the current service worker does not bundle them for offline use, and conceptual diagrams remain available offline. The photos are illustrative context, not verified step-by-step procedural photos. Sources: [Jomegat pole tarp shelter](https://commons.wikimedia.org/wiki/File:Pole_tarp_and_rope_shelter_4855.JPG), [Virginia State Parks lean-to](https://commons.wikimedia.org/wiki/File:Lean_to_Shelter_(17035853790).jpg), [Virginia State Parks shelter construction](https://commons.wikimedia.org/wiki/File:Building_a_lean_to_shelter_(17197376576).jpg). Licensing is documented on each source page.
