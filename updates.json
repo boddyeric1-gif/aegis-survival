@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v23",
+  "version": "v24",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v24",
+      "date": "2026-11-07",
+      "title": "Privacy-conscious Visitor Analytics",
+      "changes": [
+        "Added approximate daily app visitor counts and Reddit campaign attribution to Updates",
+        "Pseudonymous browser identifier stored locally; backend stores one visit per UTC day, no chats or inventory",
+        "Offline-first behavior preserved; visits are not PWA installations or AI model downloads"
+      ]
+    },
     {
       "version": "v23",
       "date": "2026-11-07",
