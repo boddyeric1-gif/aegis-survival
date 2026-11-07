@@ -344,3 +344,10 @@ perfVm.runInNewContext(perfSource,{window:perfWindow,document:{readyState:'loadi
 assert.equal(perfWindow.AEGIS_BENCHMARK.TARGET,10);
 assert.equal(perfWindow.AEGIS_BENCHMARK.evaluate([{ok:true,seconds:4},{ok:true,seconds:8},{ok:true,seconds:12}]).pass,true);
 assert.equal(perfWindow.AEGIS_BENCHMARK.evaluate([{ok:true,seconds:11},{ok:true,seconds:12},{ok:true,seconds:13}]).pass,false);
+
+assert.match(html,/visitor-analytics-v24\\.js/);
+assert.match(sw,/visitor-analytics-v24\\.js/);
+const analyticsSource=read('visitor-analytics-v24.js');
+assert.match(analyticsSource,/utm_source/);
+assert.match(analyticsSource,/navigator\\.onLine/);
+assert.doesNotMatch(analyticsSource,/SUPABASE_SERVICE_ROLE_KEY/);
