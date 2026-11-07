@@ -1,10 +1,14 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Live Broadcast (v16)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v23)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## v23: Surface Performance Lab
+
+Offline AI Chat now includes a three-question on-device performance benchmark, a 10-second median response target, optional 1/2 CPU thread setting, and JSON export. This is a performance target, not a measured guarantee. The verified 0.5B model remains the installed fallback; no larger model is provisioned yet. See `updates.json` for the public release history.
 
 ## v16: Live Supabase broadcasts (shared EMB OS project)
 
