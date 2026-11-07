@@ -174,3 +174,7 @@ Open **Offline AI Chat → Surface Performance Lab**. The app benchmarks three r
 ## v25 — Bushcraft illustrated skills
 
 A new **Bushcraft** tab provides 26 structured lessons across 10 categories, searchable by topic, with materials, written steps, category-level schematic SVG imagery, safety notes, local favorites, print and text export. Illustrations are **schematic placeholders, not validated step photographs**; do not interpret them as exact build diagrams. The library is locally bundled in `bushcraft-v25.js` and precached by `sw.js` for offline use. Future iterations should add separately reviewed, accurate step-specific photography or diagrams with provenance and licensing metadata. Do not claim the concept mockup's hundreds of skills are implemented.
+
+## v26 — Bushcraft visual overhaul
+
+Updated the locally bundled `bushcraft-v25.js` renderer with category-specific scene illustrations, stage variations, and a more immersive fieldcraft academy layout. These are **conceptual SVG illustrations**, not verified photographs or precise step-by-step construction diagrams. The 26 existing lessons remain; a full photograph-backed library and expert-reviewed detailed build instructions are still planned. Offline cache bumped to `aegis-26-bushcraft-visual-1`.
