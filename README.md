@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v24)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v25)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -169,3 +169,8 @@ Open the **Offline AI Chat** tab after installing and verifying the local Qwen m
 ## v23 · Surface Performance Lab
 
 Open **Offline AI Chat → Surface Performance Lab**. The app benchmarks three real warm-model inference calls with 64-token limits, reports individual and median seconds, and checks the **10-second median target**. Export the JSON results for device-specific tuning. The benchmark includes prompt processing and generation, but excludes initial model download/loading. It does not imply a guaranteed 10-second response for every question. A conservative desktop CPU setting defaults to 2 threads (previously 1) and 128 batch size; choose 1 thread if 2 is slower or unstable, then reload. iOS remains 1 thread. The already-installed **0.5B** model remains the only provisioned model and is preserved in the existing model cache. **Qwen2.5-1.5B Q4_K_M is not installed or hosted by this change**: adding it safely requires a separate verified model download manifest, storage budget and device performance testing. Do not remove the fallback until comparative benchmarks prove an upgrade.
+
+
+## v25 — Bushcraft illustrated skills
+
+A new **Bushcraft** tab provides 26 structured lessons across 10 categories, searchable by topic, with materials, written steps, category-level schematic SVG imagery, safety notes, local favorites, print and text export. Illustrations are **schematic placeholders, not validated step photographs**; do not interpret them as exact build diagrams. The library is locally bundled in `bushcraft-v25.js` and precached by `sw.js` for offline use. Future iterations should add separately reviewed, accurate step-specific photography or diagrams with provenance and licensing metadata. Do not claim the concept mockup's hundreds of skills are implemented.
