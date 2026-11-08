@@ -4,8 +4,8 @@
 */
 (()=>{'use strict';
 const root=document.getElementById('bushcraft');if(!root)return;
-const DB='aegis-photo-index-v32',CACHE='aegis-photo-binary-v32';
-const state={busy:false,active:'',renderToken:0,records:{},errors:[]};
+const DB='aegis-photo-index-v39',CACHE='aegis-photo-binary-v32';
+const state={busy:false,active:'',renderToken:0,records:{},errors:[],searches:new Map()};
 try{state.records=JSON.parse(localStorage.getItem(DB)||'{}')||{}}catch{}
 const escape=s=>String(s||'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
 const strip=s=>{let d=document.createElement('div');d.innerHTML=String(s||'');return(d.textContent||'').trim()};
@@ -17,24 +17,67 @@ const saveIndex=()=>{try{localStorage.setItem(DB,JSON.stringify(state.records))}
 const goodURL=url=>{try{let u=new URL(url);return u.protocol==='https:'&&['upload.wikimedia.org','commons.wikimedia.org'].includes(u.hostname)}catch{return false}};
 const licensed=meta=>{const license=strip(meta.LicenseShortName?.value||meta.License?.value||'');const usage=strip(meta.UsageTerms?.value||'');return /^(CC(?:[ -]|$)|Creative Commons|Public domain|PD(?:[ -]|$)|GNU|GFDL)/i.test(license+' '+usage)};
 function normalize(p){let info=p.imageinfo?.[0],meta=info?.extmetadata||{};if(!info||!licensed(meta))return null;let url=info.thumburl||info.url;if(!goodURL(url))return null;return{title:p.title,url,source:info.descriptionurl||'https://commons.wikimedia.org/wiki/'+encodeURIComponent(p.title.replaceAll(' ','_')),artist:strip(meta.Artist?.value||'Unknown author').slice(0,160),license:strip(meta.LicenseShortName?.value||meta.License?.value||'Check source').slice(0,90)}}
+const topics={
+ 'Tarp lean-to':['tarp shelter camping','tarpaulin shelter'],
+ 'A-frame tarp shelter':['A-frame tent tarp','tarp camping shelter'],
+ 'Ground insulation bed':['camping sleeping pad','forest shelter bed'],
+ 'Shelter site selection':['woodland camping shelter','forest campsite'],
+ 'Rainwater diversion':['camp drainage','rainwater runoff'],
+ 'Tinder preparation':['fire tinder kindling','birch bark tinder'],
+ 'Fire lay planning':['campfire kindling','campfire wood'],
+ 'Firewood moisture sorting':['stacked firewood','firewood drying'],
+ 'Emergency water storage':['water storage containers','water canister'],
+ 'Water source risk check':['river water collection','water source'],
+ 'Rain collection setup':['rainwater harvesting tarp','rainwater collection'],
+ 'Foraging observation journal':['botanical field notebook','plant identification'],
+ 'Food storage rotation':['food storage pantry','food containers'],
+ 'Wildlife sign observation':['animal tracks soil','wildlife tracks'],
+ 'Humane live-capture planning':['humane animal cage trap','live trap'],
+ 'Animal track recording':['animal tracks footprints','wildlife footprints'],
+ 'Simple wooden mallet':['wooden mallet hand tool','wooden mallet'],
+ 'Camp utensil care':['camping cookware','washing dishes camping'],
+ 'Bowline knot':['bowline knot rope','bowline'],
+ 'Taut-line hitch':['taut line hitch knot','taut-line hitch'],
+ 'Square lashing practice':['square lashing poles','square lashing'],
+ 'Landmark route notes':['topographic map hiking','trail map'],
+ 'Compass orientation':['compass map navigation','compass'],
+ 'Leave-no-trace camp routine':['leave no trace camping','campsite'],
+ 'Rainproof supply storage':['waterproof storage containers','camping storage'],
+ 'Household repair inventory':['hand tools toolbox','tool storage']
+};
+const categoryQueries={
+ Shelter:['camping tarp shelter','woodland shelter'],Fire:['campfire firewood','fire starting'],Water:['camping water collection','water containers'],
+ 'Food & Foraging':['foraging plants','field notebook'],'Hunting & Traps':['animal tracks','wildlife observation'],
+ 'Tools & Crafting':['woodworking hand tools','camp tools'],'Cordage & Knots':['rope knots','knot tying'],
+ Navigation:['map compass navigation','hiking map'],Fieldcraft:['campsite forest','outdoor field skills'],'Long-Term Living':['supply storage','household tools']
+};
+const lessonCategory=name=>Array.from(root.querySelectorAll('[data-lesson]')).find(e=>e.textContent.includes(name))?.closest('#bc-list')?root.querySelector('[data-cat][aria-pressed="true"]')?.dataset.cat:'';
 async function search(query){
- const p=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrnamespace:'6',gsrsearch:query,gsrlimit:'24',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'700'});
- const res=await fetch('https://commons.wikimedia.org/w/api.php?'+p,{mode:'cors',cache:'no-store'});
- if(!res.ok)throw Error('Commons HTTP '+res.status);
- const json=await res.json();if(json.error)throw Error(json.error.info||json.error.code);
- return Object.values(json.query?.pages||{}).map(normalize).filter(Boolean);
+ if(state.searches.has(query))return state.searches.get(query);
+ const task=(async()=>{
+  const p=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrnamespace:'6',gsrsearch:query,gsrlimit:'12',prop:'imageinfo',iiprop:'url|extmetadata',iiurlwidth:'600'});
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8500);
+  try{
+   const res=await fetch('https://commons.wikimedia.org/w/api.php?'+p,{mode:'cors',cache:'no-store',signal:controller.signal});
+   if(!res.ok)throw Error('Commons HTTP '+res.status);
+   const json=await res.json();if(json.error)throw Error(json.error.info||json.error.code);
+   return Object.values(json.query?.pages||{}).map(normalize).filter(Boolean);
+  }finally{clearTimeout(timer)}
+ })();
+ state.searches.set(query,task);
+ try{return await task}catch(e){state.searches.delete(query);throw e}
 }
 async function lookup(name,step){
  const k=key(name,step),stored=state.records[k];
  if(stored?.image)return stored;
  if(!navigator.onLine)return stored||{error:'Offline: no image saved for this step'};
- const short=step.replace(/^(Choose|Select|Check|Record|Prepare|Keep|Observe|Identify|Use|Store|Avoid|Find|Note|Plan|Test|Lay|Build|Cover|Leave|Make|Run|Tie|Stake|Center|Drape|Photograph|Inspect|Separate|Wash|Rinse|Dry|Clean|Fill|Label|Angle|Compare|Mark|Cut|Smooth|Wrap|Return|Form|Pass|Dress|Tighten|Hold|Align|Secure|Measure|Move|Follow|Confirm)\\b/i,'').trim();
- const queries=[name+' '+short, name, short].filter(Boolean);
+ const category=lessonCategory(name);
+ const queries=[...(topics[name]||[]),...(categoryQueries[category]||[]),'outdoor survival skills'].filter(Boolean);
  let found=[],error='';
- for(const q of queries){
+ for(const q of [...new Set(queries)]){
   try{found=await search(q);if(found.length)break}catch(e){error=e.message}
  }
- const result=found.length?{image:found[0],alternatives:found.slice(1,4),query:queries[0],time:Date.now()}:{error:error||'No licensed image found',query:queries[0],time:Date.now()};
+ const result=found.length?{image:found[0],alternatives:found.slice(1,4),query:queries[0],time:Date.now()}:{error:error||'No licensed image found. Use Refresh this lesson when online.',query:queries[0],time:Date.now()};
  state.records[k]=result;saveIndex();return result;
 }
 async function cacheImage(image){
@@ -57,7 +100,7 @@ function renderCard(container,result,index,token){
  const image=result.image;
  card.innerHTML='<div class="bc-media-frame"><span class="bc-media-loading">Loading photograph…</span></div><div class="bc-media-credit"><span>'+escape(image.title.replace(/^File:/,''))+'</span><small>'+escape(image.artist)+' · '+escape(image.license)+'</small><a href="'+escape(image.source)+'" target="_blank" rel="noopener noreferrer">Source / attribution</a><button type="button" class="bc-media-save">Save photo offline</button></div>';
  const frame=card.querySelector('.bc-media-frame');
- imageSource(image).then(src=>{if(token!==state.renderToken||!frame.isConnected)return;if(!src){frame.textContent='Photo not cached for offline use';return}const img=new Image();img.loading='lazy';img.alt='Unreviewed Commons visual reference for step '+(index+1);img.src=src;img.onload=()=>{if(src.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(src),1000)};img.onerror=()=>{frame.textContent='Photograph unavailable — open source link'};frame.replaceChildren(img)}).catch(()=>frame.textContent='Image unavailable');
+ imageSource(image).then(src=>{if(token!==state.renderToken||!frame.isConnected)return;if(!src){frame.textContent='Photo not cached for offline use';return}const img=new Image();img.loading='lazy';img.alt='Unreviewed Commons visual reference for step '+(index+1);img.onload=()=>{if(src.startsWith('blob:'))setTimeout(()=>URL.revokeObjectURL(src),1000)};img.onerror=()=>{frame.textContent='Photograph unavailable — open source link'};img.src=src;frame.replaceChildren(img)}).catch(()=>frame.textContent='Image unavailable');
  card.querySelector('.bc-media-save').onclick=async e=>{const b=e.currentTarget;b.disabled=true;b.textContent='Saving…';try{await cacheImage(image);b.textContent='Saved offline ✓'}catch(err){b.textContent='Retry save';setStatus('Unable to cache photo: '+err.message)}finally{b.disabled=false}};
 }
 function setStatus(msg){const e=document.querySelector('#bc-media-status');if(e)e.textContent=msg}
