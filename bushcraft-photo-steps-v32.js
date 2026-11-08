@@ -77,7 +77,7 @@ async function lookup(name,step){
  for(const q of [...new Set(queries)]){
   try{found=await search(q);if(found.length)break}catch(e){error=e.message}
  }
- const result=found.length?{image:found[0],alternatives:found.slice(1,4),query:queries[0],time:Date.now()}:{error:error||'No licensed image found. Use Refresh this lesson when online.',query:queries[0],time:Date.now()};
+ const stepIndex=steps().indexOf(step);const pick=found.length?Math.max(0,stepIndex)%Math.min(found.length,5):0;const result=found.length?{image:found[pick],alternatives:found.filter((_,i)=>i!==pick).slice(0,3),query:queries[0],time:Date.now()}:{error:error||'No licensed image found. Use Refresh this lesson when online.',query:queries[0],time:Date.now()};
  state.records[k]=result;saveIndex();return result;
 }
 async function cacheImage(image){
