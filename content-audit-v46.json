@@ -1,0 +1,349 @@
+{
+  "date": "2026-11-09",
+  "scope": "26 lessons / 130 illustrations: code, labels, pairing and source cross-reference review; not professional or physical field validation",
+  "corrections": [
+    "Tinder reserve arrow now points away from open flame.",
+    "Square-lashing frapping panels retain the underlying wrapping turns.",
+    "Wooden-mallet wording now specifies one continuous piece of sound wood, matching the drawing."
+  ],
+  "lessons": [
+    {
+      "title": "Tarp lean-to",
+      "pages": [
+        69,
+        70
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters",
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "A-frame tarp shelter",
+      "pages": [
+        71,
+        72
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters",
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Ground insulation bed",
+      "pages": [
+        67,
+        68
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters",
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Shelter site selection",
+      "pages": [
+        67,
+        68
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters",
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Rainwater diversion",
+      "pages": [
+        68
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Tinder preparation",
+      "pages": [
+        108,
+        109
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 7 \u00b7 Firecraft",
+        "Chapter 7 \u00b7 Firecraft"
+      ]
+    },
+    {
+      "title": "Fire lay planning",
+      "pages": [
+        110,
+        111
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 7 \u00b7 Firecraft",
+        "Chapter 7 \u00b7 Firecraft"
+      ]
+    },
+    {
+      "title": "Firewood moisture sorting",
+      "pages": [
+        108,
+        109
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 7 \u00b7 Firecraft",
+        "Chapter 7 \u00b7 Firecraft"
+      ]
+    },
+    {
+      "title": "Emergency water storage",
+      "pages": [
+        87
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Water source risk check",
+      "pages": [
+        88,
+        89
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 6 \u00b7 Water Procurement",
+        "Chapter 6 \u00b7 Water Procurement"
+      ]
+    },
+    {
+      "title": "Rain collection setup",
+      "pages": [
+        89
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 6 \u00b7 Water Procurement"
+      ]
+    },
+    {
+      "title": "Foraging observation journal",
+      "pages": [
+        154
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 8 \u00b7 Food Procurement"
+      ]
+    },
+    {
+      "title": "Food storage rotation",
+      "pages": [
+        149
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 8 \u00b7 Food Procurement"
+      ]
+    },
+    {
+      "title": "Wildlife sign observation",
+      "pages": [
+        119
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 8 \u00b7 Food Procurement"
+      ]
+    },
+    {
+      "title": "Humane live-capture planning",
+      "pages": [
+        120
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 8 \u00b7 Food Procurement"
+      ]
+    },
+    {
+      "title": "Animal track recording",
+      "pages": [
+        119
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 8 \u00b7 Food Procurement"
+      ]
+    },
+    {
+      "title": "Simple wooden mallet",
+      "pages": [
+        205
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 12 \u00b7 Field-Expedient Weapons, Tools,"
+      ]
+    },
+    {
+      "title": "Camp utensil care",
+      "pages": [
+        38
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 4 \u00b7 Basic Survival Medicine"
+      ]
+    },
+    {
+      "title": "Bowline knot",
+      "pages": [
+        646,
+        647
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Appendix G \u00b7 Ropes and Knots",
+        "Appendix G \u00b7 Ropes and Knots"
+      ]
+    },
+    {
+      "title": "Taut-line hitch",
+      "pages": [
+        640,
+        641
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Appendix G \u00b7 Ropes and Knots",
+        "Appendix G \u00b7 Ropes and Knots"
+      ]
+    },
+    {
+      "title": "Square lashing practice",
+      "pages": [
+        648,
+        649
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Appendix G \u00b7 Ropes and Knots",
+        "Appendix G \u00b7 Ropes and Knots"
+      ]
+    },
+    {
+      "title": "Landmark route notes",
+      "pages": [
+        308
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 18 \u00b7 Field-Expedient Direction Finding"
+      ]
+    },
+    {
+      "title": "Compass orientation",
+      "pages": [
+        308,
+        315
+      ],
+      "relationship": "Related source procedure; compare equipment and method",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 18 \u00b7 Field-Expedient Direction Finding",
+        "Chapter 18 \u00b7 Field-Expedient Direction Finding"
+      ]
+    },
+    {
+      "title": "Leave-no-trace camp routine",
+      "pages": [
+        67
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 5 \u00b7 Shelters"
+      ]
+    },
+    {
+      "title": "Rainproof supply storage",
+      "pages": [
+        28
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 3 \u00b7 Survival Planning and Survival Kits"
+      ]
+    },
+    {
+      "title": "Household repair inventory",
+      "pages": [
+        28,
+        29
+      ],
+      "relationship": "Background reading only; not an exact match to this lesson",
+      "illustrations": "Original schematic aid; no independent field validation",
+      "needsHandsOnReview": true,
+      "sourceHeadings": [
+        "Chapter 3 \u00b7 Survival Planning and Survival Kits",
+        "Chapter 3 \u00b7 Survival Planning and Survival Kits"
+      ]
+    }
+  ]
+}

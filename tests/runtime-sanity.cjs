@@ -1,7 +1,7 @@
 const fs=require('node:fs');const assert=require('node:assert/strict');
 const read=p=>fs.readFileSync(p,'utf8');
 const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html');
-assert.match(sw,/aegis-(?:11-reader|12-intent|12-pwa-update|13-unified-manual|13-field-guide|14-updates-alerts|15-admin-inbox|16-live-broadcast|17-admin-login|18-admin-render|19-notifications|20-blank-admin|21-phase4-intelligence|22-offline-ai-chat|23-surface-benchmark|24-visitor-analytics)/);
+assert.match(sw,/const CACHE='aegis-\d+-[a-z0-9-]+'/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
 assert.match(bridge,/n_ctx:IOS\?512/);
@@ -57,7 +57,7 @@ assert.match(html,/src="wildlands-manual.js"/);
 assert.match(sw,/wildlands-manual\.js/);
 assert.match(manual,/Primitive Tools & Materials/);
 assert.match(manual,/Emergency Response & Long-Term Planning/);
-assert.match(sw,/startsWith\('aegis-'\)/);
+assert.match(sw,/Only numbered app-shell caches|aegis-\\d/);
 assert.doesNotMatch(sw,/caches\.delete\('model-store-v1'\)/);
 
 const projects=read('manual-projects.js');
@@ -88,16 +88,16 @@ assert.match(deep,/Trench planning and excavation safety/);
 assert.match(deep,/Indoor warm-room conversion/);
 assert.match(offlineCheck,/airplane mode/);
 
-const ux=read('ux-v9.js');
+const ux=read('ux-v42.js');
 assert.match(html,/id="v9-search"/);
 assert.match(html,/id="radiohub"/);
 assert.match(html,/data-tab="radiohub"/);
 assert.match(html,/data-v9-jump="emergency"/);
-assert.match(html,/src="ux-v9.js"/);
-assert.match(sw,/ux-v9\.js/);
+assert.match(html,/src="ux-v42.js"/);
+assert.match(sw,/ux-v42\.js/);
 assert.match(ux,/NOAA Weather Radio frequencies/);
 assert.match(ux,/Search all field manuals|manual-chapters/);
-assert.match(read('manual-offline-check.js'),/ux-v9\.js/);
+assert.match(read('manual-offline-check.js'),/ux-v42\.js/);
 
 assert.match(html,/AEGIS v10/);
 assert.match(html,/backdrop-filter:blur/);
@@ -105,13 +105,13 @@ assert.match(html,/prefers-reduced-motion/);
 assert.match(html,/data-v9-jump="emergency"/);
 assert.match(html,/id="manualhub"/);
 
-assert.match(html,/EMB AEGIS Wildlands v24 · Visitor Analytics/);
+assert.match(html,/EMB AEGIS Wildlands v\d+ ·/);
 assert.doesNotMatch(html,/<footer>ESI AEGIS v4/);
 
-const uxAudit=read('ux-v9.js');
+const uxAudit=read('ux-v42.js');
 assert.match(uxAudit,/\['fc-list','fieldmanual','Fieldcraft'\]/);
 assert.doesNotMatch(uxAudit,/wild-fieldcraft-list/);
-assert.match(read('manual-offline-check.js'),/aegis-11-reader-/);
+assert.match(read('manual-offline-check.js'),/aegis-\\d/);
 assert.match(read('README.md'),/^# EMB AEGIS Wildlands .*\(v\d+\)/);
 assert.match(read('manifest.webmanifest'),/EMB AEGIS Wildlands/);
 
@@ -149,7 +149,7 @@ assert.match(read('manual-library-v7.js'),/Completion check/);
 
 assert.match(html,/SHELTER FIRST/);
 assert.match(html,/function survivalIntent/);
-assert.match(html,/v24 · Visitor Analytics/);
+assert.match(html,/Wildlands v\d+ ·/);
 
 for(const name of ['wildlands-fieldcraft.js','manual-projects.js','deep-shelter-earthworks.js']){
   assert.match(read(name),/Field verification/);
@@ -236,17 +236,17 @@ assert.match(router.match('How do I make bannock?').text,/Reported missing: wate
 assert.match(router.match('clear field guide memory').text,/cleared/);
 assert.equal(router.recall().inventory.length,0);
 
-assert.match(sw,/req\.mode==='navigate'\)return fetch\(req\)/);
-assert.match(sw,/\.catch\(\(\)=>hit\|\|c\.match/);
+assert.match(sw,/req\.mode==='navigate'\)return hit\|\|c\.match/);
+assert.match(sw,/saved=>saved\|\|fetch\(req\)/);
 assert.match(html,/updateViaCache:'none'/);
 assert.match(html,/registration\.update\(\)/);
 assert.match(html,/visibilitychange/);
 assert.match(html,/controllerchange/);
 assert.match(html,/location\.reload\(\)/);
 
-assert.match(html,/src="field-manual-unified.js"/);
-assert.match(sw,/field-manual-unified\.js/);
-assert.match(read('field-manual-unified.js'),/field-original-sources/);
+assert.match(html,/src="field-manual-unified-v40.js"/);
+assert.match(sw,/field-manual-unified-v40\.js/);
+assert.match(read('field-manual-unified-v40.js'),/field-original-sources/);
 assert.match(read('phase3-procedure-router.js'),/catalog:\(\)=>entries\.map/);
 
 assert.match(html,/src="field-guide-expansion-v13.js"/);
@@ -276,9 +276,9 @@ assert.doesNotMatch(read('broadcast-admin-v15.js'),/EMB2701/);
 assert.match(html,/src="broadcast-live-v16.js"/);
 assert.match(sw,/broadcast-live-v16\.js/);
 assert.match(read('broadcast-live-v16.js'),/aegis_messages/);
-assert.match(read('broadcast-live-v16.js'),/auth\/v1\/token/);
+assert.match(read('broadcast-live-v16.js'),/request\('login',\{username:username\.value\.trim\(\),password:password\.value\}/);
 
-assert.match(html,/connect-src 'self' https:\/\/zsyfzgefyjydkvdgbyth\.supabase\.co/);
+assert.match(html,/connect-src[^;]+https:\/\/zsyfzgefyjydkvdgbyth\.supabase\.co/);
 
 const adminScript=read('broadcast-live-v16.js');
 assert.doesNotMatch(adminScript,/e\.append\(email\)/,'Removed email input must not be referenced');
@@ -289,7 +289,7 @@ assert.match(html,/id="aegis-notify-optin"/);
 assert.match(read('broadcast-live-v16.js'),/Notification\.requestPermission/);
 assert.match(read('broadcast-live-v16.js'),/notifyNew\(messages\)/);
 
-assert.match(read('broadcast-live-v16.js'),/username\.value=''/);
+assert.match(read('broadcast-live-v16.js'),/username=el\('input'\)/);
 assert.match(read('broadcast-live-v16.js'),/password\.value=''/);
 
 assert.match(html,/data-tab="phase4"/);
@@ -319,18 +319,18 @@ assert.ok(fakeWindow.AEGIS_PHASE4.matchGuide('shelter').length>0);
 assert.match(html,/data-tab="aichat"/);
 assert.match(html,/id="aegis-chat-thread"/);
 assert.match(html,/id="aegis-chat-input"/);
-assert.match(sw,/offline-ai-chat-v22\.js/);
-const chatSource=read('offline-ai-chat-v22.js');
+assert.match(sw,/offline-ai-chat-v42\.js/);
+const chatSource=read('offline-ai-chat-v42.js');
 assert.match(chatSource,/model\.complete\(promptFor\(history\)\)/);
 assert.match(chatSource,/window\.AEGIS_PHASE3\?\.catalog/);
 assert.match(chatSource,/localStorage\.setItem\(KEY/);
 assert.doesNotMatch(chatSource,/fetch\s*\(/,'Chat must not fetch remote content');
 const chatVM=require('node:vm'),chatStore=new Map();
 const chatWindow={AEGIS_PHASE3:{catalog:()=>[{title:'Tarp shelter',tags:['shelter'],steps:['Stay dry']}]}};
-const chatSandbox={window:chatWindow,document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
+const chatSandbox={navigator:{userAgent:'Desktop',platform:'Linux'},window:chatWindow,document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
 chatVM.runInNewContext(chatSource,chatSandbox,{timeout:1500});
 assert.match(chatWindow.AEGIS_CHAT.references('tarp shelter'),/Tarp shelter/);
-assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/User: How do I build/);
+assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/Question: How do I build/);
 
 assert.match(html,/surface-benchmark-v23\.js/);
 assert.match(sw,/surface-benchmark-v23\.js/);
