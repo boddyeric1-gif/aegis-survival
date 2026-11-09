@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v48",
+  "version": "v49",
   "updated": "2026-11-09",
   "releases": [
+    {
+      "version": "v49",
+      "date": "2026-11-09",
+      "title": "Live radio listening shortcuts",
+      "changes": [
+        "Added a listening hub inside Radio & Signals with Harrisburg, Allentown and Philadelphia NOAA community-relay player links, plus nationwide GWES and weatherUSA directories.",
+        "Added WITF and WHP station links, an iHeart AM/FM directory, official NOAA coverage links, search and device-local favorites.",
+        "Players open on provider pages and require internet. Saved tuning information remains offline; streams are not guaranteed emergency alerts. Updated Quick Start and README."
+      ]
+    },
     {
       "version": "v48",
       "date": "2026-11-09",
