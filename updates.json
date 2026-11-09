@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v46",
-  "updated": "2026-11-07",
+  "version": "v47",
+  "updated": "2026-11-09",
   "releases": [
+    {
+      "version": "v47",
+      "date": "2026-11-09",
+      "title": "Household command and a simpler AEGIS",
+      "changes": [
+        "Added local household profiles, pets, shared supplies with explicit coverage assumptions, assigned action plans, communication plans and pinned offline references.",
+        "Added validated household backup/import previews and recovery snapshots; reused existing supplies and contacts instead of creating duplicate lists.",
+        "Condensed daily navigation: Field Library owns guides, Emergency owns protocols, Household owns supplies and contacts, Tools owns the situation advisor. Earlier source collections and Field Intelligence records remain recoverable.",
+        "Updated the 60-second guide, navigation key and GitHub README to match the consolidated layout and household workflow."
+      ]
+    },
     {
       "version": "v46",
       "date": "2026-11-09",

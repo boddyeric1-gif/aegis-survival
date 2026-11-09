@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v46)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v47)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -208,3 +208,13 @@ Active-worker cache reporting separates shell, illustrations, manual text, origi
 Reader chapter jumps, last-page restoration and last-lesson/Home shortcuts retain the two-column section menu. Home FM results retain relevance order. Retrieval uses bounded memoization and additional vocabulary aliases; local AI context ends at passage/word boundaries and has a smaller iPhone question budget. A device-side comparison measures lookup, model-only and model-with-context times separately. No Surface/iPhone timing or physical airplane-mode pass is claimed without an exported/recorded device result.
 
 The 26-lesson/130-image audit records scope and limitations in content-audit-v46.json. Three labelled diagram/wording defects were corrected, related FM-page links added to every lesson, and chapter-specific historical cautions added to the reader. Rope drawings remain schematic practice aids, not independently validated life-safety diagrams.
+
+## v47: Household command and consolidation
+
+Household owns people, pets, home details, the existing shared supplies and contacts, assigned action plans, check-in arrangements and reference pins. All records stay on the device; there is no automatic family synchronization. Four editable planning templates start with unassigned tasks. Coverage uses explicitly entered quantities, units, consumption rates and included household members or pets; missing assumptions remain unknown. No sample Field Intelligence quantities are imported or counted.
+
+The 60-second Quick Start guide and navigation key match the new ownership and backup flow. Field Library provides one topic search plus the original FM reader. Original overlapping collections sit in a collapsed source archive. Emergency includes the protocol search. Tools includes the situation advisor and an explicitly separate legacy Field Intelligence workspace. Retired shortcuts redirect to these owners. Bushcraft remains the illustrated lesson workspace.
+
+Household JSON backups include profiles, pets, supplies, contacts, communication, plans and reference links. They exclude model/PDF downloads and unrelated Journal records. Imports validate and show counts before replacement; a pre-import recovery snapshot and interrupted-import journal protect existing records. Backups contain private information and should be stored appropriately.
+
+Device-specific airplane-mode and AI timing checks remain user-run; this release makes no new hardware timing claims.
