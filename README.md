@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v47)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v48)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -218,3 +218,11 @@ The 60-second Quick Start guide and navigation key match the new ownership and b
 Household JSON backups include profiles, pets, supplies, contacts, communication, plans and reference links. They exclude model/PDF downloads and unrelated Journal records. Imports validate and show counts before replacement; a pre-import recovery snapshot and interrupted-import journal protect existing records. Backups contain private information and should be stored appropriately.
 
 Device-specific airplane-mode and AI timing checks remain user-run; this release makes no new hardware timing claims.
+
+## v48: Guided app installation
+
+Use the header’s **Install AEGIS / Add to Home Screen** button, the Home setup card or the same action inside Quick Start. One shared setup dialog detects iPhone/iPad, Android, Windows/other desktop and Mac, and lets the user switch instructions. Each path has previous/next steps and finishes at the existing Diagnostics panel. The Home card can be dismissed for the browser session; the header action remains available.
+
+When the browser supplies `beforeinstallprompt`, **Install now** opens the real browser popup on a user click. The retained event is consumed once; dismissal or failure falls back to manual instructions. `appinstalled` and standalone display mode update the UI; clicking through instructions never counts as a verified installation. iPhone/iPad use Safari’s Share → Add to Home Screen → Add; keep Open as Web App enabled if shown. In-app browsers get instructions to open the regular browser and a copyable AEGIS address. The app cannot press browser controls or approve installation for the user.
+
+Installed app windows suppress the Home installation card. Installation, offline caching, optional model/PDF downloads and notification permissions are separate; setup never silently requests those permissions or downloads. Physical iPhone/Android installation remains device-dependent and must be tested on those devices.

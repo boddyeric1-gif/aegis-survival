@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v47",
+  "version": "v48",
   "updated": "2026-11-09",
   "releases": [
+    {
+      "version": "v48",
+      "date": "2026-11-09",
+      "title": "Guided Add to Home Screen setup",
+      "changes": [
+        "Added a clear Home installation card and a persistent header action, both opening one guided device-specific setup dialog.",
+        "Install now opens the browser installation popup when supported; Safari/iPhone, Android, desktop and Mac paths include clear manual steps and in-app-browser help.",
+        "Added installed-app detection, session dismissal, copyable app link, offline-readiness handoff, and a setup link in the 60-second guide. Installation does not automatically download AI/PDF files or request notifications."
+      ]
+    },
     {
       "version": "v47",
       "date": "2026-11-09",
