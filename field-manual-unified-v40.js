@@ -20,7 +20,9 @@ function init(){
  const input=panel.querySelector('#field-unified-search'),filter=panel.querySelector('#field-unified-category'),out=panel.querySelector('#field-unified-results'),count=panel.querySelector('#field-unified-count');
  const escape=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const classify=e=>{const t=(e.title+' '+e.group).toLowerCase();if(/shelter|tarp|insulat|winter|heat|earthwork|trench|roof/.test(t))return 'shelter';if(/water|sanit|wash|latrine|hygiene|filter/.test(t))return 'water';if(/food|cook|recipe|bread|bannock|hardtack|preserv|fish|hunting|forag|pioneer|meal|jerky|cough|comfort/.test(t))return 'food';if(/tool|wood|cord|knot|repair|knife|basket|weav|craft|build|mallet|carv/.test(t))return 'tools';if(/navigat|signal|radio|orient|map|compass|lost/.test(t))return 'navigation';return 'other'};
- const normalize=s=>String(s).toLowerCase().replace(/\b(?:how to|a|an|the|making|make|build|building|basic|practical|guide|field|procedure|survival|expanded)\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+ const canonical={'dry sleep system':'dry sleep system','dry sleeping system for small tarp shelter':'dry sleep system','lean to rain shelter':'tarp lean to','tarp lean to':'tarp lean to','wildlife sign observation and trail notes':'wildlife sign observation','lost outdoors stop orient and signal':'lost outdoors response','lost outdoors stop locate signal and decide':'lost outdoors response','humane capture planning and daily checks':'humane live capture planning','and test low load wooden mallet':'wooden mallet','simple wooden mallet':'wooden mallet','forage safely without guessing edible species':'safe plant identification','wild edible plants positive identification workflow':'safe plant identification'};
+ const normalize=s=>canonical[normalized(s)]||normalized(s);
+ const normalized=s=>String(s).toLowerCase().replace(/\b(?:how to|a|an|the|making|make|build|building|basic|practical|guide|field|procedure|survival|expanded)\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
  function render(){
  const all=engine.catalog(),groups=new Map();
  for(const e of all){const key=normalize(e.title);if(!key)continue;const list=groups.get(key)||[];list.push(e);groups.set(key,list);}
@@ -29,19 +31,20 @@ function init(){
   const matches=rows.filter(r=>(cat==='all'||classify(r.primary)===cat)&&(!q||r.alternatives.some(e=>(e.title+' '+e.group+' '+e.materials+' '+String(e.steps)).toLowerCase().includes(q)))).slice(0,120);
   count.textContent=matches.length+' matching topics · '+rows.length+' distinct topic groups · '+all.length+' source procedures';
   out.replaceChildren();
-  for(const r of matches){const e=r.primary,d=document.createElement('details');d.className='wild-guide';const sum=document.createElement('summary');sum.textContent=e.title;d.append(sum);const body=document.createElement('div');body.className='wild-guide-body';
+  for(const r of matches){const e=r.primary,d=document.createElement('details');d.className='wild-guide';d.dataset.sourceTitles=JSON.stringify(r.alternatives.map(x=>x.title));const sum=document.createElement('summary');sum.textContent=e.title;d.append(sum);const body=document.createElement('div');body.className='wild-guide-body';
    const heading=(label,value)=>{if(!value)return;const h=document.createElement('h4');h.textContent=label;body.append(h);const p=document.createElement('p');p.textContent=String(value);body.append(p)};
    heading('Materials',e.materials);
-   if(e.kind==='Bushcraft'){
+   const lesson=r.alternatives.find(x=>/bushcraft/i.test(x.kind));
+   if(lesson){
     const button=document.createElement('button');button.type='button';button.textContent='Open illustrated lesson';button.onclick=()=>{
      document.querySelector('nav.tabs [data-tab="bushcraft"]')?.click();
-     Array.from(document.querySelectorAll('#bushcraft [data-cat]')).find(b=>b.dataset.cat===e.group)?.click();
-     Array.from(document.querySelectorAll('#bushcraft [data-lesson]')).find(b=>b.textContent.startsWith(e.title+' '))?.click();
+     Array.from(document.querySelectorAll('#bushcraft [data-cat]')).find(b=>b.dataset.cat===lesson.group)?.click();
+     Array.from(document.querySelectorAll('#bushcraft [data-lesson]')).find(b=>b.textContent.startsWith(lesson.title+' '))?.click();
      document.getElementById('bc-detail')?.scrollIntoView({block:'start'});
     };body.append(button);
    }
 
-   if(Array.isArray(e.steps)){const h=document.createElement('h4');h.textContent='Steps';body.append(h);const ol=document.createElement('ol');for(const st of e.steps){const li=document.createElement('li');li.textContent=Array.isArray(st)?st.join(' — '):String(st);ol.append(li)}body.append(ol)}else heading('Method',e.steps);
+   if(lesson){heading('Practice workspace','Open the illustrated lesson for the complete step sequence and matching diagrams.');}else if(Array.isArray(e.steps)){const h=document.createElement('h4');h.textContent='Steps';body.append(h);const ol=document.createElement('ol');for(const st of e.steps){const li=document.createElement('li');li.textContent=Array.isArray(st)?st.join(' — '):String(st);ol.append(li)}body.append(ol)}else heading('Method',e.steps);
    heading('Safety and limitations',e.caution);heading('Field context',e.context);
    if(r.alternatives.length>1)heading('Related source entries',r.alternatives.filter(x=>x!==e).map(x=>x.title+' ('+x.kind+')').join('; '));
    const p=document.createElement('p');p.className='muted';p.textContent='Offline educational draft; not independently field validated.';body.append(p);d.append(body);out.append(d);
