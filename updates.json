@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v32",
+  "version": "v40",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v40",
+      "date": "2026-11-08",
+      "title": "Unified learning catalog and honest image status",
+      "changes": [
+        "Removed automatic Commons step-photo search and retired its cached results. Missing photographs stay explicitly unavailable.",
+        "Added all 26 bushcraft lessons to the shared manual and deterministic procedure search, with links to illustrated lessons.",
+        "Added a complete section directory to Field Manual and wrapped the main navigation to avoid horizontal scrolling."
+      ]
+    },
     {
       "version": "v32",
       "date": "2026-11-07",
@@ -41,7 +51,7 @@
     {
       "version": "v27",
       "date": "2026-11-07",
-      "title": "Sourced Bushcraft Photography — First Batch",
+      "title": "Sourced Bushcraft Photography \u2014 First Batch",
       "changes": [
         "Added three attributed Creative Commons Wikimedia Commons photos to shelter-related Bushcraft lessons",
         "Linked image sources and licensing metadata in lesson panels",
