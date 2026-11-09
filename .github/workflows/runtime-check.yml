@@ -24,6 +24,8 @@ jobs:
         run: node tests/fm-retrieval.cjs
       - name: Verify field readiness and unit preservation
         run: node tests/field-ready.cjs
+      - name: Verify guided installation lifecycle
+        run: node tests/install-guide.cjs
       - name: Verify household coverage and backup validation
         run: node tests/household.cjs
       - name: Verify referenced offline assets and iOS settings
