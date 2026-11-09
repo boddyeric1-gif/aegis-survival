@@ -20,5 +20,7 @@ jobs:
         run: node tests/release-metadata.cjs
       - name: Verify all bundled bushcraft illustrations
         run: node tests/bushcraft-visuals.cjs
+      - name: Verify offline manual retrieval and prompt budgets
+        run: node tests/fm-retrieval.cjs
       - name: Verify referenced offline assets and iOS settings
         run: node tests/runtime-sanity.cjs

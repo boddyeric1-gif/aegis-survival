@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v41)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v42)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -194,3 +194,9 @@ The Bushcraft media panel can now search all 26 lesson topics and cache up to th
 ## v32 Bushcraft step-photo engine
 
 The new `bushcraft-photo-steps-v32.js` module replaces the former lesson-only Commons gallery. It searches for a reference photograph for each written step and can cache matched photographs for offline use via **Prepare all step photos offline**. Each result includes Commons source and licensing metadata. Images are automatically selected search matches, **not** verified step-by-step instructional photographs. Search and downloading require internet access, sufficient browser storage, and a compatible Commons response. The app retains the offline conceptual illustrations as fallback. Verify results and test airplane mode before relying on downloaded photographs.
+
+## v42 offline FM manual
+
+All 676 pages of the supplied May 2002 FM 3-05.70 are bundled as extracted text with page-preserving local passage search. Offline AI Chat can retrieve short source excerpts before generation; “Find in manual” returns source passages without inference. Source references open the exact extracted PDF page. Saved-page bookmarks stay on the device.
+
+The original illustrated PDF is a separate, optional one-time download from its existing Wikimedia URL or an import of the supplied file. It is stored in CacheStorage only after matching the uploaded file’s SHA-256 and size. The text search works without this PDF or an installed AI model. Browser storage can be evicted. The 2002 manual is historical material and is not validated current medical or emergency guidance. Search latency and model generation latency are separate; no device-level generation speedup is claimed.
