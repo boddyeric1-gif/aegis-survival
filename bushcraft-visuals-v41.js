@@ -74,7 +74,7 @@ set('Tinder preparation',[
  rect(60,70,220,135,'#ece6d3')+rect(320,70,220,135,'#ece6d3')+[0,1,2,3,4,5].map(i=>path(`M${85+i*25} 150l17-40`,gold,2)).join('')+log(345,115,150)+label(100,245,'FINE TINDER')+label(365,245,'KINDLING'),
  bin(220,90,'DRY TINDER')+drop(440,100)+cross(440,60)+label(185,245,'KEEP A DRY RESERVE'),
  path('M80 180q45-70 90 0q-35 25-90 0',gold,3,'#d4bd81')+log(255,135,85)+log(255,175,100)+log(410,125,120)+label(75,235,'TINDER')+label(240,235,'SMALL STICKS')+label(410,235,'FUEL'),
- bin(80,110,'DRY TINDER')+arrow(240,155,380,155)+path('M460 200q-65-60 0-120q-20 50 25 65q30 45-25 55',gold,3,'#e2ae5a')+label(220,95,'STORE APART')
+ bin(80,110,'DRY TINDER')+arrow(380,155,240,155)+path('M460 200q-65-60 0-120q-20 50 25 65q30 45-25 55',gold,3,'#e2ae5a')+label(220,95,'STORE APART')
 ],['Collect only where permitted.','Fine fibers catch first; sticks sustain heat.','Protect a reserve from rain and damp ground.','Prepare every fuel size before ignition.','Keep the reserve away from flame and sparks.']);
 set('Fire lay planning',[
  page(210,25,'FIRE RULES',['Local restrictions','Approved location','Permit if needed'])+check(440,140),
@@ -149,10 +149,10 @@ set('Animal track recording',[
 set('Simple wooden mallet',[
  log(130,120,310)+check(490,135)+label(150,70,'SOUND, UNTREATED WOOD'),
  log(120,115,340)+path('M290 110v40m-90-37v45',gold,3,'none','stroke-dasharray="5 5"')+label(150,75,'MARK HEAD + HANDLE'),
- rect(160,70,210,65,'#b8976e','#674d30')+path('M265 140v90','#674d30',25)+label(140,255,'FIT HEAD + HANDLE SECURELY'),
+ rect(160,70,210,65,'#b8976e','#674d30')+path('M265 140v90','#674d30',25)+label(140,255,'ONE-PIECE HEAD + HANDLE'),
  rect(160,70,210,65,'#b8976e','#674d30')+path('M265 140v90','#674d30',25)+rect(385,90,90,40,'#c4bfae')+arrow(385,145,365,130)+label(175,255,'SMOOTH SHARP EDGES'),
  rect(200,50,160,55,'#b8976e','#674d30')+path('M280 110v85','#674d30',22)+arrow(365,110,365,180)+log(170,210,260)+label(125,255,'GENTLE TEST · CHECK FOR LOOSENING')
-],['Reject rotten, cracked or treated stock.','Plan a comfortable grip and balanced head.','Use eye protection and safe cutting technique.','Remove splinters before handling.','Stop if the head moves or the wood splits.']);
+],['Reject rotten, cracked or treated stock.','Mark the head and handle on one continuous blank.','Leave head and handle joined as one piece; use eye protection.','Remove splinters before handling.','Stop if the head moves or the wood splits.']);
 set('Camp utensil care',[
  rect(80,70,190,150,'#d5e0d2')+rect(330,70,190,150,'#dfc9b7')+label(125,150,'CLEAN')+label(380,150,'DIRTY')+path('M300 50V230',gold,3),
  rect(150,100,300,110,'#b9d8de')+drop(300,65)+rect(450,65,70,50,'#efdfae')+text(460,95,'SOAP',ink,14)+label(135,255,'SAFE WATER + SOAP'),
@@ -193,7 +193,7 @@ const poles=()=>path('M280 30V235','#96724a',28)+path('M100 130H490','#b18a5b',2
 set('Square lashing practice',[
  poles()+circle(280,130,60)+label(110,255,'CROSS TWO PRACTICE POLES'),
  poles()+[0,1,2,3].map(i=>path(`M${238+i*14} 85V180H${340-i*14}V85Z`,gold,5)).join('')+label(170,255,'WRAPPING TURNS'),
- poles()+[0,1,2].map(i=>path(`M220 ${112+i*12}H350`,gold,6)).join('')+arrow(410,165,345,145)+label(150,255,'FRAP BETWEEN THE POLES'),
+ poles()+path('M240 85V180H330V85Z',gold,5)+[0,1,2].map(i=>path(`M220 ${112+i*12}H350`,gold,6)).join('')+arrow(410,165,345,145)+label(150,255,'FRAP BETWEEN THE POLES'),
  poles()+path('M230 95V175H340V85H240V190',gold,7)+circle(240,190,11,'#e0c58e',gold)+label(170,255,'SECURE CORD ENDS'),
  poles()+path('M230 95V175H340V85H240',gold,8)+arrow(160,75,225,105)+arrow(430,210,350,165)+label(150,255,'CHECK FOR MOVEMENT')
 ],['Use small practice poles on stable ground.','Lay each wrap next to the previous turn.','Frapping tightens the wraps around the joint.','Secure the ends before testing.','Practice joint only; not an engineered structure.']);

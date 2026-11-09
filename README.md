@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v42)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v46)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -200,3 +200,11 @@ The new `bushcraft-photo-steps-v32.js` module replaces the former lesson-only Co
 All 676 pages of the supplied May 2002 FM 3-05.70 are bundled as extracted text with page-preserving local passage search. Offline AI Chat can retrieve short source excerpts before generation; “Find in manual” returns source passages without inference. Source references open the exact extracted PDF page. Saved-page bookmarks stay on the device.
 
 The original illustrated PDF is a separate, optional one-time download from its existing Wikimedia URL or an import of the supplied file. It is stored in CacheStorage only after matching the uploaded file’s SHA-256 and size. The text search works without this PDF or an installed AI model. Browser storage can be evicted. The 2002 manual is historical material and is not validated current medical or emergency guidance. Search latency and model generation latency are separate; no device-level generation speedup is claimed.
+
+## v43–v46 coordinated refinements
+
+Active-worker cache reporting separates shell, illustrations, manual text, original PDF and model state. Only numbered app-shell caches are removed during an update; manual/model caches and local user records are preserved. Navigation uses the installed shell until the new worker is fully installed.
+
+Reader chapter jumps, last-page restoration and last-lesson/Home shortcuts retain the two-column section menu. Home FM results retain relevance order. Retrieval uses bounded memoization and additional vocabulary aliases; local AI context ends at passage/word boundaries and has a smaller iPhone question budget. A device-side comparison measures lookup, model-only and model-with-context times separately. No Surface/iPhone timing or physical airplane-mode pass is claimed without an exported/recorded device result.
+
+The 26-lesson/130-image audit records scope and limitations in content-audit-v46.json. Three labelled diagram/wording defects were corrected, related FM-page links added to every lesson, and chapter-specific historical cautions added to the reader. Rope drawings remain schematic practice aids, not independently validated life-safety diagrams.

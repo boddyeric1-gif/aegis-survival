@@ -100,12 +100,15 @@ async function verify(){                     // full re-hash of everything cache
   for(const s of CFG.shards){const r=await c.match(shardUrl(s));if(!r)throw new Error('missing '+s.file);const h=hex(await crypto.subtle.digest('SHA-256',await (await r.blob()).arrayBuffer()));if(h!==s.sha256){integrity=false;const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));throw new Error('SHA-256 mismatch in '+s.file)}}
   return 'all '+CFG.shards.length+' model files match their SHA-256';}
 
+let completionBusy=false;
 async function complete(q){
+  if(completionBusy)throw new Error('Another local inference is running. Wait for it to finish.');
+  completionBusy=true;try{
   if(state!=='READY'||!wllama)throw new Error('model not ready: '+reason);
   const g=(q.schema!=null)?await gbnf():'';
   const prompt='<|im_start|>system\n'+q.system+'<|im_end|>\n<|im_start|>user\n'+q.user+'<|im_end|>\n<|im_start|>assistant\n';
   const p={prompt,max_tokens:Math.max(8,Math.min(400,q.max_tokens||120)),temperature:0};if(g)p.grammar=g;
-  const r=await wllama.createCompletion(p);return r.choices[0].text;}
+  const r=await wllama.createCompletion(p);return r.choices[0].text;}finally{completionBusy=false}}
 
 async function status(){
   let est=null;try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();est={usage_mb:Math.round((e.usage||0)/1048576),quota_mb:Math.round((e.quota||0)/1048576)}}}catch(e){}

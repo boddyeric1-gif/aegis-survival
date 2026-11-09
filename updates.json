@@ -1,8 +1,46 @@
 {
   "schema": 1,
-  "version": "v42",
+  "version": "v46",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v46",
+      "date": "2026-11-09",
+      "title": "Content and illustration audit",
+      "changes": [
+        "Reviewed 26 lesson/130 illustration pairings; corrected tinder separation arrow, retained lashing wraps and aligned mallet wording with its one-piece illustration.",
+        "Added related FM reading links and explicit source-match limitations to every lesson; added chapter-specific historical guidance notices.",
+        "Added contextual Fahrenheit-unit correction for local AI output while preserving real distances in feet."
+      ]
+    },
+    {
+      "version": "v45",
+      "date": "2026-11-09",
+      "title": "Continue reading and chapter navigation",
+      "changes": [
+        "Added chapter jumps, last-page restoration and Home shortcuts for last manual page, last lesson and saved pages.",
+        "Preserved the two-column mobile menu."
+      ]
+    },
+    {
+      "version": "v44",
+      "date": "2026-11-09",
+      "title": "Local retrieval and speed comparison",
+      "changes": [
+        "Added bounded search memoization, extra vocabulary aliases and intact source-context boundaries.",
+        "Added device-local lookup/model-only/model-with-context comparison; reduced the iPhone question budget."
+      ]
+    },
+    {
+      "version": "v43",
+      "date": "2026-11-09",
+      "title": "Active-worker offline readiness",
+      "changes": [
+        "Replaced stale v4.4.0 cache status with actual active-worker file checks and separate manual/PDF/model status.",
+        "Preserved user/manual/model storage across shell updates; installed navigation stays on its own shell until the next update completes.",
+        "Added explicitly user-recorded airplane-mode checks and repaired version-dependent regression checks."
+      ]
+    },
     {
       "version": "v42",
       "date": "2026-11-08",

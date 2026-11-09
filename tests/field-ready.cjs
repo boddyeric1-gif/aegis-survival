@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict');
+(async()=>{const source=fs.readFileSync('sw.js','utf8'),handlers={},deleted=[],messages=[];const cacheName=source.match(/const CACHE='([^']+)'/)[1],assets=JSON.parse(source.match(/const ASSETS=(\[[^;]+\]);/)[1]);const keys=['aegis-42-old',cacheName,'aegis-manuals-v1','model-store-v1','aegis-photo-binary-v32'];let missing=null;
+const self={location:new URL('https://example.test/aegis/sw.js'),addEventListener:(n,fn)=>(handlers[n]??=[]).push(fn),clients:{claim:async()=>{}},skipWaiting:()=>{}};
+const c={self,URL,Request,Response,caches:{keys:async()=>keys,delete:async k=>deleted.push(k),open:async()=>({match:async u=>String(u).endsWith(missing)?undefined:new Response('ok')})},fetch:()=>{throw Error('Readiness should not fetch')}};vm.runInNewContext(source,c);
+let work;handlers.activate[0]({waitUntil:p=>work=p});await work;assert.deepEqual(deleted,['aegis-42-old']);
+missing='fm-search-v42.js';for(const h of handlers.message){h({data:{type:'aegis-readiness'},ports:[{postMessage:m=>messages.push(m)}],waitUntil:p=>work=p});}await work;const r=messages[0];assert.equal(r.cache,cacheName);assert(r.missing.includes('./fm-search-v42.js'));assert.equal(r.missing.length,1);
+const ctx={window:{}};vm.runInNewContext(fs.readFileSync('temperature-units-v46.js','utf8'),ctx);const normalize=ctx.window.AEGIS_TEMPERATURE.normalize;for(const[a,b]of [['Oven temperature: 350 ft','Oven temperature: 350°F'],['temperature below 32 feet','temperature below 32°F'],['above 6,500 feet elevation','above 6,500 feet elevation'],['10 feet away from the stove','10 feet away from the stove'],['A 20 ft rope','A 20 ft rope']])assert.equal(normalize(a),b);
+const audit=JSON.parse(fs.readFileSync('content-audit-v46.json'));assert.equal(audit.lessons.length,26);for(const l of audit.lessons){assert(l.pages.length);assert(l.pages.every(p=>p>=1&&p<=676));assert(l.needsHandsOnReview)}
+console.log('PASS: active-cache missing-file reporting, update cache preservation, temperature/distance units and 26-lesson audit metadata.');
+})().catch(e=>{console.error(e);process.exitCode=1});
