@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v48)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v49)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -226,3 +226,11 @@ Use the header’s **Install AEGIS / Add to Home Screen** button, the Home setup
 When the browser supplies `beforeinstallprompt`, **Install now** opens the real browser popup on a user click. The retained event is consumed once; dismissal or failure falls back to manual instructions. `appinstalled` and standalone display mode update the UI; clicking through instructions never counts as a verified installation. iPhone/iPad use Safari’s Share → Add to Home Screen → Add; keep Open as Web App enabled if shown. In-app browsers get instructions to open the regular browser and a copyable AEGIS address. The app cannot press browser controls or approve installation for the user.
 
 Installed app windows suppress the Home installation card. Installation, offline caching, optional model/PDF downloads and notification permissions are separate; setup never silently requests those permissions or downloads. Physical iPhone/Android installation remains device-dependent and must be tested on those devices.
+
+## v49: Live radio listening shortcuts
+
+Radio & Signals now has one listening directory with searchable links and device-local favorites: WXL40 Harrisburg (162.550 MHz), WXL39 Allentown (162.400 MHz), KIH28 Philadelphia (162.475 MHz), nationwide GWES and weatherUSA weather-radio directories, WITF, WHP and iHeart live-radio directories. Official NWS coverage pages are distinguished from audio players, and community relays are distinguished from NOAA-hosted services. Sources were checked November 9, 2026; no uptime guarantee is implied.
+
+Players open on provider pages in a new tab/browser; users tap Play there. AEGIS does not embed, proxy, autoplay, record or cache live audio. Station switching means pausing the old player and opening the next. Providers control audio availability, restrictions and advertising. No geolocation or third-party request is made by the directory until a link is opened. The existing offline frequency/signaling material remains in the same panel. Frequencies are reused geographically and cannot identify one worldwide stream.
+
+Streams require internet and may lag or fail; they are not an automatic emergency-alert receiver. Favorites and directory text are available after the app is cached, but offline audio is not provided.
