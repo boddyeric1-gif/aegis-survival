@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v40",
+  "version": "v41",
   "updated": "2026-11-07",
   "releases": [
+    {
+      "version": "v41",
+      "date": "2026-11-08",
+      "title": "130 bundled bushcraft step illustrations",
+      "changes": [
+        "Added five distinct labelled action diagrams to each of the 26 bushcraft lessons.",
+        "Replaced generic category artwork in step cards with lesson-specific objects, movement arrows and explanatory labels.",
+        "Tap any step image to open a large, keyboard-accessible illustration viewer.",
+        "Illustrations are embedded in bundled JavaScript and precached with the app; no image search, external image hosts or photo downloads."
+      ]
+    },
     {
       "version": "v40",
       "date": "2026-11-08",
