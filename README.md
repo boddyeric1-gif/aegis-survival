@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v52)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v53)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -260,3 +260,7 @@ Common strong profanity and slurs are rejected in both names and messages, inclu
 Backend source is in `supabase/functions/aegis-community/` and `backend/community-chat-*.sql`. New tables have RLS and no anon/authenticated privileges. Public access goes through the Edge function. Service credentials and push signing keys stay on the server. The repository contains no backend secrets. Rejected message text is not stored in strike records.
 
 This feature is internet chat, not Bluetooth mesh. Offline AI and local field references remain independent. Existing model files and cache identities are unchanged.
+
+## v53: Group-text Community Chat
+
+Community Chat is a full-height conversation screen: other people’s bubbles on the left, your own signed bubbles on the right, and the name/message composer pinned below the feed. The mobile layout follows the visual viewport when the keyboard opens. Chat info and rules collapse beneath the compact header; the bell toggles community notifications independently of official alerts. Back returns to Home. Notification deep links wait for navigation initialization. Existing storage keys, moderation rules and downloaded model caches are unchanged.
