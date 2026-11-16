@@ -1,0 +1,5 @@
+const fs=require('node:fs'),assert=require('node:assert/strict');const filter=require('../community-filter-v52.js');
+for(const phrase of ['damn','hell','crap','Damn! This crap works like hell.','bitchat Bluetooth mesh','grass and class','Scunthorpe','The cockpit','shiitake mushrooms','water storage','fire-retardant fabric'])assert.equal(filter.hasFoulLanguage(phrase),false,'Allowed phrase: '+phrase);
+for(const phrase of ['fuck','fucking','shit','bitch','asshole','bastard','piss','dick','cock','pussy','whore','nigger','faggot','retard','FUCK!','sh1t','a$$hole','b1tch','sh!t','f.u.c.k','f-uck','f u c k','s h i t','f*ck','f**k','f***','sh*t','s***','fu\u200bck'])assert.equal(filter.hasFoulLanguage(phrase),true,'Restricted phrase must be detected');
+assert.deepEqual(filter.allowedWords,['damn','hell','crap']);assert.equal(fs.readFileSync('community-filter-v52.js','utf8'),fs.readFileSync('supabase/functions/aegis-community/language-filter.js','utf8'),'Browser/server language rules must match');
+console.log('PASS: allowed mild words, stronger profanity/slurs, common disguises, safe substrings and shared server rules.');
