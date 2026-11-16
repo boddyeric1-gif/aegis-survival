@@ -13,7 +13,7 @@ This release includes the v50 conversational/Bushcraft upgrade and v51 Mobile in
 | Household | People/pets, supplies, action assignments, communication/meeting plans, manual references, readiness and backup import/export. |
 | Other sections | Emergency references, tools, journal/imported documents, Radio & Signals directory/favorites, diagnostics, updates, admin and message interface. |
 | PWA | Home Screen manifest/icons, install walkthrough, quick-start guide, offline app shell and manuals. |
-| Persistence | Separate model cache survives app-shell updates; hash-matched unchanged shell assets are reused; verified partial model downloads resume; cached model files can recover after verification metadata loss. |
+| Persistence | Separate model cache plus persistent IndexedDB fallback survive app-shell updates; hash-matched unchanged shell assets are reused; verified partial model downloads resume; cached model files can recover after verification metadata loss. |
 | Source and checks | Application source, release notes, attribution/licenses, hash-generation helper, CI and 11 regression scripts. |
 
 ## All 26 Bushcraft lessons
@@ -59,4 +59,4 @@ The original FM PDF is not bundled in this package: extracted manual text is. Or
 
 ## Verification limits
 
-The complete package passes the 11 local regression scripts, including real packaged model-byte checks, cached-model boot without network, interrupted/corrupt download handling, shell update reuse and rollback. Diagrams are original schematic teaching aids, not expert-certified technical drawings. Actual iPhone download, force-close/reopen and airplane-mode inference must still be verified on the physical phone. No guarantee of model accuracy, speed or iOS storage retention is made.
+The complete package passes the 11 local regression scripts, including real packaged model-byte checks, cached-model boot from both file stores without network, CacheStorage quota fallback, interrupted/corrupt download handling, shell update reuse and rollback. Diagrams are original schematic teaching aids, not expert-certified technical drawings. Actual iPhone download, force-close/reopen and airplane-mode inference must still be verified on the physical phone. No guarantee of model accuracy, speed or iOS storage retention is made.

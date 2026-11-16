@@ -12,7 +12,8 @@
         "Resume storage checks account for pieces already saved. Download timeouts cover response streaming and verification stages are recorded.",
         "Shorter chat instructions leave more context capacity for questions, follow-ups and retrieved field references.",
         "Added functional download interruption, integrity and resume regression checks. Physical iPhone testing remains required.",
-        "App updates reuse unchanged SHA-256-matched shell files instead of downloading the entire offline shell again."
+        "App updates reuse unchanged SHA-256-matched shell files instead of downloading the entire offline shell again.",
+        "Model writes fall back to persistent IndexedDB if CacheStorage refuses them; Diagnostics reports quota and last model stage."
       ]
     },
     {

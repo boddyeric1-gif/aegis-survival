@@ -20,15 +20,23 @@ const shardUrl=s=>new URL(CFG.base+s.file,location.href).href;
 let gbnfText=null;
 async function gbnf(){if(gbnfText===null)gbnfText=await (await fetch(new URL(CFG.gbnf,location.href).href)).text();return gbnfText}
 
+// CacheStorage can reject large model writes even while IndexedDB remains available.
+// Both stores use stable same-origin shard URLs, and both survive app-shell updates.
+let fileDB=null,preferIDB=false;
+function openFileDB(){if(fileDB)return fileDB;fileDB=new Promise((resolve,reject)=>{if(!self.indexedDB){reject(new Error('IndexedDB model storage unavailable'));return}const request=indexedDB.open('aegis-model-files-v1',1);request.onupgradeneeded=()=>request.result.createObjectStore('files');request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error)});return fileDB}
+async function fileOperation(mode,key,value){const db=await openFileDB();return new Promise((resolve,reject)=>{const tx=db.transaction('files',mode),store=tx.objectStore('files'),request=mode==='readonly'?store.get(key):value===undefined?store.delete(key):store.put(value,key);let result;request.onsuccess=()=>{result=request.result};tx.oncomplete=()=>resolve(result);tx.onerror=()=>reject(tx.error||request.error);tx.onabort=()=>reject(tx.error||new Error('Model file transaction interrupted'))})}
+async function readShard(shard){const url=shardUrl(shard);try{const hit=await(await caches.open(STORE)).match(url);if(hit)return await hit.blob()}catch{}try{return await fileOperation('readonly',url)||null}catch{return null}}
+async function removeShard(shard){const url=shardUrl(shard);try{await(await caches.open(STORE)).delete(url)}catch{}if(self.indexedDB)try{await fileOperation('readwrite',url)}catch{}}
+async function saveShard(shard,blob){const url=shardUrl(shard);if(!preferIDB){try{await(await caches.open(STORE)).put(url,new Response(blob,{headers:{'content-type':'application/octet-stream'}}));return}catch(e){if(e.name!=='QuotaExceededError')throw e;preferIDB=true;stage('STORAGE_FALLBACK','Cache storage refused model file; trying persistent IndexedDB')}}try{await fileOperation('readwrite',url,blob)}catch(e){throw new Error('Browser could not save '+shard.file+'. Verified pieces are retained. Available browser storage may be full or restricted; do not clear AEGIS data. '+e.message)}}
+
 async function cachedBlobs(){
   if(!('caches' in self))return null;
-  const c=await caches.open(STORE),out=[];
+  const out=[];
   let ver={};try{ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}')}catch(e){}
   let changed=false;
   for(const shard of CFG.shards){
-    const response=await c.match(shardUrl(shard));
-    if(!response)return null;
-    const blob=await response.blob();
+    const blob=await readShard(shard);
+    if(!blob)return null;
     if(blob.size!==shard.bytes)return null;
     if(ver[shard.file]!==shard.sha256){
       stage('VERIFYING','recovering cached shard '+shard.file);
@@ -76,12 +84,12 @@ async function install(onProgress){
     if(navigator.storage&&navigator.storage.persist){try{note('persistent storage granted: '+await navigator.storage.persist())}catch(e){}}
     const total=CFG.shards.reduce((a,s)=>a+s.bytes,0);
     stage('DOWNLOADING','checking saved pieces before requesting missing files');
-    if(navigator.storage&&navigator.storage.estimate){const q=await navigator.storage.estimate();const saved=await caches.open(STORE);let remaining=0;for(const shard of CFG.shards){const hit=await saved.match(shardUrl(shard));if(!hit||(await hit.blob()).size!==shard.bytes)remaining+=shard.bytes}if(q.quota&&q.usage!==undefined&&q.quota-q.usage<remaining*1.15)throw new Error('not enough free browser storage: need about '+Math.ceil(remaining*1.15/1048576)+' MB free to finish, have about '+Math.floor((q.quota-q.usage)/1048576)+' MB')}
-    const c=await caches.open(STORE);const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');let done=0;
+    if(navigator.storage&&navigator.storage.estimate){const q=await navigator.storage.estimate();let remaining=0;for(const shard of CFG.shards){const hit=await readShard(shard);if(!hit||hit.size!==shard.bytes)remaining+=shard.bytes}if(q.quota&&q.usage!==undefined&&q.quota-q.usage<remaining*1.15)throw new Error('not enough free browser storage: need about '+Math.ceil(remaining*1.15/1048576)+' MB free to finish, have about '+Math.floor((q.quota-q.usage)/1048576)+' MB')}
+    const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');let done=0;
     for(const s of CFG.shards){
-      const url=shardUrl(s);const hit=await c.match(url);
-      if(hit){const b=await hit.blob();if(b.size===s.bytes){if(ver[s.file]!==s.sha256){const digest=hex(await crypto.subtle.digest('SHA-256',await b.arrayBuffer()));if(digest===s.sha256){ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver))}}if(ver[s.file]===s.sha256){done+=s.bytes;progress=Math.floor(done*100/total);continue}}}
-      await c.delete(url);delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));
+      const url=shardUrl(s);const hit=await readShard(s);
+      if(hit){const b=hit;if(b.size===s.bytes){if(ver[s.file]!==s.sha256){const digest=hex(await crypto.subtle.digest('SHA-256',await b.arrayBuffer()));if(digest===s.sha256){ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver))}}if(ver[s.file]===s.sha256){done+=s.bytes;progress=Math.floor(done*100/total);continue}}}
+      await removeShard(s);delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));
       reason='Downloading '+CFG.name+': '+progress+'% (verified pieces are retained)';
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);let resp;try{resp=await fetch(s.url||url,{...(s.url?{credentials:'omit'}:{cache:'no-store'}),signal:controller.signal,...(s.url?{headers:{Range:'bytes='+s.offset+'-'+(s.offset+s.bytes-1)}}:{})})}catch(e){clearTimeout(timeout);throw new Error('Download interrupted; verified pieces are saved. Keep AEGIS open and tap Download again. '+e.message)}if(!resp.ok){clearTimeout(timeout);throw new Error('download failed ('+resp.status+') for '+s.file)}if(s.url&&(resp.status!==206||resp.headers.get('content-range')!=='bytes '+s.offset+'-'+(s.offset+s.bytes-1)+'/'+total)){clearTimeout(timeout);controller.abort();throw new Error('Model host did not provide the expected download piece. Verified pieces remain saved.')}
       stage('DOWNLOADING','receiving '+s.file);
@@ -94,7 +102,7 @@ async function install(onProgress){
       state='VERIFYING';reason='verifying '+s.file;stage('VERIFYING',reason);
       const blob=new Blob(parts);const h=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));
       if(h!==s.sha256)throw new Error('integrity check FAILED for '+s.file+' (SHA-256 mismatch). The file was discarded.');
-      await c.put(url,new Response(blob,{headers:{'content-type':'application/octet-stream'}}));
+      await saveShard(s,blob);
       ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver));done+=s.bytes;state='DOWNLOADING';
     }
     const blobs=await cachedBlobs();if(!blobs)throw new Error('model files missing after download');
@@ -102,8 +110,7 @@ async function install(onProgress){
   }catch(e){if(state!=='FAILED'){state='FAILED';reason=(e&&e.message||String(e));stage('FAILED',reason)}}}
 
 async function verify(){                     // full re-hash of everything cached
-  const c=await caches.open(STORE);
-  for(const s of CFG.shards){const r=await c.match(shardUrl(s));if(!r)throw new Error('missing '+s.file);const h=hex(await crypto.subtle.digest('SHA-256',await (await r.blob()).arrayBuffer()));if(h!==s.sha256){integrity=false;const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));throw new Error('SHA-256 mismatch in '+s.file)}}
+  for(const s of CFG.shards){const blob=await readShard(s);if(!blob)throw new Error('missing '+s.file);const h=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));if(h!==s.sha256){integrity=false;const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));throw new Error('SHA-256 mismatch in '+s.file)}}
   return 'all '+CFG.shards.length+' model files match their SHA-256';}
 
 let completionBusy=false;
@@ -118,7 +125,8 @@ async function complete(q){
 
 async function status(){
   let est=null;try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();est={usage_mb:Math.round((e.usage||0)/1048576),quota_mb:Math.round((e.quota||0)/1048576)}}}catch(e){}
-  return {ready:state==='READY',integrity_ok:integrity&&state==='READY',inference_verified:smokeTestPassed,model:CFG.name,reason:state==='READY'?'':reason,state,progress,load_seconds:loadSecs,loading_seconds:state==='LOADING'?Math.round((Date.now()-loadStarted)/1000):null,platform:IOS?'ios':'other',diagnostics:diag.slice(-12),last_stage:(()=>{try{return JSON.parse(localStorage.getItem(LS('lastStage'))||'null')}catch(e){return null}})(),backend,threads:THREADS,add_hazards:CFG.addHazards!==false,needs_download:state==='NOT_INSTALLED'||(state==='FAILED'&&!integrity),storage:est,size_mb:Math.round(CFG.shards.reduce((a,s)=>a+s.bytes,0)/1048576)};}
+  let cached=0;for(const shard of CFG.shards){const blob=await readShard(shard);if(blob&&blob.size===shard.bytes)cached++}
+  return {cached_shards:cached,total_shards:CFG.shards.length,file_store:preferIDB?'IndexedDB fallback':'CacheStorage / saved IndexedDB',ready:state==='READY',integrity_ok:integrity&&state==='READY',inference_verified:smokeTestPassed,model:CFG.name,reason:state==='READY'?'':reason,state,progress,load_seconds:loadSecs,loading_seconds:state==='LOADING'?Math.round((Date.now()-loadStarted)/1000):null,platform:IOS?'ios':'other',diagnostics:diag.slice(-12),last_stage:(()=>{try{return JSON.parse(localStorage.getItem(LS('lastStage'))||'null')}catch(e){return null}})(),backend,threads:THREADS,add_hazards:CFG.addHazards!==false,needs_download:state==='NOT_INSTALLED'||(state==='FAILED'&&!integrity),storage:est,size_mb:Math.round(CFG.shards.reduce((a,s)=>a+s.bytes,0)/1048576)};}
 
 async function retry(){if(state==='LOADING')return 'already loading';stage('RETRY','manual retry requested');localStorage.removeItem(LS('loading'));const have=await cachedBlobs();if(!have){state='NOT_INSTALLED';return 'not installed'}integrity=true;try{await load(have)}catch(e){}return state}
 
