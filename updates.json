@@ -1,8 +1,21 @@
 {
   "schema": 1,
-  "version": "v53",
+  "version": "v54",
   "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v54",
+      "date": "2026-11-16",
+      "title": "The Field Experience Upgrade",
+      "changes": [
+        "A new field dashboard brings manual search, illustrated bushcraft, household planning, local AI, Community Chat and radio references into six clear entry points.",
+        "Persistent mobile navigation and a searchable, grouped All sections directory replace the long scrolling tab bar. Desktop gets a compact primary navigation row.",
+        "Device & offline setup brings model downloads, model choice, display settings, file status and performance tests together. Emergency reference remains visible in the app header.",
+        "The AI workspace now opens directly to the conversation with collapsible response options and conversation tools. Unsent AI drafts are saved on this device.",
+        "Calmer reading layouts, compact bushcraft categories, clearer household links, section headings and a Back to top control improve long pages.",
+        "Existing household records, favorites, chat history, notification preferences and downloaded model files are preserved. No model redownload is required by this update."
+      ]
+    },
     {
       "version": "v53",
       "date": "2026-11-16",

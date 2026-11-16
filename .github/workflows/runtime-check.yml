@@ -43,3 +43,8 @@ jobs:
           node tests/community-api.cjs
           node tests/community-client.cjs
           node tests/community-notifications.cjs
+
+      - name: Verify field experience navigation and readiness
+        run: |
+          node --check experience-v54.js
+          node tests/field-experience.cjs
