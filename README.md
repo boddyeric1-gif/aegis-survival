@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v55)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v56)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -276,3 +276,11 @@ AI conversations open ahead of model-selection and benchmark panels. Advanced op
 Saved-model reads retry transient failures across CacheStorage and IndexedDB; failures remain unknown rather than missing. Cached model pieces are materialized before runtime use. Read deadlines, reopened IndexedDB connections, a single bounded runtime I/O retry, and single-flight saved-file recovery retain downloads. A previously interrupted runtime still requires a deliberate retry to avoid crash loops. Ready-session status reuses verified load evidence; concurrent file inspections coalesce.
 
 Worker readiness uses cache keys rather than sequential body access, reports storage failure explicitly, retries worker timeouts, closes message ports, and coalesces repeated checks. Diagnostics labels prior successful app evidence separately from a failed current check. Saved AI recovery is available without clearing data or requesting downloads. App-worker registration and update checks no longer wait for AI startup. The obsolete external-script diagnostic now permits bundled same-origin scripts. Existing storage keys and model URLs are unchanged.
+
+## v56: Repair AEGIS & fortification
+
+Diagnostics and Device setup expose REPAIR AEGIS. It hashes active app assets against release hashes, restores matching saved copies first, optionally fetches matching app bytes online, and preserves existing bytes if replacements are unavailable or wrong-version. It saves a separate `aegis-shell-rescue-v1` recovery cache when storage permits, without copying AI models or personal records. Normal app requests retry transient cache reads and can restore matching rescue copies automatically. Repair has progress, a time budget, retained results and an exportable support report. Offline repair cannot restore files absent from every saved copy.
+
+A non-destructive storage probe and saved-model recovery complete the repair pass. Healthy or busy AI is left alone, missing models require an explicit install/resume, and repairs never delete existing caches or user records. AI startup, answers, downloads, verification, recovery and benchmarks share an exclusive runtime task controller. The interrupted-load marker remains set through inference smoke testing.
+
+Stress coverage includes 50 offline repair passes, 25 cached model reopens, transient/persistent I/O failures, wrong-version downloads, damaged/missing files, concurrent requests, runtime operation conflicts, and unchanged model/manual stores. These are software fault-injection tests, not a guarantee against OS eviction, hardware failure or an actual iPhone airplane-mode certification.

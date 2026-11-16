@@ -1,8 +1,21 @@
 {
   "schema": 1,
-  "version": "v55",
+  "version": "v56",
   "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v56",
+      "date": "2026-11-16",
+      "title": "Repair AEGIS & Fortification",
+      "changes": [
+        "REPAIR AEGIS checks app-file integrity and attempts safe recovery from Diagnostics or Device setup. Existing records and AI downloads are preserved.",
+        "Matching saved recovery copies are used first; online repairs accept only files matching the active release hashes. Wrong-version or failed downloads never replace existing bytes.",
+        "A separate app-shell recovery cache is saved when storage permits. Missing app requests can automatically restore matching saved copies.",
+        "Repair checks local storage, safely reopens saved AI when appropriate, shows progress and unresolved items, and can export a repair report. It does not automatically download AI models.",
+        "A shared AI runtime task controller prevents loading, answering, verification and benchmarks from running over one another. Interrupted-startup protection now covers the inference smoke test.",
+        "Stress tests cover repeated offline repairs, cached-model reopens, storage faults, corrupted/missing assets, concurrent operations and failed/wrong-version downloads."
+      ]
+    },
     {
       "version": "v55",
       "date": "2026-11-16",

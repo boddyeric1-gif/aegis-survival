@@ -13,7 +13,7 @@ const LS=k=>(CFG.id==='mobile'?'aegis.llm.mobile.':'aegis.llm.')+k;
 const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
 const diag=[];const stage=(name,detail)=>{const entry={time:new Date().toISOString(),stage:name,detail};diag.push(entry);if(diag.length>40)diag.shift();try{localStorage.setItem(LS('lastStage'),JSON.stringify(entry))}catch(e){}window.dispatchEvent(new Event('aegis-llm-state'))};
 const THREADS=IOS?1:(localStorage.getItem(LS('threads'))==='1'?1:2);
-let backend='none',wllama=null,loadStarted=0,state='NOT_INSTALLED',reason='the offline language model has not been downloaded yet',progress=0,integrity=false,loadSecs=-1,smokeTestPassed=false;
+let backend='none',wllama=null,loadStarted=0,state='PREPARING',reason='checking saved offline model files',progress=0,integrity=false,loadSecs=-1,smokeTestPassed=false;
 const log=[];const note=m=>{log.push(new Date().toISOString().slice(11,19)+' '+m);if(log.length>60)log.shift()};
 const hex=buf=>[...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
 const shardUrl=s=>new URL(CFG.base+s.file,location.href).href;
@@ -59,7 +59,7 @@ async function cachedBlobs(){
   return [new Blob(out)];
 }
 
-async function init(){state='PREPARING';reason='opening saved model files; no download is requested';                   // called on app start: never downloads; loads only if already installed and verified
+async function initImpl(){state='PREPARING';reason='opening saved model files; no download is requested';                   // called on app start: never downloads; loads only if already installed and verified
   try{
     if(!('WebAssembly' in self)||!('caches' in self)||!self.crypto||!crypto.subtle){state='UNSUPPORTED';reason='this browser lacks WebAssembly, Cache storage or secure-context crypto (use https or localhost)';return}
     const have=await cachedBlobs();
@@ -83,7 +83,7 @@ async function load(blobs){
     if(CFG.compat_wasm){const compat={wasm:new URL(CFG.compat_wasm,location.href).href};if(CFG.compat_worker)compat.worker=new URL(CFG.compat_worker,location.href).href;wllama.setCompat(compat)}
     stage('LOADING','runtime configured; loading GGUF on '+(IOS?'iOS CPU':'desktop/browser'));
     await wllama.loadModel(blobs,{n_ctx:IOS?(CFG.id==='mobile'?1024:512):(CFG.nctx||2048),n_threads:THREADS,n_batch:IOS?32:128,n_gpu_layers:useGpu?999:0});
-    backend=useGpu?'webgpu-requested':'cpu-wasm';loadSecs=(performance.now()-t0)/1000;localStorage.removeItem(LS('loading'));state='VERIFYING';reason='checking whether the model can actually generate text';stage('SMOKE_TEST','testing one-token local inference');const check=await wllama.createCompletion({prompt:'<|im_start|>user\nReply with OK.<|im_end|>\n<|im_start|>assistant\n',max_tokens:4,temperature:0});if(!check||!check.choices||!check.choices[0]||typeof check.choices[0].text!=='string'||!check.choices[0].text.trim())throw new Error('model loaded but failed the inference smoke test');smokeTestPassed=true;state='READY';reason='';stage('READY','model initialized and produced local text');note('model loaded in '+loadSecs.toFixed(1)+' s, backend '+backend);
+    backend=useGpu?'webgpu-requested':'cpu-wasm';loadSecs=(performance.now()-t0)/1000;state='VERIFYING';reason='checking whether the model can actually generate text';stage('SMOKE_TEST','testing one-token local inference');const check=await wllama.createCompletion({prompt:'<|im_start|>user\nReply with OK.<|im_end|>\n<|im_start|>assistant\n',max_tokens:4,temperature:0});if(!check||!check.choices||!check.choices[0]||typeof check.choices[0].text!=='string'||!check.choices[0].text.trim())throw new Error('model loaded but failed the inference smoke test');localStorage.removeItem(LS('loading'));smokeTestPassed=true;state='READY';reason='';stage('READY','model initialized and produced local text');note('model loaded in '+loadSecs.toFixed(1)+' s, backend '+backend);
   }catch(e){localStorage.removeItem(LS('loading'));smokeTestPassed=false;state='FAILED';reason=(e&&e.message||String(e))+' (rules-only mode)';stage('FAILED',reason);if(!ioLoadRecovery&&/NotReadableError|I\/O read|storage.*read/i.test(String(e?.name)+' '+reason)){ioLoadRecovery=true;try{stage('RECOVERING','reopening saved model once after a temporary read failure; no download');await pause(500);const saved=await cachedBlobs();if(saved)return await load(saved)}finally{ioLoadRecovery=false}}throw e}}
 
 // One-time download of all shards with per-shard SHA-256 verification into persistent Cache storage.
@@ -138,7 +138,7 @@ async function inspectModelFiles(){if(inspection)return inspection;if(inspection
 async function status(){
   let est=null;try{if(navigator.storage&&navigator.storage.estimate){const e=await navigator.storage.estimate();est={usage_mb:Math.round((e.usage||0)/1048576),quota_mb:Math.round((e.quota||0)/1048576)}}}catch(e){}
   let cached=state==='READY'&&integrity?CFG.shards.length:null,inspectionError=null;if(cached===null){try{cached=await storageDeadline(inspectModelFiles(),10000)}catch(e){inspectionError=e.message}}
-  return {model_file_evidence:state==='READY'&&integrity?'verified for the currently loaded AI session':'saved-file inspection',storage_inspection_error:inspectionError,cached_shards:cached,total_shards:CFG.shards.length,file_store:preferIDB?'IndexedDB fallback':'CacheStorage / saved IndexedDB',ready:state==='READY',integrity_ok:integrity&&state==='READY',inference_verified:smokeTestPassed,model:CFG.name,reason:state==='READY'?'':reason,state,progress,load_seconds:loadSecs,loading_seconds:state==='LOADING'?Math.round((Date.now()-loadStarted)/1000):null,platform:IOS?'ios':'other',diagnostics:diag.slice(-12),last_stage:(()=>{try{return JSON.parse(localStorage.getItem(LS('lastStage'))||'null')}catch(e){return null}})(),backend,threads:THREADS,add_hazards:CFG.addHazards!==false,needs_download:state==='NOT_INSTALLED',storage:est,size_mb:Math.round(CFG.shards.reduce((a,s)=>a+s.bytes,0)/1048576)};}
+  return {runtime_task:modelTaskName,model_file_evidence:state==='READY'&&integrity?'verified for the currently loaded AI session':'saved-file inspection',storage_inspection_error:inspectionError,cached_shards:cached,total_shards:CFG.shards.length,file_store:preferIDB?'IndexedDB fallback':'CacheStorage / saved IndexedDB',ready:state==='READY',integrity_ok:integrity&&state==='READY',inference_verified:smokeTestPassed,model:CFG.name,reason:state==='READY'?'':reason,state,progress,load_seconds:loadSecs,loading_seconds:state==='LOADING'?Math.round((Date.now()-loadStarted)/1000):null,platform:IOS?'ios':'other',diagnostics:diag.slice(-12),last_stage:(()=>{try{return JSON.parse(localStorage.getItem(LS('lastStage'))||'null')}catch(e){return null}})(),backend,threads:THREADS,add_hazards:CFG.addHazards!==false,needs_download:state==='NOT_INSTALLED',storage:est,size_mb:Math.round(CFG.shards.reduce((a,s)=>a+s.bytes,0)/1048576)};}
 
 let recoveryPromise=null;
 async function retry(){if(recoveryPromise)return recoveryPromise;if(/^(PREPARING|LOADING|VERIFYING|DOWNLOADING)$/.test(state))return 'already working';recoveryPromise=(async()=>{state='PREPARING';reason='retrying saved files without downloading';stage('RETRY',reason);try{localStorage.removeItem(LS('loading'));inspectionValue=null;const have=await cachedBlobs();if(!have){state='NOT_INSTALLED';reason='Some saved model files are missing or invalid. Download resumes only the required pieces.';return state}integrity=true;await load(have)}catch(e){state=e?.name==='StorageReadError'?'RECOVERY_NEEDED':'FAILED';reason=e.message;stage('RECOVERY_NEEDED',reason)}return state})();try{return await recoveryPromise}finally{recoveryPromise=null}}
@@ -148,8 +148,11 @@ async function selftest(prompts){            // run on the REAL device to measur
   for(const t of prompts){const t0=performance.now();let txt=null,err=null;try{txt=await complete({system:P.system,user:t,schema:P.schema,max_tokens:80})}catch(e){err=String(e)}out.push({prompt:t,seconds:+((performance.now()-t0)/1000).toFixed(2),output:txt,error:err})}
   return out;}
 
-window.AEGISWebLLM={raw:(p)=>wllama.createCompletion(p),backend:()=>backend,tokenize:(t)=>wllama.tokenize(t),ctxinfo:()=>wllama.getLoadedContextInfo(),init,install,status,complete,retry,verify,selftest,log:()=>log.slice(),cfg:CFG};
-// expose the same names the app expects on window.AEGISNative
-window.AEGISNative={status,complete,retry,install,verify,selftest};
+let modelTaskName='',modelTask=null;
+function modelExclusive(name,work){if(modelTask){if(name===modelTaskName&&['startup','recovery','download','verification'].includes(name))return modelTask;return Promise.reject(new Error('Local AI is busy with '+modelTaskName+'. Wait for it to finish; manuals remain available.'))}modelTaskName=name;modelTask=Promise.resolve().then(work).finally(()=>{modelTask=null;modelTaskName=''});return modelTask}
+function init(){return modelExclusive('startup',initImpl)}
+const guarded={init,install:onProgress=>modelExclusive('download',()=>install(onProgress)),status,complete:q=>modelExclusive('answering',()=>complete(q)),retry:()=>modelExclusive('recovery',retry),verify:()=>modelExclusive('verification',verify),selftest:prompts=>modelExclusive('benchmark',()=>selftest(prompts))};
+window.AEGISWebLLM={raw:(p)=>wllama.createCompletion(p),backend:()=>backend,tokenize:(t)=>wllama.tokenize(t),ctxinfo:()=>wllama.getLoadedContextInfo(),...guarded,log:()=>log.slice(),cfg:CFG};
+window.AEGISNative=guarded;
 window.dispatchEvent(new Event('aegis-llm-ready'));
 init().then(()=>window.dispatchEvent(new Event('aegis-llm-state')));
