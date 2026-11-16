@@ -1,8 +1,21 @@
 {
   "schema": 1,
-  "version": "v51",
+  "version": "v52",
   "updated": "2026-11-15",
   "releases": [
+    {
+      "version": "v52",
+      "date": "2026-11-15",
+      "title": "Community Chat",
+      "changes": [
+        "Dedicated public Community Chat with a name/signature, saved drafts, recent-message cache and automatic online refresh.",
+        "Server-enforced 10-second send cooldown, including protection across refreshes and signature changes.",
+        "Separate Community Chat push notification opt-in and notification-tap routing; admin alert subscriptions are preserved.",
+        "Strong profanity and slurs are blocked in names and messages. Damn, hell and crap are allowed.",
+        "Three restricted-message attempts within one hour mute sending for one hour; reading remains available.",
+        "Existing admin login can hide community messages. Mobile model download button now says Mobile AI Version."
+      ]
+    },
     {
       "version": "v51",
       "date": "2026-11-15",

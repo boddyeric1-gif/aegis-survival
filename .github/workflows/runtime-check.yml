@@ -34,3 +34,12 @@ jobs:
         run: |
           node tests/download-recovery.cjs
           node tests/shell-persistence.cjs
+      - name: Verify Community Chat, notifications and language rules
+        run: |
+          node --check community-chat-v52.js
+          node --check community-filter-v52.js
+          node --check supabase/functions/aegis-community/index.ts
+          node tests/community-filter.cjs
+          node tests/community-api.cjs
+          node tests/community-client.cjs
+          node tests/community-notifications.cjs

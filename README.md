@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v51)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v52)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -248,3 +248,15 @@ Mobile model source: https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF
 Packages the Mobile model as 33 same-site files. This removes the blocked external host and redirect path without expanding the app security policy. Existing cache URLs and per-piece SHA-256 values are preserved, so previously verified pieces remain reusable. Interrupted downloads keep verified pieces. Storage preflight counts missing bytes rather than demanding room for the entire model again. Download diagnostics record transfer and verification stages. Compact chat instructions leave more of the bounded context for user questions, recent conversation and reference text. App updates reuse unchanged hash-matched shell files from the previous cache. Physical iPhone download, restart and offline inference still require testing.
 
 Large model writes now fall back from CacheStorage to persistent IndexedDB when CacheStorage refuses them. Both stores are read on startup, and Diagnostics reports stored pieces, quota and the last model stage. This is a recovery path, not a promise to bypass an overall browser storage limit.
+
+## v52: Community Chat
+
+Community Chat is a separate public, internet-connected feed. Users type a name/signature and a message; no account is required. Signatures are self-chosen, not verified identities. The server enforces a ten-second send cooldown by installation key and a pseudonymous network hash. Changing the signature or refreshing does not reset the installation cooldown. Cached recent messages, drafts, signature and cooldown/mute status persist locally; offline messages are never automatically sent.
+
+Community Web Push is opt-in and uses a separate subscriber table from admin broadcasts. Disabling community notifications does not unsubscribe the shared browser PushSubscription or disable admin alerts. Notifications require network and browser permission; iPhone requires the Home Screen app. Notification taps open Community Chat. The author’s installation is excluded from the server notification fanout. The existing admin login can hide messages.
+
+Common strong profanity and slurs are rejected in both names and messages, including common symbol/spacing disguises. **Damn, hell and crap are explicitly allowed.** Three unique restricted sends within one hour disable sending for one hour; reading remains available. Confirmed rejections clear the local request ID so a new press is a new attempt; retrying an unconfirmed request is idempotent. Attempts and mutes are checked server-side. Names are not accounts: deleting browser data or changing networks can evade installation-based controls; this is not a verified-identity ban system.
+
+Backend source is in `supabase/functions/aegis-community/` and `backend/community-chat-*.sql`. New tables have RLS and no anon/authenticated privileges. Public access goes through the Edge function. Service credentials and push signing keys stay on the server. The repository contains no backend secrets. Rejected message text is not stored in strike records.
+
+This feature is internet chat, not Bluetooth mesh. Offline AI and local field references remain independent. Existing model files and cache identities are unchanged.
