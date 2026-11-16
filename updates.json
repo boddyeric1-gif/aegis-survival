@@ -1,8 +1,20 @@
 {
   "schema": 1,
-  "version": "v52",
-  "updated": "2026-11-15",
+  "version": "v53",
+  "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v53",
+      "date": "2026-11-16",
+      "title": "Group-text Community Chat",
+      "changes": [
+        "Community Chat opens as a dedicated conversation screen with everyone’s messages together: your bubbles on the right, community bubbles on the left.",
+        "A pinned bottom composer keeps your saved name, message and Send button beside the conversation, with mobile keyboard viewport handling.",
+        "Compact chat notification controls, collapsible rules, date separators and a Back to AEGIS button.",
+        "Notification links wait for app navigation to be ready. Full conversations keep the latest 100 messages, including your newest send.",
+        "Existing cooldowns, language rules, one-hour mutes, saved drafts, and downloaded AI files are preserved."
+      ]
+    },
     {
       "version": "v52",
       "date": "2026-11-15",
@@ -182,7 +194,7 @@
     {
       "version": "v27",
       "date": "2026-11-07",
-      "title": "Sourced Bushcraft Photography \u2014 First Batch",
+      "title": "Sourced Bushcraft Photography — First Batch",
       "changes": [
         "Added three attributed Creative Commons Wikimedia Commons photos to shelter-related Bushcraft lessons",
         "Linked image sources and licensing metadata in lesson panels",
