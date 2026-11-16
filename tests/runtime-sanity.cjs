@@ -4,7 +4,7 @@ const sw=read('sw.js'),bridge=read('llm/webllm_bridge.js'),html=read('index.html
 assert.match(sw,/const CACHE='aegis-\d+-[a-z0-9-]+'/);
 const assets=JSON.parse(sw.match(/const ASSETS=(\[[^;]+\]);/)[1]);
 for(const a of assets){if(a==='./')continue;assert.ok(fs.existsSync(a.replace(/^\.\//,'')), 'missing offline asset '+a)}
-assert.match(bridge,/n_ctx:IOS\?512/);
+assert.match(bridge,/n_ctx:IOS\?\(CFG.id==='mobile'\?1024:512\)/);
 assert.match(bridge,/n_batch:IOS\?32/);
 assert.match(bridge,/!IOS&&pref/);
 assert.match(bridge,/localStorage\.setItem\(LS\('lastStage'\)/);
@@ -351,3 +351,7 @@ const analyticsSource=read('visitor-analytics-v24.js');
 assert.match(analyticsSource,/utm_source/);
 assert.match(analyticsSource,/navigator\.onLine/);
 assert.doesNotMatch(analyticsSource,/SUPABASE_SERVICE_ROLE_KEY/);
+
+// Keep conversation and mobile-profile regression gates in the established CI entry point.
+require('./intelligence.cjs');
+require('./mobile-model.cjs');

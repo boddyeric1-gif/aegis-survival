@@ -9,7 +9,7 @@ import {Wllama} from './wllama.js';
 
 const CFG=window.AEGIS_WEBLLM;                       // {name, license, nctx, shards:[{file,bytes,sha256}], base, wasm, gbnf}
 const STORE='model-store-v1';                        // NOTE: must not start with "aegis-" (the service worker deletes those on update)
-const LS=k=>'aegis.llm.'+k;
+const LS=k=>(CFG.id==='mobile'?'aegis.llm.mobile.':'aegis.llm.')+k;
 const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(/Macintosh/.test(navigator.userAgent)&&navigator.maxTouchPoints>1);
 const diag=[];const stage=(name,detail)=>{const entry={time:new Date().toISOString(),stage:name,detail};diag.push(entry);if(diag.length>40)diag.shift();try{localStorage.setItem(LS('lastStage'),JSON.stringify(entry))}catch(e){}window.dispatchEvent(new Event('aegis-llm-state'))};
 const THREADS=IOS?1:(localStorage.getItem(LS('threads'))==='1'?1:2);
@@ -63,7 +63,7 @@ async function load(blobs){
     wllama=new Wllama({default:new URL(CFG.wasm,location.href).href},{suppressNativeLog:true,allowOffline:true});
     if(CFG.compat_wasm){const compat={wasm:new URL(CFG.compat_wasm,location.href).href};if(CFG.compat_worker)compat.worker=new URL(CFG.compat_worker,location.href).href;wllama.setCompat(compat)}
     stage('LOADING','runtime configured; loading GGUF on '+(IOS?'iOS CPU':'desktop/browser'));
-    await wllama.loadModel(blobs,{n_ctx:IOS?512:(CFG.nctx||2048),n_threads:THREADS,n_batch:IOS?32:128,n_gpu_layers:useGpu?999:0});
+    await wllama.loadModel(blobs,{n_ctx:IOS?(CFG.id==='mobile'?1024:512):(CFG.nctx||2048),n_threads:THREADS,n_batch:IOS?32:128,n_gpu_layers:useGpu?999:0});
     backend=useGpu?'webgpu-requested':'cpu-wasm';loadSecs=(performance.now()-t0)/1000;localStorage.removeItem(LS('loading'));state='VERIFYING';reason='checking whether the model can actually generate text';stage('SMOKE_TEST','testing one-token local inference');const check=await wllama.createCompletion({prompt:'<|im_start|>user\nReply with OK.<|im_end|>\n<|im_start|>assistant\n',max_tokens:4,temperature:0});if(!check||!check.choices||!check.choices[0]||typeof check.choices[0].text!=='string'||!check.choices[0].text.trim())throw new Error('model loaded but failed the inference smoke test');smokeTestPassed=true;state='READY';reason='';stage('READY','model initialized and produced local text');note('model loaded in '+loadSecs.toFixed(1)+' s, backend '+backend);
   }catch(e){localStorage.removeItem(LS('loading'));smokeTestPassed=false;state='FAILED';reason=(e&&e.message||String(e))+' (rules-only mode)';stage('FAILED',reason);throw e}}
 
@@ -80,10 +80,11 @@ async function install(onProgress){
       const url=shardUrl(s);const hit=await c.match(url);
       if(hit){const b=await hit.blob();if(b.size===s.bytes){if(ver[s.file]!==s.sha256){const digest=hex(await crypto.subtle.digest('SHA-256',await b.arrayBuffer()));if(digest===s.sha256){ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver))}}if(ver[s.file]===s.sha256){done+=s.bytes;progress=Math.floor(done*100/total);continue}}}
       await c.delete(url);delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));
-      reason='downloading offline language model: '+progress+'%';
-      const resp=await fetch(url,{cache:'no-store'});if(!resp.ok)throw new Error('download failed ('+resp.status+') for '+s.file);
+      reason='Downloading '+CFG.name+': '+progress+'% (verified pieces are retained)';
+      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);let resp;try{resp=await fetch(s.url||url,{cache:'no-store',signal:controller.signal,...(s.url?{headers:{Range:'bytes='+s.offset+'-'+(s.offset+s.bytes-1)}}:{})})}catch(e){clearTimeout(timeout);throw new Error('Download interrupted; verified pieces are saved. Keep AEGIS open and tap Download again. '+e.message)}if(!resp.ok){clearTimeout(timeout);throw new Error('download failed ('+resp.status+') for '+s.file)}if(s.url&&(resp.status!==206||resp.headers.get('content-range')!=='bytes '+s.offset+'-'+(s.offset+s.bytes-1)+'/270590880')){clearTimeout(timeout);controller.abort();throw new Error('Model host did not provide the expected download piece. Verified pieces remain saved.')}
       const reader=resp.body.getReader();const parts=[];let got=0;
-      for(;;){const {done:d,value}=await reader.read();if(d)break;parts.push(value);got+=value.length;progress=Math.floor((done+got)*100/total);reason='downloading offline language model: '+progress+'%';if(onProgress)onProgress(progress)}
+      for(;;){const {done:d,value}=await reader.read();if(d)break;parts.push(value);got+=value.length;if(got>s.bytes){controller.abort();clearTimeout(timeout);throw new Error('Model host returned an oversized piece')} progress=Math.floor((done+got)*100/total);reason='Downloading '+CFG.name+': '+progress+'% (verified pieces are retained)';if(onProgress)onProgress(progress)}
+      clearTimeout(timeout);if(got>s.bytes)throw new Error('Unexpected model file size');
       if(got!==s.bytes)throw new Error('incomplete download of '+s.file+' ('+got+' of '+s.bytes+' bytes); check your connection and tap Download again');
       state='VERIFYING';reason='verifying '+s.file;
       const blob=new Blob(parts);const h=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));

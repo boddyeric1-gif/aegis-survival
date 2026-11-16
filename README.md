@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v49)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v50)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -234,3 +234,11 @@ Radio & Signals now has one listening directory with searchable links and device
 Players open on provider pages in a new tab/browser; users tap Play there. AEGIS does not embed, proxy, autoplay, record or cache live audio. Station switching means pausing the old player and opening the next. Providers control audio availability, restrictions and advertising. No geolocation or third-party request is made by the directory until a link is opened. The existing offline frequency/signaling material remains in the same panel. Frequencies are reused geographically and cannot identify one worldwide stream.
 
 Streams require internet and may lag or fail; they are not an automatic emergency-alert receiver. Favorites and directory text are available after the app is cached, but offline audio is not provided.
+
+## v50: Conversational assistant and Bushcraft workshop
+
+Chat uses bounded recent conversation, explicitly reported equipment and latest corrections. Auto mode uses local AI when ready and clearly labeled guide lookup otherwise. A separate Mobile profile offers SmolLM2-360M-Instruct Q4_K_M, 270,590,880 bytes, downloaded once from a pinned Hugging Face revision in 33 SHA-256-verified byte ranges. Completed pieces are retained across retries. Mobile and desktop verification metadata are separate; switching preserves both downloads. No inference accuracy or speed gain is claimed. All 26 Bushcraft lessons have accessible diagram captions, source comparisons, local practice checklists and notes. Full-width scalable diagrams have matching captions, correct arrow colours and previous/next enlargement controls. Six core lessons add reasons, inspection checks, troubleshooting and exercises. Practice records have a separate JSON export. Existing household backups do not include practice records.
+
+Original diagrams are schematic teaching aids, not technically certified drawings. Compare source references and seek hands-on instruction for knot and tool skills. Device testing remains required by QUALITY_GATES.md.
+
+Mobile model source: https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/tree/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec . Original model: https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct (Apache-2.0). Initial Mobile installation requires access to Hugging Face; inference does not. Whole-file SHA-256 was checked during preparation; each delivered byte range has its own recorded SHA-256. iPhone installation and inference remain unverified.

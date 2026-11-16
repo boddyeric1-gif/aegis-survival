@@ -1,8 +1,21 @@
 {
   "schema": 1,
-  "version": "v49",
-  "updated": "2026-11-09",
+  "version": "v50",
+  "updated": "2026-11-15",
   "releases": [
+    {
+      "version": "v50",
+      "date": "2026-11-15",
+      "title": "Conversational assistant and Bushcraft practice workshop",
+      "changes": [
+        "Added bounded conversational context on desktop and iPhone, explicit equipment corrections and ranked local guide retrieval.",
+        "Added Auto, Guide lookup and Local AI response modes; general questions no longer require matching manual excerpts.",
+        "Added step captions, source comparisons, practice checks and local notes across all 26 Bushcraft lessons, with deeper teaching for six core lessons.",
+        "Fixed Bushcraft search across categories and added All skills and Favorites browsing.",
+        "Added a separate Mobile model option: SmolLM2-360M-Instruct Q4_K_M, 271 MB, with 33 resumable verified pieces and separate verification metadata. The original Surface model and existing data remain intact; iPhone inference remains unverified.",
+        "Improved diagram readability with full-width vector images, accessible captions, corrected arrowhead colours and previous/next controls. Original schematic accuracy still requires technical review."
+      ]
+    },
     {
       "version": "v49",
       "date": "2026-11-09",
