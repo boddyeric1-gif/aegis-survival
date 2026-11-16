@@ -48,3 +48,6 @@ jobs:
         run: |
           node --check experience-v54.js
           node tests/field-experience.cjs
+
+      - name: Verify offline recovery and diagnostic timeouts
+        run: node tests/readiness-recovery.cjs

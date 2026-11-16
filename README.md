@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v54)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v55)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -270,3 +270,9 @@ Community Chat is a full-height conversation screen: other people’s bubbles on
 The new field dashboard replaces stacked setup controls with task cards, manual search and a truthful device overview. Mobile gets persistent Home / Library / AI / Community / More navigation; desktop gets a compact primary row. All original sections remain available in the searchable, grouped All sections dialog. Device & offline setup owns the original status, model choice/download, display and performance controls; their existing handlers and storage keys are retained. Emergency reference stays available in the header.
 
 AI conversations open ahead of model-selection and benchmark panels. Advanced options and conversation tools are collapsed, and unsent AI drafts use the new `aegis.ai.draft.v54` local key. This release does not migrate or clear existing household, guide, model, PDF, community or AI-history stores. Reading layouts, household links, bushcraft categories, section introductions and scroll-return controls are updated.
+
+## v55: Offline resilience
+
+Saved-model reads retry transient failures across CacheStorage and IndexedDB; failures remain unknown rather than missing. Cached model pieces are materialized before runtime use. Read deadlines, reopened IndexedDB connections, a single bounded runtime I/O retry, and single-flight saved-file recovery retain downloads. A previously interrupted runtime still requires a deliberate retry to avoid crash loops. Ready-session status reuses verified load evidence; concurrent file inspections coalesce.
+
+Worker readiness uses cache keys rather than sequential body access, reports storage failure explicitly, retries worker timeouts, closes message ports, and coalesces repeated checks. Diagnostics labels prior successful app evidence separately from a failed current check. Saved AI recovery is available without clearing data or requesting downloads. App-worker registration and update checks no longer wait for AI startup. The obsolete external-script diagnostic now permits bundled same-origin scripts. Existing storage keys and model URLs are unchanged.

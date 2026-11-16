@@ -1,8 +1,21 @@
 {
   "schema": 1,
-  "version": "v54",
+  "version": "v55",
   "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v55",
+      "date": "2026-11-16",
+      "title": "Offline Resilience & Saved AI Recovery",
+      "changes": [
+        "Saved AI files get automatic bounded read retries and IndexedDB connection recovery. Temporary storage failures are reported as unreadable, not missing.",
+        "Model pieces are read into stable memory before loading, with one automatic recovery attempt for a runtime I/O error. Existing downloads are retained.",
+        "AI status uses verified loaded-session evidence and shares concurrent storage inspections, reducing repeated disk reads.",
+        "Offline readiness uses fast cache-key inspection, retries worker timeouts, closes communication ports, and prevents overlapping checks.",
+        "Diagnostics keeps a prior successful app check clearly labeled when a new check fails. Saved AI recovery can reopen existing files without downloading.",
+        "App caching and updates start independently of AI initialization. The bundled-script diagnostic correctly accepts same-origin app modules."
+      ]
+    },
     {
       "version": "v54",
       "date": "2026-11-16",
