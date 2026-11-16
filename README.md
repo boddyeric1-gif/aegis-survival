@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v53)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v54)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -264,3 +264,9 @@ This feature is internet chat, not Bluetooth mesh. Offline AI and local field re
 ## v53: Group-text Community Chat
 
 Community Chat is a full-height conversation screen: other people’s bubbles on the left, your own signed bubbles on the right, and the name/message composer pinned below the feed. The mobile layout follows the visual viewport when the keyboard opens. Chat info and rules collapse beneath the compact header; the bell toggles community notifications independently of official alerts. Back returns to Home. Notification deep links wait for navigation initialization. Existing storage keys, moderation rules and downloaded model caches are unchanged.
+
+## v54: The Field Experience Upgrade
+
+The new field dashboard replaces stacked setup controls with task cards, manual search and a truthful device overview. Mobile gets persistent Home / Library / AI / Community / More navigation; desktop gets a compact primary row. All original sections remain available in the searchable, grouped All sections dialog. Device & offline setup owns the original status, model choice/download, display and performance controls; their existing handlers and storage keys are retained. Emergency reference stays available in the header.
+
+AI conversations open ahead of model-selection and benchmark panels. Advanced options and conversation tools are collapsed, and unsent AI drafts use the new `aegis.ai.draft.v54` local key. This release does not migrate or clear existing household, guide, model, PDF, community or AI-history stores. Reading layouts, household links, bushcraft categories, section introductions and scroll-return controls are updated.
