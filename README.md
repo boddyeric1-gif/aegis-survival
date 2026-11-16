@@ -246,3 +246,5 @@ Mobile model source: https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF
 ## v51: Mobile download recovery and conversation
 
 Packages the Mobile model as 33 same-site files. This removes the blocked external host and redirect path without expanding the app security policy. Existing cache URLs and per-piece SHA-256 values are preserved, so previously verified pieces remain reusable. Interrupted downloads keep verified pieces. Storage preflight counts missing bytes rather than demanding room for the entire model again. Download diagnostics record transfer and verification stages. Compact chat instructions leave more of the bounded context for user questions, recent conversation and reference text. App updates reuse unchanged hash-matched shell files from the previous cache. Physical iPhone download, restart and offline inference still require testing.
+
+Large model writes now fall back from CacheStorage to persistent IndexedDB when CacheStorage refuses them. Both stores are read on startup, and Diagnostics reports stored pieces, quota and the last model stage. This is a recovery path, not a promise to bypass an overall browser storage limit.
