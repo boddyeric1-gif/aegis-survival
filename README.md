@@ -1,4 +1,4 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v50)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v51)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
@@ -242,3 +242,7 @@ Chat uses bounded recent conversation, explicitly reported equipment and latest 
 Original diagrams are schematic teaching aids, not technically certified drawings. Compare source references and seek hands-on instruction for knot and tool skills. Device testing remains required by QUALITY_GATES.md.
 
 Mobile model source: https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/tree/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec . Original model: https://huggingface.co/HuggingFaceTB/SmolLM2-360M-Instruct (Apache-2.0). Initial Mobile installation requires access to Hugging Face; inference does not. Whole-file SHA-256 was checked during preparation; each delivered byte range has its own recorded SHA-256. iPhone installation and inference remain unverified.
+
+## v51: Mobile download recovery and conversation
+
+Packages the Mobile model as 33 same-site files. This removes the blocked external host and redirect path without expanding the app security policy. Existing cache URLs and per-piece SHA-256 values are preserved, so previously verified pieces remain reusable. Interrupted downloads keep verified pieces. Storage preflight counts missing bytes rather than demanding room for the entire model again. Download diagnostics record transfer and verification stages. Compact chat instructions leave more of the bounded context for user questions, recent conversation and reference text. App updates reuse unchanged hash-matched shell files from the previous cache. Physical iPhone download, restart and offline inference still require testing.

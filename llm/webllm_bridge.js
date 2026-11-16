@@ -47,6 +47,7 @@ async function init(){                   // called on app start: never downloads
     if(!('WebAssembly' in self)||!('caches' in self)||!self.crypto||!crypto.subtle){state='UNSUPPORTED';reason='this browser lacks WebAssembly, Cache storage or secure-context crypto (use https or localhost)';return}
     const have=await cachedBlobs();
     if(!have){const partial=Object.keys(JSON.parse(localStorage.getItem(LS('verified'))||'{}')).length;state='NOT_INSTALLED';reason=partial?'model download incomplete: tap Download to finish':'the offline language model has not been downloaded yet';return}
+    integrity=true;
     if(localStorage.getItem(LS('loading'))){localStorage.setItem(LS('backend'),'cpu');state='DISABLED';reason='Previous model initialization was interrupted. The browser may have closed the app or exhausted memory. Model files remain installed; tap Retry once to use the conservative CPU configuration.';stage('INTERRUPTED',reason);return}
     integrity=true;await load(have);
   }catch(e){state='FAILED';reason=(e&&e.message||String(e))+' (rules-only mode)'}}
@@ -74,19 +75,23 @@ async function install(onProgress){
     state='DOWNLOADING';progress=0;integrity=false;
     if(navigator.storage&&navigator.storage.persist){try{note('persistent storage granted: '+await navigator.storage.persist())}catch(e){}}
     const total=CFG.shards.reduce((a,s)=>a+s.bytes,0);
-    if(navigator.storage&&navigator.storage.estimate){const q=await navigator.storage.estimate();if(q.quota&&q.usage!==undefined&&q.quota-q.usage<total*1.15)throw new Error('not enough free browser storage: need about '+Math.ceil(total*1.15/1048576)+' MB free, have about '+Math.floor((q.quota-q.usage)/1048576)+' MB')}
+    stage('DOWNLOADING','checking saved pieces before requesting missing files');
+    if(navigator.storage&&navigator.storage.estimate){const q=await navigator.storage.estimate();const saved=await caches.open(STORE);let remaining=0;for(const shard of CFG.shards){const hit=await saved.match(shardUrl(shard));if(!hit||(await hit.blob()).size!==shard.bytes)remaining+=shard.bytes}if(q.quota&&q.usage!==undefined&&q.quota-q.usage<remaining*1.15)throw new Error('not enough free browser storage: need about '+Math.ceil(remaining*1.15/1048576)+' MB free to finish, have about '+Math.floor((q.quota-q.usage)/1048576)+' MB')}
     const c=await caches.open(STORE);const ver=JSON.parse(localStorage.getItem(LS('verified'))||'{}');let done=0;
     for(const s of CFG.shards){
       const url=shardUrl(s);const hit=await c.match(url);
       if(hit){const b=await hit.blob();if(b.size===s.bytes){if(ver[s.file]!==s.sha256){const digest=hex(await crypto.subtle.digest('SHA-256',await b.arrayBuffer()));if(digest===s.sha256){ver[s.file]=s.sha256;localStorage.setItem(LS('verified'),JSON.stringify(ver))}}if(ver[s.file]===s.sha256){done+=s.bytes;progress=Math.floor(done*100/total);continue}}}
       await c.delete(url);delete ver[s.file];localStorage.setItem(LS('verified'),JSON.stringify(ver));
       reason='Downloading '+CFG.name+': '+progress+'% (verified pieces are retained)';
-      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);let resp;try{resp=await fetch(s.url||url,{cache:'no-store',signal:controller.signal,...(s.url?{headers:{Range:'bytes='+s.offset+'-'+(s.offset+s.bytes-1)}}:{})})}catch(e){clearTimeout(timeout);throw new Error('Download interrupted; verified pieces are saved. Keep AEGIS open and tap Download again. '+e.message)}if(!resp.ok){clearTimeout(timeout);throw new Error('download failed ('+resp.status+') for '+s.file)}if(s.url&&(resp.status!==206||resp.headers.get('content-range')!=='bytes '+s.offset+'-'+(s.offset+s.bytes-1)+'/270590880')){clearTimeout(timeout);controller.abort();throw new Error('Model host did not provide the expected download piece. Verified pieces remain saved.')}
+      const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),90000);let resp;try{resp=await fetch(s.url||url,{...(s.url?{credentials:'omit'}:{cache:'no-store'}),signal:controller.signal,...(s.url?{headers:{Range:'bytes='+s.offset+'-'+(s.offset+s.bytes-1)}}:{})})}catch(e){clearTimeout(timeout);throw new Error('Download interrupted; verified pieces are saved. Keep AEGIS open and tap Download again. '+e.message)}if(!resp.ok){clearTimeout(timeout);throw new Error('download failed ('+resp.status+') for '+s.file)}if(s.url&&(resp.status!==206||resp.headers.get('content-range')!=='bytes '+s.offset+'-'+(s.offset+s.bytes-1)+'/'+total)){clearTimeout(timeout);controller.abort();throw new Error('Model host did not provide the expected download piece. Verified pieces remain saved.')}
+      stage('DOWNLOADING','receiving '+s.file);
       const reader=resp.body.getReader();const parts=[];let got=0;
+      try{
       for(;;){const {done:d,value}=await reader.read();if(d)break;parts.push(value);got+=value.length;if(got>s.bytes){controller.abort();clearTimeout(timeout);throw new Error('Model host returned an oversized piece')} progress=Math.floor((done+got)*100/total);reason='Downloading '+CFG.name+': '+progress+'% (verified pieces are retained)';if(onProgress)onProgress(progress)}
-      clearTimeout(timeout);if(got>s.bytes)throw new Error('Unexpected model file size');
+      }finally{clearTimeout(timeout);reader.releaseLock()}
+      if(got>s.bytes)throw new Error('Unexpected model file size');
       if(got!==s.bytes)throw new Error('incomplete download of '+s.file+' ('+got+' of '+s.bytes+' bytes); check your connection and tap Download again');
-      state='VERIFYING';reason='verifying '+s.file;
+      state='VERIFYING';reason='verifying '+s.file;stage('VERIFYING',reason);
       const blob=new Blob(parts);const h=hex(await crypto.subtle.digest('SHA-256',await blob.arrayBuffer()));
       if(h!==s.sha256)throw new Error('integrity check FAILED for '+s.file+' (SHA-256 mismatch). The file was discarded.');
       await c.put(url,new Response(blob,{headers:{'content-type':'application/octet-stream'}}));
@@ -94,7 +99,7 @@ async function install(onProgress){
     }
     const blobs=await cachedBlobs();if(!blobs)throw new Error('model files missing after download');
     integrity=true;localStorage.removeItem(LS('loading'));await load(blobs);
-  }catch(e){if(state!=='FAILED'){state='FAILED';reason=(e&&e.message||String(e))}}}
+  }catch(e){if(state!=='FAILED'){state='FAILED';reason=(e&&e.message||String(e));stage('FAILED',reason)}}}
 
 async function verify(){                     // full re-hash of everything cached
   const c=await caches.open(STORE);

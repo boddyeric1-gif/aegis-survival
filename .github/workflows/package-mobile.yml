@@ -1,0 +1,47 @@
+name: Package verified Mobile model
+on:
+  push:
+    branches: [fix/v51-mobile-download-context]
+permissions:
+  contents: write
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Materialize checksum-pinned Mobile files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, hashlib, urllib.request
+          d=json.loads(Path('llm/mobile-profile.json').read_text())
+          target=Path(d['base']); target.mkdir(exist_ok=True)
+          if all((target/s['file']).exists() and hashlib.sha256((target/s['file']).read_bytes()).hexdigest()==s['sha256'] for s in d['shards']):
+              raise SystemExit(0)
+          url='https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf'
+          raw=urllib.request.urlopen(url, timeout=180).read()
+          assert hashlib.sha256(raw).hexdigest()==d['sha256'], 'Whole-model checksum mismatch'
+          offset=0
+          for s in d['shards']:
+              piece=raw[offset:offset+s['bytes']]
+              assert len(piece)==s['bytes'] and hashlib.sha256(piece).hexdigest()==s['sha256']
+              (target/s['file']).write_bytes(piece)
+              offset+=len(piece)
+          assert offset==len(raw)
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate complete package
+        run: |
+          for test in tests/*.cjs; do node "$test" || exit 1; done
+          git diff --check
+      - name: Save verified files on this branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add llm/mobile/
+          if ! git diff --cached --quiet; then
+            git commit -m 'Bundle verified Mobile model files for same-site installation'
+            git push
+          fi
