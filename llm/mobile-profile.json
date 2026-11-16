@@ -15,233 +15,167 @@
     {
       "file": "smollm2-360m-q4.part001",
       "bytes": 8388608,
-      "sha256": "8ff3be86198e7c6b2913d23fd266911ae0c2c011ae221d9ed018102b7a2a611d",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 0
+      "sha256": "8ff3be86198e7c6b2913d23fd266911ae0c2c011ae221d9ed018102b7a2a611d"
     },
     {
       "file": "smollm2-360m-q4.part002",
       "bytes": 8388608,
-      "sha256": "e8401ad5bddfe41a795c21b9a0bfa641bace2f96f36e54db0fef810113bd31da",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 8388608
+      "sha256": "e8401ad5bddfe41a795c21b9a0bfa641bace2f96f36e54db0fef810113bd31da"
     },
     {
       "file": "smollm2-360m-q4.part003",
       "bytes": 8388608,
-      "sha256": "4104eac10fb19de81aac7eca94589b100e8b4ee84cc1271647b44ec00ad96291",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 16777216
+      "sha256": "4104eac10fb19de81aac7eca94589b100e8b4ee84cc1271647b44ec00ad96291"
     },
     {
       "file": "smollm2-360m-q4.part004",
       "bytes": 8388608,
-      "sha256": "e9362d85bda947b0ef5f2051bea1be136653c2483404360d7c6c4bd644ba11f4",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 25165824
+      "sha256": "e9362d85bda947b0ef5f2051bea1be136653c2483404360d7c6c4bd644ba11f4"
     },
     {
       "file": "smollm2-360m-q4.part005",
       "bytes": 8388608,
-      "sha256": "a52cf523d76929658e39d7af94209c067c8513488078d3c67485dddbb46fdae2",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 33554432
+      "sha256": "a52cf523d76929658e39d7af94209c067c8513488078d3c67485dddbb46fdae2"
     },
     {
       "file": "smollm2-360m-q4.part006",
       "bytes": 8388608,
-      "sha256": "73f8e456514c29e8a27e68dbafe3d2fedd98b3a292bbf2c8490ff6f0e701b6d9",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 41943040
+      "sha256": "73f8e456514c29e8a27e68dbafe3d2fedd98b3a292bbf2c8490ff6f0e701b6d9"
     },
     {
       "file": "smollm2-360m-q4.part007",
       "bytes": 8388608,
-      "sha256": "819101575c72e28db72fa574db9263c22f233213945c7c14f356f55aefeeeda0",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 50331648
+      "sha256": "819101575c72e28db72fa574db9263c22f233213945c7c14f356f55aefeeeda0"
     },
     {
       "file": "smollm2-360m-q4.part008",
       "bytes": 8388608,
-      "sha256": "eb2bf2ac0369b116b73c835fc5ecbd2f998b012cc4616e5506317a3935e51ec2",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 58720256
+      "sha256": "eb2bf2ac0369b116b73c835fc5ecbd2f998b012cc4616e5506317a3935e51ec2"
     },
     {
       "file": "smollm2-360m-q4.part009",
       "bytes": 8388608,
-      "sha256": "308e3734542fa44ee68ac9fdeaecdc9180689f8f285a20ef1b80980bea44188e",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 67108864
+      "sha256": "308e3734542fa44ee68ac9fdeaecdc9180689f8f285a20ef1b80980bea44188e"
     },
     {
       "file": "smollm2-360m-q4.part010",
       "bytes": 8388608,
-      "sha256": "26c276fbe10c3c3aecf70767af1efff41fa6eeea4f033558c73f216e84cc30ca",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 75497472
+      "sha256": "26c276fbe10c3c3aecf70767af1efff41fa6eeea4f033558c73f216e84cc30ca"
     },
     {
       "file": "smollm2-360m-q4.part011",
       "bytes": 8388608,
-      "sha256": "9af4b144d2b51966058c0e7e574c5a3ab1660ef15c5af1668886a47a838a0d09",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 83886080
+      "sha256": "9af4b144d2b51966058c0e7e574c5a3ab1660ef15c5af1668886a47a838a0d09"
     },
     {
       "file": "smollm2-360m-q4.part012",
       "bytes": 8388608,
-      "sha256": "349f533474f717d495d637006a585241f66f11e92c33343026bcbe4b57042562",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 92274688
+      "sha256": "349f533474f717d495d637006a585241f66f11e92c33343026bcbe4b57042562"
     },
     {
       "file": "smollm2-360m-q4.part013",
       "bytes": 8388608,
-      "sha256": "e5b6d0b55a1e68c5ab8e8557ad72db3341aa81d24f9e13694128816677f48cdd",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 100663296
+      "sha256": "e5b6d0b55a1e68c5ab8e8557ad72db3341aa81d24f9e13694128816677f48cdd"
     },
     {
       "file": "smollm2-360m-q4.part014",
       "bytes": 8388608,
-      "sha256": "13dd3a9c349e6c7532e3e9065c34cec5771d3ab5e16c38c85819a1255d2ae215",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 109051904
+      "sha256": "13dd3a9c349e6c7532e3e9065c34cec5771d3ab5e16c38c85819a1255d2ae215"
     },
     {
       "file": "smollm2-360m-q4.part015",
       "bytes": 8388608,
-      "sha256": "b83f0362e2891530e5fd70ce63b3f06677bd5243700c6fcf59a971c534711437",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 117440512
+      "sha256": "b83f0362e2891530e5fd70ce63b3f06677bd5243700c6fcf59a971c534711437"
     },
     {
       "file": "smollm2-360m-q4.part016",
       "bytes": 8388608,
-      "sha256": "d5ea54c0e1a09ad465276e9b108d472ddaf6c75275f56867ba7e748cdd1fca46",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 125829120
+      "sha256": "d5ea54c0e1a09ad465276e9b108d472ddaf6c75275f56867ba7e748cdd1fca46"
     },
     {
       "file": "smollm2-360m-q4.part017",
       "bytes": 8388608,
-      "sha256": "b0c8f2e3d7c96a9c0f918365f0a5e3ef66804a14a3ca6eee7e43384448da9f9d",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 134217728
+      "sha256": "b0c8f2e3d7c96a9c0f918365f0a5e3ef66804a14a3ca6eee7e43384448da9f9d"
     },
     {
       "file": "smollm2-360m-q4.part018",
       "bytes": 8388608,
-      "sha256": "36739d77cb2ecef7dc9bc3b04d4fbaeb32b01cedfbffa9e46936069820d22aef",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 142606336
+      "sha256": "36739d77cb2ecef7dc9bc3b04d4fbaeb32b01cedfbffa9e46936069820d22aef"
     },
     {
       "file": "smollm2-360m-q4.part019",
       "bytes": 8388608,
-      "sha256": "4b204bfeeeb8fda433dae4756af613a7c99631d4c8716072d1f5f8ef3c6da438",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 150994944
+      "sha256": "4b204bfeeeb8fda433dae4756af613a7c99631d4c8716072d1f5f8ef3c6da438"
     },
     {
       "file": "smollm2-360m-q4.part020",
       "bytes": 8388608,
-      "sha256": "6bd546a88a67051cae68cab6f980bfe64650b860280973daf005eeccaab79dfe",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 159383552
+      "sha256": "6bd546a88a67051cae68cab6f980bfe64650b860280973daf005eeccaab79dfe"
     },
     {
       "file": "smollm2-360m-q4.part021",
       "bytes": 8388608,
-      "sha256": "e8bd6dcf6c65fb57ec18826102d7fa82e1025055bc0e08435ace9b9f67b252c9",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 167772160
+      "sha256": "e8bd6dcf6c65fb57ec18826102d7fa82e1025055bc0e08435ace9b9f67b252c9"
     },
     {
       "file": "smollm2-360m-q4.part022",
       "bytes": 8388608,
-      "sha256": "13d75036c570710821ce42e6f7aa7fe4e499d2e2c746f2cdcd66912ec90ad975",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 176160768
+      "sha256": "13d75036c570710821ce42e6f7aa7fe4e499d2e2c746f2cdcd66912ec90ad975"
     },
     {
       "file": "smollm2-360m-q4.part023",
       "bytes": 8388608,
-      "sha256": "0e7bb1effa61714e2496ed58b92a180ad059e381b9d2f6cd44fc8621e2b52e16",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 184549376
+      "sha256": "0e7bb1effa61714e2496ed58b92a180ad059e381b9d2f6cd44fc8621e2b52e16"
     },
     {
       "file": "smollm2-360m-q4.part024",
       "bytes": 8388608,
-      "sha256": "39378db0d25468ac7e7980df4825a5a586b562be872dfaf3cafc76752346d99c",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 192937984
+      "sha256": "39378db0d25468ac7e7980df4825a5a586b562be872dfaf3cafc76752346d99c"
     },
     {
       "file": "smollm2-360m-q4.part025",
       "bytes": 8388608,
-      "sha256": "a9aa73025d78b83de22277582bc8bf431300b141095f00ec029db901f348773f",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 201326592
+      "sha256": "a9aa73025d78b83de22277582bc8bf431300b141095f00ec029db901f348773f"
     },
     {
       "file": "smollm2-360m-q4.part026",
       "bytes": 8388608,
-      "sha256": "436f660c7d065ffcab328b09a58f816b06e7ebae89de0b266edefbc3f5675bb5",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 209715200
+      "sha256": "436f660c7d065ffcab328b09a58f816b06e7ebae89de0b266edefbc3f5675bb5"
     },
     {
       "file": "smollm2-360m-q4.part027",
       "bytes": 8388608,
-      "sha256": "8b9ad2a4a6adaeac922a2cc1bec3b49f0c5839efff247b0bb47c45d0e22a4f01",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 218103808
+      "sha256": "8b9ad2a4a6adaeac922a2cc1bec3b49f0c5839efff247b0bb47c45d0e22a4f01"
     },
     {
       "file": "smollm2-360m-q4.part028",
       "bytes": 8388608,
-      "sha256": "d193c0f7aefad196dc016865485ba1888e9614c1a480de0283b1ae94f5a3468d",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 226492416
+      "sha256": "d193c0f7aefad196dc016865485ba1888e9614c1a480de0283b1ae94f5a3468d"
     },
     {
       "file": "smollm2-360m-q4.part029",
       "bytes": 8388608,
-      "sha256": "b6b7d4eb5dc60bce71fab5fdb1c18c907cc5cb8affedc98936a880ad75bfb947",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 234881024
+      "sha256": "b6b7d4eb5dc60bce71fab5fdb1c18c907cc5cb8affedc98936a880ad75bfb947"
     },
     {
       "file": "smollm2-360m-q4.part030",
       "bytes": 8388608,
-      "sha256": "5e6dbd5160066109e9873f5721867d95693370ef02c4a3797acd9e18410b51f3",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 243269632
+      "sha256": "5e6dbd5160066109e9873f5721867d95693370ef02c4a3797acd9e18410b51f3"
     },
     {
       "file": "smollm2-360m-q4.part031",
       "bytes": 8388608,
-      "sha256": "7cf03e359754d3feb17beaa37575da4efe2739726c078740fd0e31c5e34c38f3",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 251658240
+      "sha256": "7cf03e359754d3feb17beaa37575da4efe2739726c078740fd0e31c5e34c38f3"
     },
     {
       "file": "smollm2-360m-q4.part032",
       "bytes": 8388608,
-      "sha256": "bad6e8f2eee62a6bd2fd6f9b2bd14677fb475ffa838fd6814a8af33e6b8a700f",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 260046848
+      "sha256": "bad6e8f2eee62a6bd2fd6f9b2bd14677fb475ffa838fd6814a8af33e6b8a700f"
     },
     {
       "file": "smollm2-360m-q4.part033",
       "bytes": 2155424,
-      "sha256": "e34f805cab92422cb7c6d2134aeed02eb585c071c32d799acdfa39ce209c90f5",
-      "url": "https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/7be6f65f1db715fe5dc5a4634c0d459b4eed42ec/SmolLM2-360M-Instruct-Q4_K_M.gguf",
-      "offset": 268435456
+      "sha256": "e34f805cab92422cb7c6d2134aeed02eb585c071c32d799acdfa39ce209c90f5"
     }
   ]
 }

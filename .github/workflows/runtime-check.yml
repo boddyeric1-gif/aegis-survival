@@ -30,3 +30,7 @@ jobs:
         run: node tests/household.cjs
       - name: Verify referenced offline assets and iOS settings
         run: node tests/runtime-sanity.cjs
+      - name: Verify packaged model download and shell persistence
+        run: |
+          node tests/download-recovery.cjs
+          node tests/shell-persistence.cjs

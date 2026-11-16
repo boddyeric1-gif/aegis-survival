@@ -1,8 +1,20 @@
 {
   "schema": 1,
-  "version": "v50",
+  "version": "v51",
   "updated": "2026-11-15",
   "releases": [
+    {
+      "version": "v51",
+      "date": "2026-11-15",
+      "title": "Mobile download recovery and conversation",
+      "changes": [
+        "Mobile model packaged as 33 same-site files: no third-party redirects or cross-origin browser downloads. Existing verified cache keys are preserved.",
+        "Resume storage checks account for pieces already saved. Download timeouts cover response streaming and verification stages are recorded.",
+        "Shorter chat instructions leave more context capacity for questions, follow-ups and retrieved field references.",
+        "Added functional download interruption, integrity and resume regression checks. Physical iPhone testing remains required.",
+        "App updates reuse unchanged SHA-256-matched shell files instead of downloading the entire offline shell again."
+      ]
+    },
     {
       "version": "v50",
       "date": "2026-11-15",

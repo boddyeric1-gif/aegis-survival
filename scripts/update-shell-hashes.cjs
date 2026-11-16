@@ -1,0 +1,2 @@
+// Run after changing any precached asset. Model files remain an optional separate download.
+const fs=require('node:fs'),crypto=require('node:crypto');const path='sw.js';let source=fs.readFileSync(path,'utf8');const assets=JSON.parse(source.match(/const ASSETS=(\[[^;]+\]);/)[1]);const hashes=Object.fromEntries(assets.map(asset=>[asset,crypto.createHash('sha256').update(fs.readFileSync(asset==='./'?'index.html':asset)).digest('hex')]));source=source.replace(/const ASSET_HASHES=[^;]+;/,'const ASSET_HASHES='+JSON.stringify(hashes)+';');fs.writeFileSync(path,source);
