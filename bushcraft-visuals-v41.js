@@ -7,7 +7,7 @@ const text=(x,y,t,c=ink,size=18)=>`<text x="${x}" y="${y}" fill="${c}" font-size
 const path=(d,c=ink,w=4,fill='none',extra='')=>`<path d="${d}" stroke="${c}" stroke-width="${w}" fill="${fill}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`;
 const rect=(x,y,w,h,fill='#e6e3d6',stroke=ink)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8" fill="${fill}" stroke="${stroke}" stroke-width="3"/>`;
 const circle=(x,y,r,fill='none',stroke=ink)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="3"/>`;
-const arrow=(x,y,X,Y,c=gold)=>path(`M${x} ${y}L${X} ${Y}`,c,4,'none',`marker-end="url(#${c===red?'red':'arr'})"`);
+const arrow=(x,y,X,Y,c=gold)=>path(`M${x} ${y}L${X} ${Y}`,c,4,'none',`marker-end="url(#${c===red?'red':c===blue?'blue':'arr'})"`);
 const cross=(x,y)=>path(`M${x-12} ${y-12}l24 24m0-24l-24 24`,red,5);
 const check=(x,y)=>path(`M${x-10} ${y}l8 8 16-19`,green,5);
 const tree=(x,broken=false)=>path(`M${x} 220V30`,ink,13)+path(`M${x} 85l-35-25m35 65l38-22`,ink,7)+(broken?path(`M${x} 45l65 15-13 25`,red,6)+cross(x+80,40):'');
@@ -234,8 +234,8 @@ set('Household repair inventory',[
 ],['Record the systems you rely on.','Check part fit before an emergency.','Keep tools visible, dry and in good condition.','Water and sanitation take priority.','Leave fuel and electrical repairs to qualified people.']);
 function wrap(s,max=64){const out=[];let line='';for(const word of s.split(' ')){if((line+' '+word).trim().length>max){out.push(line);line=word}else line+=(line?' ':'')+word}if(line)out.push(line);return out;}
 function render(name,step){const entry=D[name];if(!entry||!entry.scenes[step])throw Error('Missing bushcraft diagram: '+name+' '+step);const note=wrap(entry.notes[step],68);
- const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 410" role="img"><title>${esc(name)} — step ${step+1}</title><desc>${esc(entry.notes[step])}</desc><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3 0 6Z" fill="${gold}"/></marker><marker id="red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3 0 6Z" fill="${red}"/></marker></defs><rect width="640" height="410" rx="16" fill="#f3efdf"/><rect width="640" height="55" rx="16" fill="#233b35"/><rect y="30" width="640" height="25" fill="#233b35"/>${text(20,35,'STEP '+(step+1),'#efc77f',19)}${text(110,35,name,'#fff8e5',19)}<g transform="translate(20 62)">${entry.scenes[step]}</g><path d="M20 337H620" stroke="#c7c5b3"/>${note.map((t,i)=>text(24,365+i*23,t,ink,17)).join('')}</svg>`;
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 410" role="img"><title>${esc(name)} — step ${step+1}</title><desc>${esc(entry.notes[step])}</desc><defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3 0 6Z" fill="${gold}"/></marker><marker id="blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3 0 6Z" fill="${blue}"/></marker><marker id="red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0L6 3 0 6Z" fill="${red}"/></marker></defs><rect width="640" height="410" rx="16" fill="#f3efdf"/><rect width="640" height="55" rx="16" fill="#233b35"/><rect y="30" width="640" height="25" fill="#233b35"/>${text(20,35,'STEP '+(step+1),'#efc77f',19)}${text(110,35,name,'#fff8e5',name.length>34?15:19)}<g transform="translate(20 62)">${entry.scenes[step]}</g><path d="M20 337H620" stroke="#c7c5b3"/>${note.map((t,i)=>text(24,365+i*23,t,ink,17)).join('')}</svg>`;
  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
-window.AEGIS_BUSHCRAFT_VISUALS={render,names:()=>Object.keys(D),count:()=>Object.values(D).reduce((n,e)=>n+e.scenes.length,0)};
+window.AEGIS_BUSHCRAFT_VISUALS={render,note:(name,step)=>D[name]?.notes[step]||'',names:()=>Object.keys(D),count:()=>Object.values(D).reduce((n,e)=>n+e.scenes.length,0)};
 })();
