@@ -51,3 +51,8 @@ jobs:
 
       - name: Verify offline recovery and diagnostic timeouts
         run: node tests/readiness-recovery.cjs
+
+      - name: Stress-test safe app repair
+        run: |
+          node --check repair-aegis-v56.js
+          node tests/repair-stress.cjs
