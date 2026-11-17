@@ -1,8 +1,17 @@
 {
   "schema": 1,
-  "version": "v56",
+  "version": "v57",
   "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v57",
+      "date": "2026-11-16",
+      "title": "Stable Mobile Navigation",
+      "changes": [
+        "Stabilized the mobile bottom navigation during scrolling with a dedicated opaque composited layer and removed legacy body isolation.",
+        "Kept iPhone safe-area spacing and the full-screen Community Chat layout. Existing offline downloads and saved records are preserved."
+      ]
+    },
     {
       "version": "v56",
       "date": "2026-11-16",
