@@ -319,7 +319,7 @@ assert.match(html,/id="aegis-chat-thread"/);
 assert.match(html,/id="aegis-chat-input"/);
 assert.match(sw,/offline-ai-chat-v42\.js/);
 const chatSource=read('offline-ai-chat-v42.js');
-assert.match(chatSource,/model\.complete\(promptFor\(history\)\)/);
+// Chat dispatch and saved conversation behavior are exercised in chat-conversation.cjs.
 assert.match(chatSource,/window\.AEGIS_PHASE3\?\.catalog/);
 assert.match(chatSource,/localStorage\.setItem\(KEY/);
 assert.doesNotMatch(chatSource,/fetch\s*\(/,'Chat must not fetch remote content');
@@ -328,7 +328,7 @@ const chatWindow={AEGIS_PHASE3:{catalog:()=>[{title:'Tarp shelter',tags:['shelte
 const chatSandbox={navigator:{userAgent:'Desktop',platform:'Linux'},window:chatWindow,document:{readyState:'loading',addEventListener:()=>{},getElementById:()=>null},localStorage:{getItem:k=>chatStore.get(k)||null,setItem:(k,v)=>chatStore.set(k,v)},console};
 chatVM.runInNewContext(chatSource,chatSandbox,{timeout:1500});
 assert.match(chatWindow.AEGIS_CHAT.references('tarp shelter'),/Tarp shelter/);
-assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/Question: How do I build/);
+assert.match(chatWindow.AEGIS_CHAT.promptFor([{role:'user',text:'How do I build a tarp shelter?'}]).user,/CURRENT question: How do I build/);
 
 assert.match(html,/surface-benchmark-v23\.js/);
 assert.match(sw,/surface-benchmark-v23\.js/);

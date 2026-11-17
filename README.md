@@ -1,10 +1,16 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v57)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v58)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## v58: Guide-backed practical conversations
+
+Practical shelter, fire and knot questions now use the bundled procedure library before model inference. The assistant retains the user’s task through short follow-ups, distinguishes new topics, compares explicit rope lengths with guide requirements and responds to supply corrections without inventing substitutes. These replies are labeled **Field Assistant**, remain available without the optional model, and use the same saved conversation across reopening.
+
+Free-form chat still uses the optional local model; its intrinsic reasoning ability has not been upgraded. Actual tests of the packaged SmolLM2 model produced incorrect construction and quantity answers despite prompt changes, so v58 does not rely on that model to generate supported practical procedures. Structured chat roles and guide context were also improved for remaining model requests. See [validation notes](docs/v58-chat-validation.md).
 
 ## v24: Visitor Analytics
 

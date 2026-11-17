@@ -130,8 +130,11 @@ async function complete(q){
   if(state!=='READY'||!wllama)throw new Error('model not ready: '+reason);
   const g=(q.schema!=null)?await gbnf():'';
   const prompt='<|im_start|>system\n'+q.system+'<|im_end|>\n<|im_start|>user\n'+q.user+'<|im_end|>\n<|im_start|>assistant\n';
-  const p={prompt,max_tokens:Math.max(8,Math.min(400,q.max_tokens||120)),temperature:0};if(g)p.grammar=g;
-  const r=await wllama.createCompletion(p);return r.choices[0].text;}finally{completionBusy=false}}
+  // Chat requests use the GGUF's own chat template and real message roles.
+  // Structured interpreter requests retain their existing completion contract.
+  const messages=Array.isArray(q.messages)&&q.messages.length?q.messages:null;
+  const p={...(messages?{messages}:{prompt}),max_tokens:Math.max(8,Math.min(400,q.max_tokens||120)),temperature:0};if(g)p.grammar=g;
+  const r=messages?await wllama.createChatCompletion(p):await wllama.createCompletion(p);return r.choices[0].message?.content??r.choices[0].text;}finally{completionBusy=false}}
 
 let inspection=null,inspectionAt=0,inspectionValue=null;
 async function inspectModelFiles(){if(inspection)return inspection;if(inspectionValue!==null&&Date.now()-inspectionAt<2000)return inspectionValue;inspection=(async()=>{let count=0;for(const shard of CFG.shards){const blob=await readShard(shard);if(blob&&blob.size===shard.bytes)count++}inspectionAt=Date.now();inspectionValue=count;return count})();try{return await inspection}finally{inspection=null}}
