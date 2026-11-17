@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v57",
+  "version": "v58",
   "updated": "2026-11-16",
   "releases": [
+    {
+      "version": "v58",
+      "date": "2026-11-16",
+      "title": "Guide-backed Conversations",
+      "changes": [
+        "Building questions and supported practical follow-ups now use actual bundled procedure steps instead of relying on the small model to invent an answer.",
+        "The Field Assistant keeps the user’s task across short follow-ups and saved-chat reopening, handles supply corrections, and compares explicit rope lengths against guide requirements.",
+        "Corner-attachment follow-ups receive relevant steps; unrelated introductions and old topics no longer displace the current question.",
+        "Remaining model requests use structured chat roles and the GGUF chat template. Existing model downloads, records and the v57 navigation fix are preserved."
+      ]
+    },
     {
       "version": "v57",
       "date": "2026-11-16",
