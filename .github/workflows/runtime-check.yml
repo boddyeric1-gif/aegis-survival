@@ -47,6 +47,7 @@ jobs:
       - name: Verify field experience navigation and readiness
         run: |
           node --check experience-v54.js
+          node --check visual-polish-v59.js
           node tests/field-experience.cjs
           node --check field-answers-v58.js
           node tests/chat-conversation.cjs
