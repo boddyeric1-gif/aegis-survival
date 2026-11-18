@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v59",
-  "updated": "2026-11-17",
+  "version": "v60",
+  "updated": "2026-11-18",
   "releases": [
+    {
+      "version": "v60",
+      "date": "2026-11-18",
+      "title": "Pantry Planning & Answer Recovery",
+      "changes": [
+        "Complete offline meal plans built from reported ingredients, with broth substitutions, canned versus dried bean checks, no-heat options and follow-up corrections.",
+        "Truncated model answers are flagged and saved with a Continue answer button; the runtime now reports why generation stopped.",
+        "Explicit follow-ups on topics outside the field guide retain recent conversation turns. Existing mobile/desktop model downloads and app data are preserved.",
+        "No new model is required. Free-form local AI still has limitations; the tested larger candidate did not pass correction handling and was not shipped."
+      ]
+    },
     {
       "version": "v59",
       "date": "2026-11-17",

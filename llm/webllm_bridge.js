@@ -124,7 +124,7 @@ async function verify(){                     // full re-hash of everything cache
   return 'all '+CFG.shards.length+' model files match their SHA-256';}
 
 let completionBusy=false;
-async function complete(q){
+async function completeDetailed(q){
   if(completionBusy)throw new Error('Another local inference is running. Wait for it to finish.');
   completionBusy=true;try{
   if(state!=='READY'||!wllama)throw new Error('model not ready: '+reason);
@@ -134,7 +134,9 @@ async function complete(q){
   // Structured interpreter requests retain their existing completion contract.
   const messages=Array.isArray(q.messages)&&q.messages.length?q.messages:null;
   const p={...(messages?{messages}:{prompt}),max_tokens:Math.max(8,Math.min(400,q.max_tokens||120)),temperature:0};if(g)p.grammar=g;
-  const r=messages?await wllama.createChatCompletion(p):await wllama.createCompletion(p);return r.choices[0].message?.content??r.choices[0].text;}finally{completionBusy=false}}
+  const r=messages?await wllama.createChatCompletion(p):await wllama.createCompletion(p);const choice=r.choices?.[0];return {text:choice?.message?.content??choice?.text??'',finish_reason:choice?.finish_reason||'unknown',usage:r.usage||null};}finally{completionBusy=false}}
+
+async function complete(q){return (await completeDetailed(q)).text}
 
 let inspection=null,inspectionAt=0,inspectionValue=null;
 async function inspectModelFiles(){if(inspection)return inspection;if(inspectionValue!==null&&Date.now()-inspectionAt<2000)return inspectionValue;inspection=(async()=>{let count=0;for(const shard of CFG.shards){const blob=await readShard(shard);if(blob&&blob.size===shard.bytes)count++}inspectionAt=Date.now();inspectionValue=count;return count})();try{return await inspection}finally{inspection=null}}
@@ -154,7 +156,7 @@ async function selftest(prompts){            // run on the REAL device to measur
 let modelTaskName='',modelTask=null;
 function modelExclusive(name,work){if(modelTask){if(name===modelTaskName&&['startup','recovery','download','verification'].includes(name))return modelTask;return Promise.reject(new Error('Local AI is busy with '+modelTaskName+'. Wait for it to finish; manuals remain available.'))}modelTaskName=name;modelTask=Promise.resolve().then(work).finally(()=>{modelTask=null;modelTaskName=''});return modelTask}
 function init(){return modelExclusive('startup',initImpl)}
-const guarded={init,install:onProgress=>modelExclusive('download',()=>install(onProgress)),status,complete:q=>modelExclusive('answering',()=>complete(q)),retry:()=>modelExclusive('recovery',retry),verify:()=>modelExclusive('verification',verify),selftest:prompts=>modelExclusive('benchmark',()=>selftest(prompts))};
+const guarded={init,install:onProgress=>modelExclusive('download',()=>install(onProgress)),status,complete:q=>modelExclusive('answering',()=>complete(q)),completeDetailed:q=>modelExclusive('answering',()=>completeDetailed(q)),retry:()=>modelExclusive('recovery',retry),verify:()=>modelExclusive('verification',verify),selftest:prompts=>modelExclusive('benchmark',()=>selftest(prompts))};
 window.AEGISWebLLM={raw:(p)=>wllama.createCompletion(p),backend:()=>backend,tokenize:(t)=>wllama.tokenize(t),ctxinfo:()=>wllama.getLoadedContextInfo(),...guarded,log:()=>log.slice(),cfg:CFG};
 window.AEGISNative=guarded;
 window.dispatchEvent(new Event('aegis-llm-ready'));

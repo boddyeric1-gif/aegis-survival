@@ -51,6 +51,8 @@ jobs:
           node tests/field-experience.cjs
           node --check field-answers-v58.js
           node tests/chat-conversation.cjs
+          node tests/assistant-planning.cjs
+          node tests/chat-completion.cjs
 
       - name: Verify offline recovery and diagnostic timeouts
         run: node tests/readiness-recovery.cjs
