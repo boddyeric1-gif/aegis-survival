@@ -1,10 +1,16 @@
-# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v59)
+# EMB AEGIS Wildlands — Offline Field Guide & Local AI (v60)
 
 **AEGIS** is an experimental, offline-first survival field reference and emergency-preparedness progressive web app (PWA) from EMB Creations. The current interface uses EMB Studios' signature near-black interface with restrained champagne-gold accents, an emergency-first home screen, and searchable field manuals. **Manuals and rule-based references are the priority; the local AI is optional and experimental.**
 
 **Open the app:** https://boddyeric1-gif.github.io/aegis-survival/
 
 > **Safety notice:** This project is not medically reviewed, professionally validated, or certified for emergency use. Some guides are original educational drafts; historical sources may be outdated. In an immediate emergency, contact local emergency services and follow current official guidance. Do not rely on the app as your only emergency resource.
+
+## v60: Pantry planning and answer recovery
+
+Meal requests now use a compositional offline planner for supported pantry foods (rice, pasta, oats, potatoes, canned proteins, beans, vegetables and fruit). It respects explicit removals, distinguishes canned/cooked foods from ambiguous or raw ingredients, handles no heat and missing liquid, and supplies complete steps regardless of the model token limit. These responses are labeled **Field Assistant**, use the saved conversation, and do not need another model download. Unsupported nutrition, storage and unrelated questions still use the existing assistant paths.
+
+Free-form chat now preserves generation finish reasons, marks length-limited answers, and offers **Continue answer** after reopening. Explicit follow-ups on topics outside the guide catalog retain recent real conversation turns. Intrinsic model reasoning is unchanged: a native comparison of SmolLM2-360M and Qwen3-0.6B found ingredient/correction failures in both; the candidate is not shipped or selected. See [validation and limits](docs/v60-assistant-validation.md).
 
 ## v58: Guide-backed practical conversations
 
