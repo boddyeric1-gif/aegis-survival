@@ -11,9 +11,11 @@ const recipeIntent=/\b(?:recipe|meal|dinner|lunch|breakfast|what (?:can|could|sh
 const otherTask=/\b(?:shelter|tarps?|rope|compass|navigate|purify|knot|kindling|tinder|who are you|capital of|new (?:topic|question))\b/i;
 const noHeat=/\b(?:no|without|don['’]?t have|do not have|can['’]?t use)\s+(?:a |any )?(?:heat|stove|fire|fuel|cooker)\b/i;
 function pantry(messages){
- const stock=new Map();let heat=null,water=null,active=false;
+ const stock=new Map();let heat=null,water=null,cookware=null,diet=null,active=false;
  for(const m of messages){if(m.role!=='user')continue;const text=m.text||'';if(otherTask.test(text)&&!recipeIntent.test(text)){active=false;continue}
   if(recipeIntent.test(text))active=true;
+  if(/\b(?:no|without|don't have|don’t have) (?:a |any )?(?:pot|pan|cookware)\b/i.test(text))cookware=false;else if(/\b(?:have|got) (?:a |some )?(?:pot|pan|cookware)\b/i.test(text))cookware=true;
+  if(/\b(?:not|no longer) (?:vegan|vegetarian)\b/i.test(text))diet=null;else if(/\b(?:vegan|vegetarian|no meat)\b/i.test(text))diet='vegetarian';
   if(/\b(?:start over|new pantry|only (?:have|got)|all (?:i|we) have)\b/i.test(text))stock.clear();
   if(/\b(?:if i (?:had|have)|imagine|suppose)\b/i.test(text))continue;
   if(noHeat.test(text))heat=false;else if(/\b(?:have|got|can use)\s+(?:a |the )?(?:stove|heat|fire|cooker)\b/i.test(text))heat=true;
@@ -38,23 +40,22 @@ function pantry(messages){
   // Resolve unambiguous pronoun replies to the most recent bean-form question.
   if(/^(?:yes[, ]+)?(?:they(?:'re| are)|the beans are|those are) (?:canned|fully cooked)/i.test(text.trim())){for(const [k,v]of stock)if(v.kind==='bean'&&!v.missing)stock.set(k,{...v,form:/canned/i.test(text)?'canned':'cooked'})}
  }
- return {items:[...stock.values()],heat,water,active};
+ return {items:[...stock.values()],heat,water,cookware,diet,active};
 }
 function answer(messages){
  const state=pantry(messages),last=messages.filter(m=>m.role==='user').at(-1)?.text||'';
  if(/\b(?:poison|vomit|sick|refrigerat|leftovers|storage|safe to eat)\b/i.test(last))return null;
  if(!state.active||otherTask.test(last)&&!recipeIntent.test(last))return null;
  // Nutrition, storage, poisoning and unrelated follow-ups go to the normal assistant.
- if(!recipeIntent.test(last)&&! /\b(?:it|that|those|they|beans|rice|broth|instead|actually|only|more|less|amount|much|many|servings?|people|no |without|stove|heat|water|canned|cook|step|potato|remove|allergic|skip|chicken|tuna)\b/i.test(last))return null;
- if(/\b(?:no|without|don't have|don’t have) (?:a |any )?(?:pot|pan|cookware)\b/i.test(last))return {role:'assistant',mode:'planned',sources:[],text:'Without cookware, use only confirmed ready-to-eat foods cold. What clean food-safe container or cooking equipment do you have? Do not heat unopened cans.'};
- const have=state.items.filter(x=>!x.missing),usable=have.filter(x=>!['bean','protein'].includes(x.kind)||['canned','cooked'].includes(x.form));
+ if(!recipeIntent.test(last)&&! /\b(?:it|that|those|they|beans|rice|broth|instead|actually|only|more|less|amount|much|many|servings?|people|no |without|stove|heat|water|canned|cook|pot|pan|cookware|vegetarian|vegan|step|potato|remove|allergic|skip|chicken|tuna)\b/i.test(last))return null;
+ const have=state.items.filter(x=>!x.missing&&!(state.diet&&(x.kind==='protein'||x.name==='chicken broth'))),usable=have.filter(x=>!['bean','protein'].includes(x.kind)||['canned','cooked'].includes(x.form));
  if(!have.length)return null;
  const known=have.map(x=>(x.form==='canned'?'canned ':x.form==='cooked'?'cooked ':'')+x.name);
  const excluded=have.filter(x=>['bean','protein'].includes(x.kind)&&!['canned','cooked'].includes(x.form));
  const caution=excluded.length?'Leave out '+excluded.map(x=>x.name).join(' and ')+' for now: '+excluded.map(x=>x.kind==='bean'?'are the '+x.name+' canned/fully cooked, or dried?':'is the '+x.name+' canned/fully cooked, or raw?').join(' ')+' Dried kidney beans need separate safe preparation; do not just warm them in this meal.':'';
  const side=usable.filter(x=>x.kind==='fruit'),add=usable.filter(x=>['protein','bean','vegetable'].includes(x.kind));
  const grain=usable.find(x=>x.kind==='grain'),potato=usable.find(x=>x.name==='potatoes'),broth=usable.find(x=>x.kind==='liquid');
- const cold=state.heat===false||state.water===false&&!broth;
+ const cold=state.heat===false||state.cookware===false||state.water===false&&!broth;
  const ready=usable.filter(x=>['canned','cooked'].includes(x.form)&&x.kind!=='liquid'&&(x.kind!=='grain'||x.form==='cooked'));
  let title,steps=[];
  if(cold){
@@ -76,6 +77,6 @@ function answer(messages){
  const quantities=/\b(?:how much|how many|amount|servings?|people|feed)\b/i.test(last)?'\nAmounts: package sizes determine portions. How much '+(grain?.name||potato?.name||'food')+' do you have, and how many are eating (if you haven’t already said)? I won’t guess portions.':'';
  return {role:'assistant',mode:'planned',sources:[],text:title+'\n\nFrom your list: '+known.join(', ')+'.\n\n'+steps.map((s,i)=>(i+1)+'. '+s).join('\n')+(caution?'\n\n'+caution:'')+quantities+'\n\nSave leftovers below 40°F (4°C) within 2 hours, or 1 hour above 90°F (32°C). Without safe refrigeration, make only what you can eat now.'};
 }
-function context(messages){const s=pantry(messages);return s.active&&s.items.length?'User-reported pantry (latest corrections win): '+s.items.map(x=>x.name+': '+(x.missing?'NOT AVAILABLE':x.form)).join('; ')+(s.heat===false?'; NO HEAT':'')+(s.water===false?'; NO SAFE WATER':''):''}
+function context(messages){const s=pantry(messages);return s.active&&s.items.length?'User-reported pantry (latest corrections win): '+s.items.map(x=>x.name+': '+(x.missing?'NOT AVAILABLE':x.form)).join('; ')+(s.diet?'; VEGETARIAN MEAL REQUEST':'')+(s.cookware===false?'; NO COOKWARE':'')+(s.heat===false?'; NO HEAT':'')+(s.water===false?'; NO SAFE WATER':''):''}
 window.AEGIS_ASSISTANT_PLANNING={pantry,answer,context};
 })();

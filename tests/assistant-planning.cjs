@@ -18,5 +18,7 @@ r=P.answer([u('I have potatoes, canned carrots and canned chicken. Give me a mea
 r=P.answer([u('I have canned tuna and canned chickpeas. I have no stove. What can I eat?')]);assert.match(r.text,/No-cook/);assert.match(r.text,/tuna/);assert.match(r.text,/chickpeas/);
 r=P.answer([u('I have raw chicken and dried kidney beans. I have no stove. Give me a meal recipe.')]);assert.match(r.text,/Which of your foods are canned or already cooked/);assert.doesNotMatch(r.text,/Combine|Eat cold/);
 r=P.answer([...turns,u("I'm allergic to chicken. Remove chicken.")]);assert.doesNotMatch(r.text,/Stir in[^\n]*chicken/);
+r=P.answer([...turns,u('Make it vegetarian.')]);assert(r);assert.doesNotMatch(r.text,/canned chicken|broth can replace/);
+r=P.answer([...turns,u('I have no pot.')]);assert.match(r.text,/No-cook/);r=P.answer([...turns,u('I have no pot.'),u('How much rice can I use?')]);assert.match(r.text,/Leave uncooked brown rice out/);
 for(let i=0;i<25;i++)assert.equal(P.answer(JSON.parse(JSON.stringify(changed))).text,P.answer(changed).text,'Exact planning state survives saved history restart');
 console.log('PASS: recorded recipe, broth correction, ambiguous/canned/dried beans, no-heat recovery, substitutions, new pantry, topic switch, hypothetical/assistant-fact isolation and 25 reopen checks.');
