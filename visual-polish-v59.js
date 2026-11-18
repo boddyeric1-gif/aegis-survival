@@ -40,8 +40,8 @@ body.v59-polish .v54-home-search{border-radius:var(--polish-radius)!important}
 body.v59-polish .v54-destinations>h3{font-size:14px;letter-spacing:.01em;margin:4px 0 14px}
 body.v59-polish .v54-card-grid{gap:16px}
 body.v59-polish .v54-feature-card{padding:24px;gap:14px;border-radius:var(--polish-radius);min-height:204px;border-color:#414b37;box-shadow:inset 0 1px 0 #ffffff04}
-body.v59-polish .v54-card-top small{font-size:11px;padding:3px 8px;color:#c3c9b6}
-body.v59-polish .v54-card-description{font-size:14px;line-height:1.65;color:#b8c1ad}
+body.v59-polish .v54-card-top small{font-size:11px;font-weight:500;padding:3px 8px;color:#c3c9b6}
+body.v59-polish .v54-card-description{font-size:14px;font-weight:400;line-height:1.65;color:#b8c1ad}
 body.v59-polish .v54-card-tail{font-size:12px;gap:9px;padding-top:2px}
 body.v59-polish .v54-desktop-nav button{padding:10px 15px;border-radius:11px}
 body.v59-polish .v54-header-actions button{border-radius:11px}
@@ -128,7 +128,7 @@ body.v59-polish footer{font-size:11px;line-height:1.8;padding:24px 18px}
  body.v59-polish .v54-card-grid{gap:12px}
  body.v59-polish .v54-feature-card{padding:18px 15px;min-height:216px;gap:12px}
  body.v59-polish .v54-feature-card>strong{font-size:17px;line-height:1.3}
- body.v59-polish .v54-card-description{font-size:12px;line-height:1.7}
+ body.v59-polish .v54-card-description{font-size:13px;line-height:1.7}
  body.v59-polish .v54-card-top small{font-size:9px;padding:0;border:0}
  body.v59-polish .v54-card-tail{font-size:11px}
  body.v59-polish .v54-bottom button span{font-size:10px}
