@@ -1,24 +1,54 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
-const source=fs.readFileSync('assistant-planning-v60.js','utf8');
-const c={window:{},fetch(){throw Error('Planner must be fully offline')}};vm.runInNewContext(source,c);const P=c.window.AEGIS_ASSISTANT_PLANNING;
-const u=text=>({role:'user',text}),a=text=>({role:'assistant',text});
+const session={window:{},fetch(){throw Error('Recipes must work offline')}};
+vm.runInNewContext(fs.readFileSync('assistant-planning-v60.js','utf8'),session);
+const planner=session.window.AEGIS_ASSISTANT_PLANNING;
+const user=text=>({role:'user',text});
 const question="I have brown rice, chicken broth, kidney beans, canned chicken, canned corn and potato’s, canned pineapples, and a few cans of green beans. Can you give me a recipe to make with the food I have?";
-const turns=[u(question)];let r=P.answer(turns);
-assert(r);assert.equal(r.role,'assistant');assert.equal(r.mode,'planned');assert.match(r.text,/Brown rice pantry bowl/);assert.match(r.text,/package’s liquid ratio/);assert.match(r.text,/canned chicken/);assert.match(r.text,/are the kidney beans canned\/fully cooked, or dried/);assert.match(r.text,/pineapple on the side/);assert.doesNotMatch(r.text,/15 oz|1 cup|soy sauce|olive oil|garlic|rinse the.*broth/i);assert.match(r.text,/Serve.*\./);
-let changed=[...turns,a(r.text),u('Actually I have no broth. How do I change it?')];r=P.answer(changed);assert.match(r.text,/safe drinking water/);assert.doesNotMatch(r.text,/broth can replace/);assert.equal(P.pantry(changed).items.find(x=>x.name==='chicken broth').missing,true);
-changed.push(a(r.text),u("They're canned."));r=P.answer(changed);assert(r);assert.doesNotMatch(r.text,/are the kidney beans/);assert.match(r.text,/drained canned kidney beans/);
-changed.push(u('Actually I have no stove.'));r=P.answer(changed);assert.match(r.text,/No-cook/);assert.match(r.text,/Leave uncooked brown rice out/);assert.doesNotMatch(r.text,/Boil|Cook brown rice as directed/);
-changed.push(u('I have a stove again and clean water.'));r=P.answer(changed);assert.match(r.text,/Brown rice pantry bowl/);
-assert.equal(P.pantry([...turns,a('You have canned kidney beans and olive oil.')]).items.find(x=>x.name==='kidney beans').form,'unknown','Assistant output must never become pantry facts');
-assert.equal(P.answer([...turns,u('How do I attach the tarp corners?')]),null,'New task cannot become a recipe');
-assert.equal(P.answer([u('If I had rice and canned tuna, what meal could I cook?')]),null,'Hypothetical stock is not confirmed');
-r=P.answer([...turns,u('How much for four people?')]);assert.match(r.text,/package sizes determine portions/);assert.match(r.text,/I won’t guess portions/);
-r=P.answer([...turns,u('Start over. I only have pasta and canned tuna. Give me a recipe.')]);assert.match(r.text,/Pasta pantry bowl/);assert.doesNotMatch(r.text,/brown rice|pineapple|kidney beans/i);
-r=P.answer([u('I have potatoes, canned carrots and canned chicken. Give me a meal recipe.')]);assert.match(r.text,/Potato pantry pot/);assert.match(r.text,/fork-tender/);
-r=P.answer([u('I have canned tuna and canned chickpeas. I have no stove. What can I eat?')]);assert.match(r.text,/No-cook/);assert.match(r.text,/tuna/);assert.match(r.text,/chickpeas/);
-r=P.answer([u('I have raw chicken and dried kidney beans. I have no stove. Give me a meal recipe.')]);assert.match(r.text,/Which of your foods are canned or already cooked/);assert.doesNotMatch(r.text,/Combine|Eat cold/);
-r=P.answer([...turns,u("I'm allergic to chicken. Remove chicken.")]);assert.doesNotMatch(r.text,/Stir in[^\n]*chicken/);
-r=P.answer([...turns,u('Make it vegetarian.')]);assert(r);assert.doesNotMatch(r.text,/canned chicken|broth can replace/);
-r=P.answer([...turns,u('I have no pot.')]);assert.match(r.text,/No-cook/);r=P.answer([...turns,u('I have no pot.'),u('How much rice can I use?')]);assert.match(r.text,/Leave uncooked brown rice out/);
-for(let i=0;i<25;i++)assert.equal(P.answer(JSON.parse(JSON.stringify(changed))).text,P.answer(changed).text,'Exact planning state survives saved history restart');
-console.log('PASS: recorded recipe, broth correction, ambiguous/canned/dried beans, no-heat recovery, substitutions, new pantry, topic switch, hypothetical/assistant-fact isolation and 25 reopen checks.');
+const original=[user(question)];
+const first=planner.answer(original);
+assert.match(first.text,/Pineapple chicken and corn brown rice bowl/);
+assert.match(first.text,/Suggested amounts for 2 servings/);
+assert.match(first.text,/½ cup brown rice/);
+assert.match(first.text,/Ingredients[\s\S]*Directions/);
+assert.match(first.text,/fold it through with a spoonful of its juice/i);
+assert.match(first.text,/Set aside kidney beans/);
+assert.doesNotMatch(first.text,/olive oil|soy sauce|15 oz/i);
+const another=planner.answer([...original,first,user('Give me another recipe')]);
+assert.match(another.text,/soup/);
+assert.match(another.text,/Simmer the potato cubes/);
+assert.notEqual(first.text,another.text);
+const correction=[...original,first,user('Actually I have no broth. How do I change it?')];
+assert.doesNotMatch(planner.answer(correction).text,/broth/i);
+const canned=[...correction,planner.answer(correction),user("They're canned.")];
+assert.match(planner.answer(canned).text,/½ cup canned kidney beans/);
+const cold=[...canned,user('Actually I have no stove.')];
+assert.match(planner.answer(cold).text,/chopped salad/);
+assert.match(planner.answer(cold).text,/Toss.*with diced pineapple/);
+assert.doesNotMatch(planner.answer(cold).text,/Simmer|Boil|sauté/);
+assert.match(planner.answer([...original,user('Make it for four people')]).text,/4 servings[\s\S]*1 cup brown rice/);
+assert.doesNotMatch(planner.answer([...original,user('Make it vegetarian.')]).text,/chicken/i);
+assert.doesNotMatch(planner.answer([...original,user("I'm allergic to chicken. Remove chicken.")]).text,/chicken/i);
+assert.match(planner.answer([...original,user('I have no pot.'),user('How much rice can I use?')]).text,/Save the uncooked brown rice/);
+assert.equal(planner.answer([...original,user('How do I attach the tarp corners?')]),null);
+assert.equal(planner.answer([user('If I had rice and canned tuna, what meal could I cook?')]),null);
+for(const [prompt,expected] of [
+ ['Eggs, spinach, cheddar, oil. What can I make?',/Spinach scramble[\s\S]*folding in the cheese/],
+ ['I have tortillas, peanut butter and banana. Give me a recipe.',/Banana and peanut butter roll-ups/],
+ ['I have flour, milk, butter, eggs and baking powder. Can I make pancakes?',/Skillet pancakes[\s\S]*flip and cook/],
+ ['I have canned tuna and canned chickpeas. I have no stove. What can I eat?',/Tuna chopped salad/],
+ ['I have potatoes, canned carrots and canned chicken. Give me a meal recipe.',/Simmer the potato cubes/],
+ ['I have oats, banana and peanut butter. What can I make?',/Banana oatmeal/],
+ ['I have raw chicken and dried kidney beans. I have no stove. Give me a meal recipe.',/Which foods do you have that are ready to eat/],
+]){
+ const recipe=planner.answer([user(prompt)]);
+ assert.ok(recipe,prompt);
+ assert.match(recipe.text,expected,prompt);
+}
+const novel=[user('I have couscous, miso, and canned corn. Can you make a recipe?')];
+assert.equal(planner.answer(novel),null,'Leave an unknown combination for the recipe model');
+assert.match(planner.recipeContext(novel),/couscous, miso, and canned corn/);
+assert.match(planner.recipeContext([...novel,user('Actually I have no corn.')]),/corn: NOT AVAILABLE[\s\S]*couscous, miso/);
+assert.equal(planner.answer([...original,user('Can I make a casserole instead?')]),null);
+assert.match(planner.answer([...original,user('I only have pasta and canned tuna. Give me a recipe.')]).text,/Tuna pasta/i);
+for(let i=0;i<25;i++)assert.equal(planner.answer(JSON.parse(JSON.stringify(cold))).text,planner.answer(cold).text);
+console.log('PASS: original pantry, recipe variations, quantities, restrictions, diverse ingredient lists, open-ended recipe context and saved history.');

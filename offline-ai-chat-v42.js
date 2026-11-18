@@ -29,6 +29,12 @@ function promptFor(messages){
  const grounded=I?.context(messages,catalog,ios?650:1200);
  // Give actual procedure steps room; the old 250-character guide budget often
  // stopped inside the materials list, before a single instruction reached the AI.
+ const recipe=window.AEGIS_ASSISTANT_PLANNING?.recipeContext(messages);
+ if(recipe){
+  const system='You are AEGIS, an offline recipe assistant. '+recipe;
+  const user=c.last.slice(0,1200);
+  return {system,user,messages:[{role:'system',content:system},{role:'user',content:user}],sources:[],max_tokens:ios?260:360};
+ }
  const source=grounded?.text||window.AEGIS_FM?.promptContext(query,ios?650:1200)||references(query);
  const sources=grounded?.text?[]:manualSources(query);
  const system='You are AEGIS, an offline assistant. Answer general questions and the CURRENT question directly. For a follow-up, continue the same task. Latest user corrections replace earlier amounts or equipment. For building questions, give three short practical steps. Compare the user’s supplies with the reference requirements; do not assume missing materials. Ask one specific question if size or length prevents confirming the design. Local references are historical or unreviewed. Do not invent supplies or citations. Do not identify edible plants or give outdated medical advice. In immediate danger, advise emergency help. Keep flames outside shelters. Be concise.';
@@ -80,7 +86,13 @@ async function send(continuation=false){
  const model=window.AEGISNative||window.AEGISWebLLM;const mode=$('aegis-response-mode')?.value||'auto';
  if(mode==='guide'&&!continuation){await lookupGuides();return}
  if(!continuation&&mode!=='guide'){const plan=window.AEGIS_ASSISTANT_PLANNING?.answer([...history,{role:'user',text}]);if(plan){history.push({role:'user',text:text.slice(0,MAX_CHARS)},plan);history=history.slice(-LIMIT);input.value='';persist();draw();setStatus('Pantry plan complete · uses your reported ingredients and latest corrections · no download or model wait');return}const answer=window.AEGIS_FIELD_ANSWERS?.answer([...history,{role:'user',text}],window.AEGIS_PHASE3?.catalog?.()||[]);if(answer){history.push({role:'user',text:text.slice(0,MAX_CHARS)},answer);history=history.slice(-LIMIT);input.value='';persist();draw();setStatus('Guide-backed answer · '+answer.guide+' · no model wait or network request');return}}
- if(!await refresh()){if(mode==='auto')await lookupGuides();return;}
+ if(!await refresh()){
+  if(!continuation&&window.AEGIS_ASSISTANT_PLANNING?.recipeContext([...history,{role:'user',text}])){
+   setStatus('This combination needs the local AI recipe generator. Open Device to set up the offline model. Your draft is still here.');
+   return;
+  }
+  if(mode==='auto'&&!continuation)await lookupGuides();return;
+ }
  busy=true;const btn=$('aegis-chat-send');if(btn)btn.disabled=true;
  history.push({role:'user',text:text.slice(0,MAX_CHARS)});history=history.slice(-LIMIT);input.value='';persist();draw();setStatus('Thinking locally on this device… This can take a while on a CPU.');
  try{await window.AEGIS_FM?.ready;const request=promptFor(history);let sources=request.sources;const started=performance.now();if(continuation){

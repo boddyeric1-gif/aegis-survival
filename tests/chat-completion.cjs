@@ -14,6 +14,11 @@ function reopen(){
  ui=reopen();assert.equal(ui.api.getHistory().at(-1).incomplete,true,'Cutoff state survives full JS restart');
  await ui.api.send(true);assert.equal(calls,2);assert(request.messages.some(x=>x.role==='assistant'&&x.content.endsWith('process by')));assert(request.messages.some(x=>x.role==='user'&&x.content.includes('mechanical clock')));assert.equal(ui.api.getHistory().at(-1).incomplete,false);assert.match(ui.status.textContent,/Local answer finished/);
  ui=reopen();ui.input.value='I have rice, canned tuna, and canned corn. Give me a meal recipe.';await ui.api.send();assert.equal(calls,2,'Recipe planner works with no inference');assert.equal(ui.api.getHistory().at(-1).mode,'planned');
- ui=reopen();ui.input.value='Actually I have no stove.';await ui.api.send();assert.match(ui.api.getHistory().at(-1).text,/No-cook/);assert.equal(calls,2);assert.match(ui.status.textContent,/Pantry plan complete/);
+ ui=reopen();ui.input.value='Actually I have no stove.';await ui.api.send();assert.match(ui.api.getHistory().at(-1).text,/chopped salad/);assert.equal(calls,2);assert.match(ui.status.textContent,/Pantry plan complete/);
+ ui=reopen();ui.input.value='I have couscous, miso and canned corn. Can you make a recipe?';await ui.api.send();
+ assert.equal(calls,3);assert.match(request.system,/couscous, miso and canned corn/);assert.equal(request.sources.length,0);assert(request.max_tokens>120);
+ ui=reopen();ui.window.AEGISNative.status=async()=>({ready:false,reason:'model unavailable'});
+ ui.input.value='I have plantains, tamarind and coconut cream. Give me a recipe.';await ui.api.send();
+ assert.equal(calls,3);assert.match(ui.input.value,/plantains/);assert.match(ui.status.textContent,/Your draft is still here/);
  console.log('PASS: real send/render/save/restart, persisted cutoff marker, Continue button and context, completed continuation and offline recipe corrections without inference.');
 })().catch(e=>{console.error(e);process.exitCode=1});

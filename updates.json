@@ -1,8 +1,18 @@
 {
   "schema": 1,
-  "version": "v60",
+  "version": "v61",
   "updated": "2026-11-18",
   "releases": [
+    {
+      "version": "v61",
+      "date": "2026-11-18",
+      "title": "Recipes from Your Ingredients",
+      "changes": [
+        "Turn common pantry combinations into named recipes with suggested servings, measured ingredients and cooking directions.",
+        "Ask for another dish, a different serving count, or changes for unavailable ingredients and equipment.",
+        "Open-ended ingredient lists and recipe styles go to the installed local AI with the original list and recent corrections."
+      ]
+    },
     {
       "version": "v60",
       "date": "2026-11-18",
