@@ -1,8 +1,19 @@
 {
   "schema": 1,
-  "version": "v58",
-  "updated": "2026-11-16",
+  "version": "v59",
+  "updated": "2026-11-17",
   "releases": [
+    {
+      "version": "v59",
+      "date": "2026-11-17",
+      "title": "Wildlands Refinement",
+      "changes": [
+        "A cohesive visual polish across Home, Library, Bushcraft, Household, AI, Community, Emergency, tools, diagnostics, menus and device settings.",
+        "Refined spacing, type hierarchy, borders, controls, reading layouts and mobile touch targets while preserving the Wildlands palette and navigation.",
+        "Clearer conversation bubbles, more comfortable answer typography and a cleaner composer, with guide-backed answers and saved chats preserved.",
+        "Existing offline AI downloads, household records, community notification settings, accessibility controls and the stable mobile navigation remain intact."
+      ]
+    },
     {
       "version": "v58",
       "date": "2026-11-16",
